@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NorthBound — Weekend Party Trips to Canada</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-cyan: #00f0ff;
+  --neon-magenta: #ff00e5;
+  --neon-purple: #8b5cf6;
+  --neon-blue: #3b82f6;
+  --dark-bg: #0a0a0f;
+  --dark-card: #111118;
+  --dark-card-hover: #1a1a25;
+  --dark-border: #1e1e2e;
+  --text-primary: #f0f0f5;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --gradient-main: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+  --gradient-card: linear-gradient(135deg, rgba(0,240,255,0.05), rgba(255,0,229,0.05));
+  --glow-cyan: 0 0 20px rgba(0,240,255,0.3);
+  --glow-magenta: 0 0 20px rgba(255,0,229,0.3);
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--dark-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 1rem 2rem;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--dark-border);
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.3s;
+}
+.nav.scrolled { padding: 0.6rem 2rem; background: rgba(10,10,15,0.95); }
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem; font-weight: 700;
+  background: var(--gradient-main);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;
+  font-weight: 500; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--neon-cyan); }
+.btn-book {
+  background: var(--gradient-main);
+  color: #000; padding: 0.6rem 1.5rem;
+  border-radius: 50px; font-weight: 700; font-size: 0.85rem;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn-book:hover { transform: translateY(-2px); box-shadow: var(--glow-cyan); }
+.mobile-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 6rem 2rem 4rem;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0,240,255,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(255,0,229,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 120%, rgba(139,92,246,0.1) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove { to { transform: translateY(60px); } }
+.hero-content { text-align: center; position: relative; z-index: 1; max-width: 900px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.2);
+  padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem;
+  color: var(--neon-cyan); margin-bottom: 1.5rem;
+}
+.hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--neon-cyan); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.hero h1 {
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  font-weight: 900; line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .gradient {
+  background: var(--gradient-main);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem; }
+.hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--gradient-main);
+  color: #000; padding: 1rem 2.5rem; border-radius: 50px;
+  font-weight: 700; font-size: 1rem; text-decoration: none; border: none; cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: var(--glow-cyan); }
+.btn-secondary {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--dark-border);
+  color: var(--text-primary); padding: 1rem 2.5rem; border-radius: 50px;
+  font-weight: 600; font-size: 1rem; text-decoration: none; cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-secondary:hover { border-color: var(--neon-cyan); background: rgba(0,240,255,0.05); }
+.hero-stats {
+  display: flex; justify-content: center; gap: 3rem; margin-top: 3rem;
+  padding-top: 2rem; border-top: 1px solid var(--dark-border);
+}
+.hero-stat-num { font-family: 'Space Grotesk'; font-size: 1.8rem; font-weight: 700; }
+.hero-stat-num.cyan { color: var(--neon-cyan); }
+.hero-stat-num.magenta { color: var(--neon-magenta); }
+.hero-stat-num.purple { color: var(--neon-purple); }
+.hero-stat-label { font-size: 0.8rem; color: var(--text-muted); }
+
+/* ── SECTIONS ── */
+.section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
+.section-label {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
+  color: var(--neon-cyan); margin-bottom: 0.75rem;
+}
+.section-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 1rem; }
+.section-subtitle { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin-bottom: 3rem; }
+
+/* ── HOW IT WORKS ── */
+.how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.how-card {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px; padding: 2rem;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.how-card:hover { border-color: var(--neon-cyan); transform: translateY(-4px); }
+.how-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gradient-main); opacity: 0; transition: opacity 0.3s;
+}
+.how-card:hover::before { opacity: 1; }
+.how-num {
+  font-family: 'Space Grotesk'; font-size: 3rem; font-weight: 700;
+  background: var(--gradient-main);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; margin-bottom: 1rem;
+}
+.how-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+.how-card p { font-size: 0.9rem; color: var(--text-secondary); }
+
+/* ── UPCOMING WEEKENDS ── */
+.weekends-section { background: linear-gradient(180deg, transparent, rgba(0,240,255,0.02), transparent); }
+.weekends-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; }
+.weekend-card {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px; overflow: hidden;
+  transition: all 0.3s; cursor: pointer;
+}
+.weekend-card:hover { border-color: var(--neon-magenta); transform: translateY(-4px); box-shadow: var(--glow-magenta); }
+.weekend-header {
+  padding: 1.5rem 1.5rem 0;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.weekend-date { font-family: 'Space Grotesk'; font-weight: 700; color: var(--neon-cyan); }
+.weekend-badge {
+  font-size: 0.7rem; padding: 0.25rem 0.75rem; border-radius: 50px;
+  font-weight: 600; text-transform: uppercase;
+}
+.badge-hot { background: rgba(255,0,229,0.15); color: var(--neon-magenta); }
+.badge-new { background: rgba(0,240,255,0.15); color: var(--neon-cyan); }
+.badge-limited { background: rgba(139,92,246,0.15); color: var(--neon-purple); }
+.weekend-body { padding: 1rem 1.5rem; }
+.weekend-body h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.weekend-route { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; }
+.weekend-details { display: flex; gap: 1rem; flex-wrap: wrap; }
+.weekend-detail {
+  font-size: 0.8rem; color: var(--text-muted);
+  display: flex; align-items: center; gap: 0.3rem;
+}
+.weekend-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--dark-border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.weekend-price { font-family: 'Space Grotesk'; }
+.weekend-price .from { font-size: 0.75rem; color: var(--text-muted); }
+.weekend-price .amount { font-size: 1.5rem; font-weight: 700; color: var(--neon-cyan); }
+.weekend-price .per { font-size: 0.75rem; color: var(--text-muted); }
+.btn-sm {
+  background: var(--gradient-main); color: #000;
+  padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 700;
+  font-size: 0.8rem; border: none; cursor: pointer; transition: all 0.3s;
+}
+.btn-sm:hover { transform: scale(1.05); }
+
+/* ── PACKAGES ── */
+.packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.package-card {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px; padding: 2.5rem 2rem;
+  position: relative; transition: all 0.3s;
+}
+.package-card:hover { transform: translateY(-4px); }
+.package-card.featured {
+  border-color: var(--neon-cyan);
+  background: linear-gradient(135deg, rgba(0,240,255,0.05), rgba(255,0,229,0.03));
+}
+.package-card.featured::before {
+  content: 'MOST POPULAR';
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--gradient-main); color: #000;
+  padding: 0.25rem 1rem; border-radius: 50px;
+  font-size: 0.7rem; font-weight: 700;
+}
+.package-name { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 0.5rem; }
+.package-price { font-family: 'Space Grotesk'; margin-bottom: 1.5rem; }
+.package-price .dollar { font-size: 1rem; color: var(--text-muted); vertical-align: top; }
+.package-price .amount { font-size: 3rem; font-weight: 700; }
+.package-price .per { font-size: 0.85rem; color: var(--text-muted); }
+.package-features { list-style: none; margin-bottom: 2rem; }
+.package-features li {
+  padding: 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.package-features li::before { content: '✓'; color: var(--neon-cyan); font-weight: 700; }
+.package-features li.na { opacity: 0.3; }
+.package-features li.na::before { content: '—'; color: var(--text-muted); }
+.btn-package {
+  width: 100%; padding: 0.9rem; border-radius: 50px;
+  font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.3s;
+}
+.btn-package.outline { background: transparent; border: 1px solid var(--dark-border); color: var(--text-primary); }
+.btn-package.outline:hover { border-color: var(--neon-cyan); }
+.btn-package.filled { background: var(--gradient-main); border: none; color: #000; }
+.btn-package.filled:hover { box-shadow: var(--glow-cyan); transform: translateY(-2px); }
+
+/* ── DESTINATIONS ── */
+.dest-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.dest-card {
+  background: var(--dark-card); border: 1px solid var(--dark-border);
+  border-radius: 12px; padding: 1.5rem; text-align: center;
+  transition: all 0.3s; cursor: pointer; text-decoration: none; color: inherit;
+}
+.dest-card:hover { border-color: var(--neon-purple); transform: translateY(-3px); }
+.dest-emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.dest-city { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+.dest-distance { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+.dest-time { font-size: 0.75rem; color: var(--neon-cyan); }
+
+/* ── NIGHTLIFE GUIDE ── */
+.clubs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.club-card {
+  background: var(--dark-card); border: 1px solid var(--dark-border);
+  border-radius: 16px; overflow: hidden; transition: all 0.3s;
+}
+.club-card:hover { border-color: var(--neon-magenta); transform: translateY(-3px); }
+.club-img {
+  height: 180px;
+  background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(255,0,229,0.2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+}
+.club-info { padding: 1.5rem; }
+.club-info h3 { font-size: 1.2rem; margin-bottom: 0.3rem; }
+.club-type { font-size: 0.8rem; color: var(--neon-magenta); margin-bottom: 0.75rem; }
+.club-info p { font-size: 0.85rem; color: var(--text-secondary); }
+.club-perks { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+.club-perk {
+  font-size: 0.7rem; padding: 0.25rem 0.75rem;
+  border-radius: 50px; background: rgba(0,240,255,0.08);
+  color: var(--neon-cyan); border: 1px solid rgba(0,240,255,0.15);
+}
+
+/* ── ITINERARY ── */
+.itinerary { max-width: 700px; margin: 0 auto; }
+.itinerary-day { margin-bottom: 2.5rem; }
+.itinerary-day-label {
+  font-family: 'Space Grotesk'; font-size: 1.3rem; font-weight: 700;
+  margin-bottom: 1.5rem; padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--dark-border);
+}
+.timeline-item {
+  display: flex; gap: 1.5rem; padding: 1rem 0;
+  position: relative;
+}
+.timeline-item::before {
+  content: ''; position: absolute; left: 45px; top: 2.5rem; bottom: -1rem;
+  width: 1px; background: var(--dark-border);
+}
+.timeline-item:last-child::before { display: none; }
+.timeline-time {
+  font-family: 'Space Grotesk'; font-weight: 700;
+  color: var(--neon-cyan); min-width: 70px; font-size: 0.9rem; padding-top: 0.2rem;
+}
+.timeline-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--gradient-main); flex-shrink: 0; margin-top: 0.35rem;
+}
+.timeline-content h4 { font-size: 1rem; margin-bottom: 0.2rem; }
+.timeline-content p { font-size: 0.85rem; color: var(--text-secondary); }
+
+/* ── TRAVEL INFO ── */
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.info-card {
+  background: var(--dark-card); border: 1px solid var(--dark-border);
+  border-radius: 16px; padding: 2rem; transition: all 0.3s;
+}
+.info-card:hover { border-color: var(--neon-cyan); }
+.info-icon { font-size: 2rem; margin-bottom: 1rem; }
+.info-card h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+.info-card p { font-size: 0.9rem; color: var(--text-secondary); }
+.info-card ul {
+  list-style: none; margin-top: 0.75rem;
+}
+.info-card ul li {
+  padding: 0.3rem 0; font-size: 0.85rem; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.info-card ul li::before { content: '→'; color: var(--neon-cyan); }
+
+/* ── FAQ ── */
+.faq-list { max-width: 750px; }
+.faq-item {
+  border-bottom: 1px solid var(--dark-border);
+}
+.faq-question {
+  width: 100%; background: none; border: none;
+  color: var(--text-primary); font-size: 1rem; font-weight: 600;
+  padding: 1.25rem 0; text-align: left; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Inter', sans-serif;
+}
+.faq-question:hover { color: var(--neon-cyan); }
+.faq-arrow { transition: transform 0.3s; font-size: 1.2rem; color: var(--text-muted); }
+.faq-item.open .faq-arrow { transform: rotate(45deg); color: var(--neon-cyan); }
+.faq-answer {
+  max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s;
+}
+.faq-item.open .faq-answer { max-height: 300px; padding-bottom: 1.25rem; }
+.faq-answer p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* ── BOOKING MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px); z-index: 2000;
+  display: none; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--dark-card); border: 1px solid var(--dark-border);
+  border-radius: 20px; max-width: 550px; width: 100%;
+  max-height: 90vh; overflow-y: auto; position: relative;
+}
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.5rem; cursor: pointer; z-index: 1;
+}
+.modal-close:hover { color: var(--text-primary); }
+.modal-header {
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid var(--dark-border);
+}
+.modal-header h2 { font-size: 1.5rem; }
+.modal-header p { font-size: 0.9rem; color: var(--text-secondary); }
+.modal-body { padding: 1.5rem 2rem; }
+.booking-steps { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+.booking-step {
+  flex: 1; height: 4px; border-radius: 2px; background: var(--dark-border);
+  transition: background 0.3s;
+}
+.booking-step.active { background: var(--gradient-main); }
+.form-group { margin-bottom: 1.25rem; }
+.form-label {
+  display: block; font-size: 0.8rem; font-weight: 600;
+  color: var(--text-secondary); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 1px;
+}
+.form-input {
+  width: 100%; padding: 0.8rem 1rem; border-radius: 10px;
+  border: 1px solid var(--dark-border); background: rgba(255,255,255,0.03);
+  color: var(--text-primary); font-size: 0.95rem; font-family: 'Inter';
+  transition: border-color 0.3s;
+}
+.form-input:focus { outline: none; border-color: var(--neon-cyan); }
+.form-select {
+  width: 100%; padding: 0.8rem 1rem; border-radius: 10px;
+  border: 1px solid var(--dark-border); background: var(--dark-card);
+  color: var(--text-primary); font-size: 0.95rem; font-family: 'Inter';
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 1rem center;
+}
+.form-select:focus { outline: none; border-color: var(--neon-cyan); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.modal-footer {
+  padding: 1rem 2rem 2rem;
+  display: flex; gap: 1rem;
+}
+.modal-footer .btn-primary { flex: 1; text-align: center; }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  text-align: center; padding: 6rem 2rem;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(0,240,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,0,229,0.05) 0%, transparent 70%);
+}
+.cta-section h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+.cta-section p { color: var(--text-secondary); max-width: 500px; margin: 0 auto 2rem; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--dark-border);
+  padding: 4rem 2rem 2rem;
+}
+.footer-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand p { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; max-width: 280px; }
+.footer-col h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 1rem; }
+.footer-col a { display: block; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; padding: 0.3rem 0; transition: color 0.3s; }
+.footer-col a:hover { color: var(--neon-cyan); }
+.footer-bottom {
+  max-width: 1200px; margin: 0 auto;
+  padding-top: 2rem; border-top: 1px solid var(--dark-border);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .mobile-toggle { display: block; }
+  .nav-links.mobile-open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: rgba(10,10,15,0.97); padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--dark-border);
+  }
+  .hero-stats { flex-direction: column; gap: 1.5rem; align-items: center; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .form-row { grid-template-columns: 1fr; }
+  .weekends-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero-ctas { flex-direction: column; align-items: center; }
+}
+
+/* ── ANIMATIONS ── */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-logo" onclick="scrollToSection('hero')">NORTHBOUND</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#weekends">Weekends</a>
+    <a href="#packages">Packages</a>
+    <a href="#destinations">Destinations</a>
+    <a href="#nightlife">Nightlife</a>
+    <a href="#travel">Travel Info</a>
+    <a href="#faq">FAQ</a>
+    <a class="btn-book" onclick="openBooking()">Book Now</a>
+  </div>
+  <button class="mobile-toggle" onclick="toggleMobileNav()">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Now booking summer 2026 weekends
+    </div>
+    <h1>Weekend Party Trips<br>to <span class="gradient">Canada</span></h1>
+    <p>Experience Windsor nightlife with organized overnight travel packages. Drink legally at 19 — no passport flight needed.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="openBooking()">Book Your Weekend</button>
+      <a class="btn-secondary" href="#weekends">View Upcoming Trips</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num cyan">19</div>
+        <div class="hero-stat-label">Legal drinking age in Ontario</div>
+      </div>
+      <div>
+        <div class="hero-stat-num magenta">2,500+</div>
+        <div class="hero-stat-label">Happy travelers</div>
+      </div>
+      <div>
+        <div class="hero-stat-num purple">4.9★</div>
+        <div class="hero-stat-label">Average rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section reveal" id="how">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Your weekend in 4 steps</h2>
+  <div class="section-subtitle">From booking to border crossing — we handle everything.</div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <h3>Pick Your Weekend</h3>
+      <p>Choose from upcoming tour dates and select your departure city. Browse available packages and pricing.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <h3>Book &amp; Upload Docs</h3>
+      <p>Reserve your spot with a deposit, upload your passport or enhanced ID, and sign the travel waiver.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <h3>Travel to Windsor</h3>
+      <p>Board the chartered coach from your city. We handle border logistics — you just enjoy the ride.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">04</div>
+      <h3>Live the Night</h3>
+      <p>Check into your hotel, hit the clubs with skip-the-line access, and experience Windsor nightlife like a VIP.</p>
+    </div>
+  </div>
+</section>
+
+<!-- UPCOMING WEEKENDS -->
+<section class="section weekends-section reveal" id="weekends">
+  <div class="section-label">Upcoming Weekends</div>
+  <h2 class="section-title">Grab your spot</h2>
+  <div class="section-subtitle">Limited capacity on every trip. Sell-outs are common.</div>
+  <div class="weekends-grid">
+
+    <div class="weekend-card" onclick="openBooking()">
+      <div class="weekend-header">
+        <div class="weekend-date">APR 10–12</div>
+        <span class="weekend-badge badge-hot">Selling Fast</span>
+      </div>
+      <div class="weekend-body">
+        <h3>Spring Kickoff Weekend</h3>
+        <div class="weekend-route">Detroit → Windsor</div>
+        <div class="weekend-details">
+          <span class="weekend-detail">🏨 2 nights</span>
+          <span class="weekend-detail">🎶 3 clubs</span>
+          <span class="weekend-detail">👥 12 spots left</span>
+        </div>
+      </div>
+      <div class="weekend-footer">
+        <div class="weekend-price">
+          <span class="from">from </span>
+          <span class="amount">$189</span>
+          <span class="per"> /person</span>
+        </div>
+        <button class="btn-sm">Book Now</button>
+      </div>
+    </div>
+
+    <div class="weekend-card" onclick="openBooking()">
+      <div class="weekend-header">
+        <div class="weekend-date">APR 24–26</div>
+        <span class="weekend-badge badge-new">New</span>
+      </div>
+      <div class="weekend-body">
+        <h3>Ohio State Takeover</h3>
+        <div class="weekend-route">Columbus → Windsor</div>
+        <div class="weekend-details">
+          <span class="weekend-detail">🏨 2 nights</span>
+          <span class="weekend-detail">🎶 2 clubs</span>
+          <span class="weekend-detail">👥 30 spots left</span>
+        </div>
+      </div>
+      <div class="weekend-footer">
+        <div class="weekend-price">
+          <span class="from">from </span>
+          <span class="amount">$219</span>
+          <span class="per"> /person</span>
+        </div>
+        <button class="btn-sm">Book Now</button>
+      </div>
+    </div>
+
+    <div class="weekend-card" onclick="openBooking()">
+      <div class="weekend-header">
+        <div class="weekend-date">MAY 1–3</div>
+        <span class="weekend-badge badge-limited">Limited</span>
+      </div>
+      <div class="weekend-body">
+        <h3>Cinco de Mayo Fiesta</h3>
+        <div class="weekend-route">Detroit → Windsor</div>
+        <div class="weekend-details">
+          <span class="weekend-detail">🏨 2 nights</span>
+          <span class="weekend-detail">🎶 4 clubs</span>
+          <span class="weekend-detail">👥 8 spots left</span>
+        </div>
+      </div>
+      <div class="weekend-footer">
+        <div class="weekend-price">
+          <span class="from">from </span>
+          <span class="amount">$199</span>
+          <span class="per"> /person</span>
+        </div>
+        <button class="btn-sm">Book Now</button>
+      </div>
+    </div>
+
+    <div class="weekend-card" onclick="openBooking()">
+      <div class="weekend-header">
+        <div class="weekend-date">MAY 22–25</div>
+        <span class="weekend-badge badge-hot">Selling Fast</span>
+      </div>
+      <div class="weekend-body">
+        <h3>Memorial Day Blowout</h3>
+        <div class="weekend-route">Multiple Cities → Windsor</div>
+        <div class="weekend-details">
+          <span class="weekend-detail">🏨 3 nights</span>
+          <span class="weekend-detail">🎶 5 clubs</span>
+          <span class="weekend-detail">👥 20 spots left</span>
+        </div>
+      </div>
+      <div class="weekend-footer">
+        <div class="weekend-price">
+          <span class="from">from </span>
+          <span class="amount">$299</span>
+          <span class="per"> /person</span>
+        </div>
+        <button class="btn-sm">Book Now</button>
+      </div>
+    </div>
+
+    <div class="weekend-card" onclick="openBooking()">
+      <div class="weekend-header">
+        <div class="weekend-date">JUN 5–7</div>
+        <span class="weekend-badge badge-new">New</span>
+      </div>
+      <div class="weekend-body">
+        <h3>Summer Send-Off</h3>
+        <div class="weekend-route">Buffalo → Windsor</div>
+        <div class="weekend-details">
+          <span class="weekend-detail">🏨 2 nights</span>
+          <span class="weekend-detail">🎶 3 clubs</span>
+          <span class="weekend-detail">👥 25 spots left</span>
+        </div>
+      </div>
+      <div class="weekend-footer">
+        <div class="weekend-price">
+          <span class="from">from </span>
+          <span class="amount">$229</span>
+          <span class="per"> /person</span>
+        </div>
+        <button class="btn-sm">Book Now</button>
+      </div>
+    </div>
+
+    <div class="weekend-card" onclick="openBooking()">
+      <div class="weekend-header">
+        <div class="weekend-date">JUN 19–21</div>
+        <span class="weekend-badge badge-limited">VIP Only</span>
+      </div>
+      <div class="weekend-body">
+        <h3>Juneteenth Festival Weekend</h3>
+        <div class="weekend-route">Detroit → Windsor</div>
+        <div class="weekend-details">
+          <span class="weekend-detail">🏨 2 nights</span>
+          <span class="weekend-detail">🎶 3 clubs + festival</span>
+          <span class="weekend-detail">👥 15 spots left</span>
+        </div>
+      </div>
+      <div class="weekend-footer">
+        <div class="weekend-price">
+          <span class="from">from </span>
+          <span class="amount">$249</span>
+          <span class="per"> /person</span>
+        </div>
+        <button class="btn-sm">Book Now</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="section reveal" id="packages">
+  <div class="section-label">Packages</div>
+  <h2 class="section-title">Choose your experience</h2>
+  <div class="section-subtitle">Every package includes round-trip transport and border crossing coordination.</div>
+  <div class="packages-grid">
+    <div class="package-card">
+      <div class="package-name">Basic</div>
+      <div class="package-price">
+        <span class="dollar">$</span><span class="amount">149</span><span class="per"> /person</span>
+      </div>
+      <ul class="package-features">
+        <li>Round-trip chartered coach</li>
+        <li>Border crossing coordination</li>
+        <li>Nightclub entry (2 venues)</li>
+        <li>Tour staff on-site</li>
+        <li>Mobile itinerary</li>
+        <li class="na">Hotel accommodation</li>
+        <li class="na">VIP club access</li>
+        <li class="na">Drink specials</li>
+      </ul>
+      <button class="btn-package outline" onclick="openBooking()">Select Basic</button>
+    </div>
+    <div class="package-card featured">
+      <div class="package-name">Standard</div>
+      <div class="package-price">
+        <span class="dollar">$</span><span class="amount">249</span><span class="per"> /person</span>
+      </div>
+      <ul class="package-features">
+        <li>Round-trip chartered coach</li>
+        <li>Border crossing coordination</li>
+        <li>Nightclub entry (3 venues)</li>
+        <li>Tour staff on-site</li>
+        <li>Mobile itinerary</li>
+        <li>2-night hotel stay (downtown)</li>
+        <li>Group dinner reservation</li>
+        <li class="na">VIP club access</li>
+      </ul>
+      <button class="btn-package filled" onclick="openBooking()">Select Standard</button>
+    </div>
+    <div class="package-card">
+      <div class="package-name">VIP</div>
+      <div class="package-price">
+        <span class="dollar">$</span><span class="amount">399</span><span class="per"> /person</span>
+      </div>
+      <ul class="package-features">
+        <li>Round-trip chartered coach</li>
+        <li>Border crossing coordination</li>
+        <li>VIP nightclub entry (all venues)</li>
+        <li>Dedicated tour coordinator</li>
+        <li>Mobile itinerary</li>
+        <li>2-night premium hotel</li>
+        <li>Group dinner + late-night food</li>
+        <li>Drink specials at all venues</li>
+      </ul>
+      <button class="btn-package outline" onclick="openBooking()">Select VIP</button>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section class="section reveal" id="destinations">
+  <div class="section-label">Departure Cities</div>
+  <h2 class="section-title">We pick you up</h2>
+  <div class="section-subtitle">Chartered coaches depart from campuses and central locations across the Midwest and East.</div>
+  <div class="dest-grid">
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Detroit, MI</div>
+      <div class="dest-distance">30 min to Windsor</div>
+      <div class="dest-time">Every weekend</div>
+    </a>
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Ann Arbor, MI</div>
+      <div class="dest-distance">1 hr to Windsor</div>
+      <div class="dest-time">Bi-weekly</div>
+    </a>
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Columbus, OH</div>
+      <div class="dest-distance">3.5 hrs to Windsor</div>
+      <div class="dest-time">Monthly</div>
+    </a>
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Cleveland, OH</div>
+      <div class="dest-distance">3 hrs to Windsor</div>
+      <div class="dest-time">Monthly</div>
+    </a>
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Toledo, OH</div>
+      <div class="dest-distance">1.5 hrs to Windsor</div>
+      <div class="dest-time">Bi-weekly</div>
+    </a>
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Buffalo, NY</div>
+      <div class="dest-distance">4 hrs to Windsor</div>
+      <div class="dest-time">Monthly</div>
+    </a>
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Indianapolis, IN</div>
+      <div class="dest-distance">4.5 hrs to Windsor</div>
+      <div class="dest-time">Special events</div>
+    </a>
+    <a class="dest-card" href="#weekends">
+      <div class="dest-emoji">🚌</div>
+      <div class="dest-city">Pittsburgh, PA</div>
+      <div class="dest-distance">4.5 hrs to Windsor</div>
+      <div class="dest-time">Special events</div>
+    </a>
+  </div>
+</section>
+
+<!-- NIGHTLIFE GUIDE -->
+<section class="section reveal" id="nightlife">
+  <div class="section-label">Windsor Nightlife</div>
+  <h2 class="section-title">Where the night takes you</h2>
+  <div class="section-subtitle">Downtown Windsor's entertainment district — all within walking distance of your hotel.</div>
+  <div class="clubs-grid">
+    <div class="club-card">
+      <div class="club-img">🎵</div>
+      <div class="club-info">
+        <h3>Ariius Nightclub</h3>
+        <div class="club-type">Premium Nightclub</div>
+        <p>Multi-level venue with top DJs, bottle service, and a rooftop patio overlooking the river.</p>
+        <div class="club-perks">
+          <span class="club-perk">Skip the Line</span>
+          <span class="club-perk">VIP Sections</span>
+          <span class="club-perk">Rooftop</span>
+        </div>
+      </div>
+    </div>
+    <div class="club-card">
+      <div class="club-img">🎸</div>
+      <div class="club-info">
+        <h3>Wild Child</h3>
+        <div class="club-type">Bar &amp; Live Music</div>
+        <p>High-energy bar with live bands, themed nights, and a legendary dance floor.</p>
+        <div class="club-perks">
+          <span class="club-perk">Live Music</span>
+          <span class="club-perk">Drink Specials</span>
+          <span class="club-perk">Theme Nights</span>
+        </div>
+      </div>
+    </div>
+    <div class="club-card">
+      <div class="club-img">🍸</div>
+      <div class="club-info">
+        <h3>Downtown District</h3>
+        <div class="club-type">Bar Crawl Route</div>
+        <p>A curated crawl through Windsor's best bars — each stop brings a different vibe.</p>
+        <div class="club-perks">
+          <span class="club-perk">Multiple Venues</span>
+          <span class="club-perk">Guided Tour</span>
+          <span class="club-perk">Wristband Access</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLE ITINERARY -->
+<section class="section reveal" id="itinerary">
+  <div class="section-label">Sample Itinerary</div>
+  <h2 class="section-title">A typical NorthBound weekend</h2>
+  <div class="section-subtitle">Here's what a Standard package weekend looks like.</div>
+  <div class="itinerary">
+    <div class="itinerary-day">
+      <div class="itinerary-day-label">Friday</div>
+      <div class="timeline-item">
+        <div class="timeline-time">5:00 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Depart from your city</h4>
+          <p>Board the chartered coach at your pickup point. Music, snacks, and good vibes on the bus.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">7:30 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Border crossing</h4>
+          <p>Quick group processing at the Ambassador Bridge or Windsor Tunnel. We coordinate everything.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">8:00 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Hotel check-in</h4>
+          <p>Drop your bags at the downtown hotel. Freshen up and get ready for the night.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">9:30 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Group dinner</h4>
+          <p>Optional group dinner at a downtown Windsor restaurant.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">11:00 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Nightclub — Venue 1</h4>
+          <p>Skip the line with your NorthBound wristband. Welcome to Canadian nightlife.</p>
+        </div>
+      </div>
+    </div>
+    <div class="itinerary-day">
+      <div class="itinerary-day-label">Saturday</div>
+      <div class="timeline-item">
+        <div class="timeline-time">12:00 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Late checkout &amp; explore</h4>
+          <p>Sleep in, grab brunch, explore the riverfront, or check out local shops.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">6:00 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Pre-game &amp; dinner</h4>
+          <p>Regroup with the crew. Evening out on the town begins.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">10:30 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Nightclub — Venue 2 &amp; 3</h4>
+          <p>Saturday night is the main event. VIP entry, drink deals, and a guided nightlife crawl.</p>
+        </div>
+      </div>
+    </div>
+    <div class="itinerary-day">
+      <div class="itinerary-day-label">Sunday</div>
+      <div class="timeline-item">
+        <div class="timeline-time">11:00 AM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Late checkout</h4>
+          <p>Pack up, grab coffee, and say goodbye to Windsor.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">1:00 PM</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>Return transport</h4>
+          <p>Board the coach home. Nap, swap stories, and start planning the next trip.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAVEL INFO -->
+<section class="section reveal" id="travel">
+  <div class="section-label">Travel Requirements</div>
+  <h2 class="section-title">What you need to cross</h2>
+  <div class="section-subtitle">Crossing into Canada is straightforward — here's what to bring.</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon">🛂</div>
+      <h3>Accepted Documents</h3>
+      <p>You need one of these to enter Canada:</p>
+      <ul>
+        <li>Valid U.S. Passport</li>
+        <li>U.S. Passport Card</li>
+        <li>Enhanced Driver's License (MI, NY, VT, WA, MN)</li>
+        <li>NEXUS Card</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🎂</div>
+      <h3>Age Requirements</h3>
+      <p>Ontario's legal drinking age is 19. You must be at least 19 to access nightlife venues on our tours. All travelers must be 18+ to book.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🚫</div>
+      <h3>Border Tips</h3>
+      <p>Smooth crossings every time:</p>
+      <ul>
+        <li>No criminal record issues (DUI, etc.)</li>
+        <li>No cannabis — it's illegal to cross with</li>
+        <li>Declare all purchases on return</li>
+        <li>Be polite and honest with officers</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🛡️</div>
+      <h3>Safety &amp; Support</h3>
+      <p>Your safety is our top priority. Every trip includes:</p>
+      <ul>
+        <li>Tour leader with every group</li>
+        <li>24/7 emergency contact line</li>
+        <li>Buddy system &amp; headcounts</li>
+        <li>Pre-trip orientation on the bus</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section reveal" id="faq">
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">Got questions?</h2>
+  <div class="section-subtitle">Everything you need to know before your first NorthBound trip.</div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Do I need a passport to go to Windsor?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Yes. To enter Canada from the U.S. you need a valid passport, passport card, enhanced driver's license (available in MI, NY, VT, WA, MN), or NEXUS card. A regular driver's license is not accepted.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Can I drink in Windsor if I'm under 21?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Yes — Ontario's legal drinking age is 19. If you're 19 or older, you can drink legally in Windsor. You must be at least 19 to access nightlife venues on our tours.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        What's the payment structure?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>A deposit of $49–$99 secures your spot. The remaining balance is due 14 days before your trip. We accept all major credit cards, Apple Pay, and Google Pay.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Can my friends and I book together?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Absolutely. Our group booking feature lets you reserve together, share a booking link with friends, and even split payments. You can also add friends to an existing booking later.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        What happens at the border?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>We handle the logistics. The coach stops at the border, an officer boards or you walk through inspection, show your document, and you're through. We've coordinated hundreds of group crossings — it's smooth and quick.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Is this safe?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Safety is built into every trip. We have tour leaders, a buddy system, headcounts at every stop, a 24/7 emergency line, and a behavior agreement. Windsor is a safe, walkable city, and all our venues and hotels are in the downtown core.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        What's the cancellation policy?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Full refund if you cancel 30+ days before your trip. 50% refund for 15–29 days. No refund within 14 days of departure. You can transfer your booking to a friend at any time.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Can I bring cannabis across the border?
+        <span class="faq-arrow">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>No. Even though cannabis is legal in both Canada and several U.S. states, transporting it across the international border is a federal offense. Do not bring any cannabis products — this will be covered in your pre-trip orientation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h2>Ready to go <span class="gradient">NorthBound</span>?</h2>
+  <p>Your first legal night out is waiting across the border. Book your weekend now.</p>
+  <button class="btn-primary" onclick="openBooking()">Book Your Weekend</button>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="font-size:1.8rem;">NORTHBOUND</div>
+      <p>Cross-border overnight tourism experiences from the U.S. to Windsor, Ontario. Organized, safe, and unforgettable.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Weekends</h4>
+      <a href="#weekends">Detroit Tours</a>
+      <a href="#weekends">Ohio Tours</a>
+      <a href="#weekends">Indiana Tours</a>
+      <a href="#weekends">Buffalo Tours</a>
+      <a href="#weekends">All Destinations</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#how">How It Works</a>
+      <a href="#nightlife">Nightlife Guide</a>
+      <a href="#travel">Travel Info</a>
+      <a href="#faq">FAQ</a>
+      <a href="#">Become an Ambassador</a>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">Snapchat</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Partner With Us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 NorthBound Tourism. All rights reserved.</span>
+    <span>
+      <a href="#" style="color:var(--text-muted); text-decoration:none;">Privacy</a> &nbsp;·&nbsp;
+      <a href="#" style="color:var(--text-muted); text-decoration:none;">Terms</a> &nbsp;·&nbsp;
+      <a href="#" style="color:var(--text-muted); text-decoration:none;">Liability Waiver</a>
+    </span>
+  </div>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBooking()">&times;</button>
+    <div class="modal-header">
+      <h2>Book Your Weekend</h2>
+      <p>Secure your spot with a deposit. Balance due 14 days before departure.</p>
+    </div>
+    <div class="modal-body">
+      <div class="booking-steps">
+        <div class="booking-step active" id="step1"></div>
+        <div class="booking-step" id="step2"></div>
+        <div class="booking-step" id="step3"></div>
+        <div class="booking-step" id="step4"></div>
+      </div>
+
+      <!-- Step 1: Trip Selection -->
+      <div id="bookingStep1">
+        <div class="form-group">
+          <label class="form-label">Select Weekend</label>
+          <select class="form-select">
+            <option>APR 10–12 — Spring Kickoff (Detroit)</option>
+            <option>APR 24–26 — Ohio State Takeover (Columbus)</option>
+            <option>MAY 1–3 — Cinco de Mayo Fiesta (Detroit)</option>
+            <option>MAY 22–25 — Memorial Day Blowout (Multiple)</option>
+            <option>JUN 5–7 — Summer Send-Off (Buffalo)</option>
+            <option>JUN 19–21 — Juneteenth Festival (Detroit)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Package</label>
+          <select class="form-select">
+            <option>Basic — $149/person</option>
+            <option selected>Standard — $249/person (Most Popular)</option>
+            <option>VIP — $399/person</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Number of Travelers</label>
+          <select class="form-select">
+            <option>1 traveler</option>
+            <option selected>2 travelers</option>
+            <option>3 travelers</option>
+            <option>4 travelers</option>
+            <option>5+ travelers (group)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Step 2: Traveler Info (hidden by default) -->
+      <div id="bookingStep2" style="display:none;">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input class="form-input" type="text" placeholder="John">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" type="text" placeholder="Smith">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="john@university.edu">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input class="form-input" type="tel" placeholder="(555) 123-4567">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date of Birth</label>
+            <input class="form-input" type="date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Home City</label>
+            <input class="form-input" type="text" placeholder="Detroit, MI">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Documents (hidden by default) -->
+      <div id="bookingStep3" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Border Document Type</label>
+          <select class="form-select">
+            <option>U.S. Passport</option>
+            <option>Passport Card</option>
+            <option>Enhanced Driver's License</option>
+            <option>NEXUS Card</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Upload Document Photo</label>
+          <input class="form-input" type="file" accept="image/*,.pdf" style="padding:0.6rem;">
+        </div>
+        <div class="form-group" style="margin-top:1.5rem;">
+          <label style="display:flex; align-items:flex-start; gap:0.75rem; cursor:pointer; font-size:0.9rem; color:var(--text-secondary);">
+            <input type="checkbox" style="margin-top:0.25rem; accent-color:var(--neon-cyan);">
+            I agree to the <a href="#" style="color:var(--neon-cyan);">Liability Waiver</a> and <a href="#" style="color:var(--neon-cyan);">Terms of Service</a>. I confirm I will be 19+ on the date of travel.
+          </label>
+        </div>
+      </div>
+
+      <!-- Step 4: Payment (hidden by default) -->
+      <div id="bookingStep4" style="display:none;">
+        <div style="background:rgba(0,240,255,0.05); border:1px solid rgba(0,240,255,0.15); border-radius:12px; padding:1.25rem; margin-bottom:1.5rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+            <span style="color:var(--text-secondary); font-size:0.9rem;">Deposit due today</span>
+            <span style="font-family:'Space Grotesk'; font-weight:700; color:var(--neon-cyan); font-size:1.2rem;">$99.00</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--text-muted); font-size:0.8rem;">Balance due by Mar 27</span>
+            <span style="color:var(--text-muted); font-size:0.85rem;">$399.00</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Card Number</label>
+          <input class="form-input" type="text" placeholder="4242 4242 4242 4242">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Expiry</label>
+            <input class="form-input" type="text" placeholder="MM / YY">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CVC</label>
+            <input class="form-input" type="text" placeholder="123">
+          </div>
+        </div>
+        <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+          <button style="flex:1; padding:0.7rem; border-radius:8px; border:1px solid var(--dark-border); background:var(--dark-card); color:var(--text-secondary); font-size:0.85rem; cursor:pointer;">Apple Pay</button>
+          <button style="flex:1; padding:0.7rem; border-radius:8px; border:1px solid var(--dark-border); background:var(--dark-card); color:var(--text-secondary); font-size:0.85rem; cursor:pointer;">Google Pay</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="bookingBack" onclick="prevStep()" style="display:none;">Back</button>
+      <button class="btn-primary" id="bookingNext" onclick="nextStep()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Nav scroll effect ──
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── Mobile nav ──
+function toggleMobileNav() {
+  document.getElementById('navLinks').classList.toggle('mobile-open');
+}
+
+// ── Smooth scroll ──
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── Scroll reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('visible'); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── FAQ ──
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  document.querySelectorAll('.faq-item').forEach(i => { if (i !== item) i.classList.remove('open'); });
+  item.classList.toggle('open');
+}
+
+// ── Booking modal ──
+let currentStep = 1;
+const totalSteps = 4;
+
+function openBooking() {
+  currentStep = 1;
+  updateBookingUI();
+  document.getElementById('bookingModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBooking() {
+  document.getElementById('bookingModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function nextStep() {
+  if (currentStep < totalSteps) {
+    currentStep++;
+    updateBookingUI();
+  } else {
+    // Submit
+    closeBooking();
+    alert('Booking submitted! You\'ll receive a confirmation email shortly.');
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    updateBookingUI();
+  }
+}
+
+function updateBookingUI() {
+  for (let i = 1; i <= totalSteps; i++) {
+    const step = document.getElementById('step' + i);
+    const content = document.getElementById('bookingStep' + i);
+    if (step) step.classList.toggle('active', i <= currentStep);
+    if (content) content.style.display = i === currentStep ? 'block' : 'none';
+  }
+  document.getElementById('bookingBack').style.display = currentStep > 1 ? 'inline-flex' : 'none';
+  document.getElementById('bookingNext').textContent =
+    currentStep === totalSteps ? 'Pay $99 Deposit' : 'Continue';
+}
+
+// Close modal on overlay click
+document.getElementById('bookingModal').addEventListener('click', function(e) {
+  if (e.target === this) closeBooking();
+});
+</script>
+</body>
+</html>
+
