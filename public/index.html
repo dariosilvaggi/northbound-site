@@ -7,21 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --neon-cyan: #00f0ff;
-  --neon-magenta: #ff00e5;
-  --neon-purple: #8b5cf6;
-  --neon-blue: #3b82f6;
-  --dark-bg: #0a0a0f;
-  --dark-card: #111118;
-  --dark-card-hover: #1a1a25;
-  --dark-border: #1e1e2e;
-  --text-primary: #f0f0f5;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --neon-cyan: #C41E3A;
+  --neon-magenta: #E63946;
+  --neon-purple: #D4A843;
+  --neon-blue: #C41E3A;
+  --dark-bg: #0f0f14;
+  --dark-card: #1C1C24;
+  --dark-card-hover: #26262f;
+  --dark-border: #2A2A34;
+  --text-primary: #F5F5F5;
+  --text-secondary: #B0BEC5;
+  --text-muted: #78909C;
   --gradient-main: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
-  --gradient-card: linear-gradient(135deg, rgba(0,240,255,0.05), rgba(255,0,229,0.05));
-  --glow-cyan: 0 0 20px rgba(0,240,255,0.3);
-  --glow-magenta: 0 0 20px rgba(255,0,229,0.3);
+  --gradient-card: linear-gradient(135deg, rgba(196,30,58,0.05), rgba(230,57,70,0.05));
+  --glow-cyan: 0 0 20px rgba(196,30,58,0.3);
+  --glow-magenta: 0 0 20px rgba(230,57,70,0.3);
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -78,8 +78,8 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 .hero-bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(0,240,255,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 50%, rgba(255,0,229,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 50%, rgba(196,30,58,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(230,57,70,0.12) 0%, transparent 60%),
     radial-gradient(ellipse at 50% 120%, rgba(139,92,246,0.1) 0%, transparent 50%);
 }
 .hero-grid {
@@ -94,7 +94,7 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 .hero-content { text-align: center; position: relative; z-index: 1; max-width: 900px; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 0.5rem;
-  background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.2);
+  background: rgba(196,30,58,0.1); border: 1px solid rgba(196,30,58,0.2);
   padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem;
   color: var(--neon-cyan); margin-bottom: 1.5rem;
 }
@@ -124,7 +124,7 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
   font-weight: 600; font-size: 1rem; text-decoration: none; cursor: pointer;
   transition: all 0.3s;
 }
-.btn-secondary:hover { border-color: var(--neon-cyan); background: rgba(0,240,255,0.05); }
+.btn-secondary:hover { border-color: var(--neon-cyan); background: rgba(196,30,58,0.05); }
 .hero-stats {
   display: flex; justify-content: center; gap: 3rem; margin-top: 3rem;
   padding-top: 2rem; border-top: 1px solid var(--dark-border);
@@ -168,7 +168,7 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 .how-card p { font-size: 0.9rem; color: var(--text-secondary); }
 
 /* ── UPCOMING WEEKENDS ── */
-.weekends-section { background: linear-gradient(180deg, transparent, rgba(0,240,255,0.02), transparent); }
+.weekends-section { background: linear-gradient(180deg, transparent, rgba(196,30,58,0.02), transparent); }
 .weekends-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; }
 .weekend-card {
   background: var(--dark-card);
@@ -186,8 +186,8 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
   font-size: 0.7rem; padding: 0.25rem 0.75rem; border-radius: 50px;
   font-weight: 600; text-transform: uppercase;
 }
-.badge-hot { background: rgba(255,0,229,0.15); color: var(--neon-magenta); }
-.badge-new { background: rgba(0,240,255,0.15); color: var(--neon-cyan); }
+.badge-hot { background: rgba(230,57,70,0.15); color: var(--neon-magenta); }
+.badge-new { background: rgba(196,30,58,0.15); color: var(--neon-cyan); }
 .badge-limited { background: rgba(139,92,246,0.15); color: var(--neon-purple); }
 .weekend-body { padding: 1rem 1.5rem; }
 .weekend-body h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
@@ -224,7 +224,7 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 .package-card:hover { transform: translateY(-4px); }
 .package-card.featured {
   border-color: var(--neon-cyan);
-  background: linear-gradient(135deg, rgba(0,240,255,0.05), rgba(255,0,229,0.03));
+  background: linear-gradient(135deg, rgba(196,30,58,0.05), rgba(230,57,70,0.03));
 }
 .package-card.featured::before {
   content: 'MOST POPULAR';
@@ -278,7 +278,7 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 .club-card:hover { border-color: var(--neon-magenta); transform: translateY(-3px); }
 .club-img {
   height: 180px;
-  background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(255,0,229,0.2));
+  background: linear-gradient(135deg, rgba(196,30,58,0.2), rgba(230,57,70,0.2));
   display: flex; align-items: center; justify-content: center;
   font-size: 3rem;
 }
@@ -289,8 +289,8 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 .club-perks { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
 .club-perk {
   font-size: 0.7rem; padding: 0.25rem 0.75rem;
-  border-radius: 50px; background: rgba(0,240,255,0.08);
-  color: var(--neon-cyan); border: 1px solid rgba(0,240,255,0.15);
+  border-radius: 50px; background: rgba(196,30,58,0.08);
+  color: var(--neon-cyan); border: 1px solid rgba(196,30,58,0.15);
 }
 
 /* ── ITINERARY ── */
@@ -425,8 +425,8 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 .cta-section {
   text-align: center; padding: 6rem 2rem;
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(0,240,255,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 50%, rgba(255,0,229,0.05) 0%, transparent 70%);
+    radial-gradient(ellipse at 50% 50%, rgba(196,30,58,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(230,57,70,0.05) 0%, transparent 70%);
 }
 .cta-section h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
 .cta-section p { color: var(--text-secondary); max-width: 500px; margin: 0 auto 2rem; }
@@ -1258,7 +1258,7 @@ h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
 
       <!-- Step 4: Payment (hidden by default) -->
       <div id="bookingStep4" style="display:none;">
-        <div style="background:rgba(0,240,255,0.05); border:1px solid rgba(0,240,255,0.15); border-radius:12px; padding:1.25rem; margin-bottom:1.5rem;">
+        <div style="background:rgba(196,30,58,0.05); border:1px solid rgba(196,30,58,0.15); border-radius:12px; padding:1.25rem; margin-bottom:1.5rem;">
           <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
             <span style="color:var(--text-secondary); font-size:0.9rem;">Deposit due today</span>
             <span style="font-family:'Space Grotesk'; font-weight:700; color:var(--neon-cyan); font-size:1.2rem;">$99.00</span>
