@@ -7,7 +7,7 @@
 <meta name="description" content="Organized overnight party trips from the US to Windsor, Ontario. Drink legally at 19. Chartered coach, hotel, nightclub access — all handled.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════
    NORTHBOUND WEEKENDS — Logo-Driven Premium Design
@@ -114,11 +114,24 @@ img { display: block; max-width: 100%; }
 }
 .nav-logo img { height: 42px; width: auto; }
 .nav-logo-text {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.05rem; font-weight: 800;
-  letter-spacing: 0.1em;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.nav-logo-main {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #C8974E;
+}
+.nav-logo-sub {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: rgba(245,240,232,0.7);
+  margin-top: 2px;
 }
 .nav-links { display: flex; gap: 1.75rem; align-items: center; }
 .nav-links a {
@@ -771,7 +784,7 @@ img { display: block; max-width: 100%; }
   <div class="nav-inner">
     <div class="nav-logo" onclick="scrollToSection('hero')">
       <img src="logo.png" alt="NorthBound Weekends">
-      <span class="nav-logo-text">NORTHBOUND</span>
+      <div class="nav-logo-text"><span class="nav-logo-main">NORTHBOUND</span><span class="nav-logo-sub">WEEKENDS</span></div>
     </div>
     <div class="nav-links" id="navLinks">
       <a href="#weekends">Weekends</a>
@@ -1275,7 +1288,7 @@ img { display: block; max-width: 100%; }
       <div>
         <div class="nav-logo" style="margin-bottom:0.5rem;">
           <img src="logo.png" alt="NorthBound" style="height:48px;">
-          <span class="nav-logo-text">NORTHBOUND</span>
+          <div class="nav-logo-text"><span class="nav-logo-main">NORTHBOUND</span><span class="nav-logo-sub">WEEKENDS</span></div>
         </div>
         <p class="footer-brand-text">Cross-border overnight tourism experiences from the U.S. to Windsor, Ontario. Organized, safe, unforgettable.</p>
       </div>
