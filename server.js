@@ -63,7 +63,15 @@ function requireAdmin(req, res, next) {
 
 // ── Admin routes ─────────────────────────────────────────────────
 app.get('/admin/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin', 'login.html'));
+  const fp = path.join(__dirname, 'admin', 'login.html');
+  fs.readFile(fp, 'utf8', (err, html) => {
+    if (err) {
+      console.error('LOGIN FILE ERROR:', err.message, '| path:', fp);
+      return res.status(500).send('File error: ' + err.message + ' | path: ' + fp);
+    }
+    res.setHeader('Content-Type', 'text/html');
+    res.send(html);
+  });
 });
 
 app.post('/admin/login', (req, res) => {
@@ -81,7 +89,15 @@ app.get('/admin/logout', (req, res) => {
 });
 
 app.get('/admin', requireAdmin, (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin', 'dashboard.html'));
+  const fp = path.join(__dirname, 'admin', 'dashboard.html');
+  fs.readFile(fp, 'utf8', (err, html) => {
+    if (err) {
+      console.error('DASHBOARD FILE ERROR:', err.message, '| path:', fp);
+      return res.status(500).send('File error: ' + err.message + ' | path: ' + fp);
+    }
+    res.setHeader('Content-Type', 'text/html');
+    res.send(html);
+  });
 });
 
 app.get('/admin/api/banners', requireAdmin, (req, res) => {
@@ -133,5 +149,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`NorthBound site running on port ${PORT}`);
+  console.log(`NorthBound site running on port ${PORT} | __dirname: ${__dirname}`);
+  console.log('admin dir exists:', require('fs').existsSync(require('path').join(__dirname, 'admin')));
 });
