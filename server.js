@@ -143,6 +143,209 @@ app.get('/api/banners', (req, res) => {
   res.json(loadBanners().filter(b => b.active));
 });
 
+// ── Content data helpers ─────────────────────────────────────────
+const CONTENT_SECTIONS = ['weekends', 'packages', 'cities', 'clubs', 'itinerary'];
+
+function loadContent(name) {
+  const fp = path.join(DATA_DIR, `${name}.json`);
+  if (!fs.existsSync(fp)) return [];
+  try { return JSON.parse(fs.readFileSync(fp, 'utf8')); }
+  catch (e) { return []; }
+}
+function saveContent(name, data) {
+  fs.writeFileSync(path.join(DATA_DIR, `${name}.json`), JSON.stringify(data, null, 2));
+}
+function newId() { return crypto.randomBytes(6).toString('hex'); }
+
+// ── Public content APIs ───────────────────────────────────────────
+CONTENT_SECTIONS.forEach(section => {
+  app.get(`/api/${section}`, (req, res) => {
+    const items = loadContent(section);
+    res.json(items.filter(x => x.active !== false));
+  });
+});
+
+// ── Admin content APIs ────────────────────────────────────────────
+
+// GET all (admin, includes inactive)
+CONTENT_SECTIONS.forEach(section => {
+  app.get(`/admin/api/${section}`, requireAdmin, (req, res) => {
+    res.json(loadContent(section));
+  });
+});
+
+// ── Weekends CRUD ─────────────────────────────────────────────────
+app.post('/admin/weekends/add', requireAdmin, (req, res) => {
+  const items = loadContent('weekends');
+  const item = { id: newId(), ...req.body, active: req.body.active !== 'false' };
+  items.push(item);
+  saveContent('weekends', items);
+  res.json({ success: true, item });
+});
+app.post('/admin/weekends/update/:id', requireAdmin, (req, res) => {
+  const items = loadContent('weekends');
+  const idx = items.findIndex(x => x.id === req.params.id);
+  if (idx !== -1) items[idx] = { ...items[idx], ...req.body, active: req.body.active !== 'false' };
+  saveContent('weekends', items);
+  res.json({ success: true });
+});
+app.post('/admin/weekends/delete/:id', requireAdmin, (req, res) => {
+  saveContent('weekends', loadContent('weekends').filter(x => x.id !== req.params.id));
+  res.json({ success: true });
+});
+app.post('/admin/weekends/toggle/:id', requireAdmin, (req, res) => {
+  const items = loadContent('weekends');
+  const item = items.find(x => x.id === req.params.id);
+  if (item) item.active = !item.active;
+  saveContent('weekends', items);
+  res.json({ success: true, active: item ? item.active : null });
+});
+
+// ── Packages CRUD ─────────────────────────────────────────────────
+app.post('/admin/packages/add', requireAdmin, (req, res) => {
+  const items = loadContent('packages');
+  const features = (req.body.featuresRaw || '').split('\n')
+    .map(l => l.trim()).filter(Boolean)
+    .map(l => ({ text: l.replace(/^[-+] ?/, ''), included: !l.startsWith('-') }));
+  const item = {
+    id: newId(),
+    name: req.body.name,
+    price: Number(req.body.price),
+    featured: req.body.featured === 'true',
+    features,
+    active: req.body.active !== 'false'
+  };
+  items.push(item);
+  saveContent('packages', items);
+  res.json({ success: true, item });
+});
+app.post('/admin/packages/update/:id', requireAdmin, (req, res) => {
+  const items = loadContent('packages');
+  const idx = items.findIndex(x => x.id === req.params.id);
+  if (idx !== -1) {
+    const features = (req.body.featuresRaw || '').split('\n')
+      .map(l => l.trim()).filter(Boolean)
+      .map(l => ({ text: l.replace(/^[-+] ?/, ''), included: !l.startsWith('-') }));
+    items[idx] = { ...items[idx], name: req.body.name, price: Number(req.body.price),
+      featured: req.body.featured === 'true', features, active: req.body.active !== 'false' };
+  }
+  saveContent('packages', items);
+  res.json({ success: true });
+});
+app.post('/admin/packages/delete/:id', requireAdmin, (req, res) => {
+  saveContent('packages', loadContent('packages').filter(x => x.id !== req.params.id));
+  res.json({ success: true });
+});
+app.post('/admin/packages/toggle/:id', requireAdmin, (req, res) => {
+  const items = loadContent('packages');
+  const item = items.find(x => x.id === req.params.id);
+  if (item) item.active = !item.active;
+  saveContent('packages', items);
+  res.json({ success: true, active: item ? item.active : null });
+});
+
+// ── Cities CRUD ───────────────────────────────────────────────────
+app.post('/admin/cities/add', requireAdmin, (req, res) => {
+  const items = loadContent('cities');
+  items.push({ id: newId(), ...req.body, active: req.body.active !== 'false' });
+  saveContent('cities', items);
+  res.json({ success: true });
+});
+app.post('/admin/cities/update/:id', requireAdmin, (req, res) => {
+  const items = loadContent('cities');
+  const idx = items.findIndex(x => x.id === req.params.id);
+  if (idx !== -1) items[idx] = { ...items[idx], ...req.body, active: req.body.active !== 'false' };
+  saveContent('cities', items);
+  res.json({ success: true });
+});
+app.post('/admin/cities/delete/:id', requireAdmin, (req, res) => {
+  saveContent('cities', loadContent('cities').filter(x => x.id !== req.params.id));
+  res.json({ success: true });
+});
+app.post('/admin/cities/toggle/:id', requireAdmin, (req, res) => {
+  const items = loadContent('cities');
+  const item = items.find(x => x.id === req.params.id);
+  if (item) item.active = !item.active;
+  saveContent('cities', items);
+  res.json({ success: true, active: item ? item.active : null });
+});
+
+// ── Clubs CRUD ────────────────────────────────────────────────────
+app.post('/admin/clubs/add', requireAdmin, (req, res) => {
+  const items = loadContent('clubs');
+  const perks = (req.body.perksRaw || '').split(',').map(p => p.trim()).filter(Boolean);
+  items.push({ id: newId(), name: req.body.name, type: req.body.type,
+    emoji: req.body.emoji || '🎵', description: req.body.description, perks, active: req.body.active !== 'false' });
+  saveContent('clubs', items);
+  res.json({ success: true });
+});
+app.post('/admin/clubs/update/:id', requireAdmin, (req, res) => {
+  const items = loadContent('clubs');
+  const idx = items.findIndex(x => x.id === req.params.id);
+  if (idx !== -1) {
+    const perks = (req.body.perksRaw || '').split(',').map(p => p.trim()).filter(Boolean);
+    items[idx] = { ...items[idx], name: req.body.name, type: req.body.type,
+      emoji: req.body.emoji || items[idx].emoji, description: req.body.description,
+      perks, active: req.body.active !== 'false' };
+  }
+  saveContent('clubs', items);
+  res.json({ success: true });
+});
+app.post('/admin/clubs/delete/:id', requireAdmin, (req, res) => {
+  saveContent('clubs', loadContent('clubs').filter(x => x.id !== req.params.id));
+  res.json({ success: true });
+});
+app.post('/admin/clubs/toggle/:id', requireAdmin, (req, res) => {
+  const items = loadContent('clubs');
+  const item = items.find(x => x.id === req.params.id);
+  if (item) item.active = !item.active;
+  saveContent('clubs', items);
+  res.json({ success: true, active: item ? item.active : null });
+});
+
+// ── Itinerary CRUD ────────────────────────────────────────────────
+app.post('/admin/itinerary/day/add', requireAdmin, (req, res) => {
+  const days = loadContent('itinerary');
+  days.push({ id: newId(), day: req.body.day, active: true, items: [] });
+  saveContent('itinerary', days);
+  res.json({ success: true });
+});
+app.post('/admin/itinerary/day/delete/:dayId', requireAdmin, (req, res) => {
+  saveContent('itinerary', loadContent('itinerary').filter(d => d.id !== req.params.dayId));
+  res.json({ success: true });
+});
+app.post('/admin/itinerary/day/rename/:dayId', requireAdmin, (req, res) => {
+  const days = loadContent('itinerary');
+  const day = days.find(d => d.id === req.params.dayId);
+  if (day) day.day = req.body.day;
+  saveContent('itinerary', days);
+  res.json({ success: true });
+});
+app.post('/admin/itinerary/item/add/:dayId', requireAdmin, (req, res) => {
+  const days = loadContent('itinerary');
+  const day = days.find(d => d.id === req.params.dayId);
+  if (day) day.items.push({ id: newId(), time: req.body.time, title: req.body.title, description: req.body.description });
+  saveContent('itinerary', days);
+  res.json({ success: true });
+});
+app.post('/admin/itinerary/item/update/:dayId/:itemId', requireAdmin, (req, res) => {
+  const days = loadContent('itinerary');
+  const day = days.find(d => d.id === req.params.dayId);
+  if (day) {
+    const idx = day.items.findIndex(i => i.id === req.params.itemId);
+    if (idx !== -1) day.items[idx] = { ...day.items[idx], time: req.body.time, title: req.body.title, description: req.body.description };
+  }
+  saveContent('itinerary', days);
+  res.json({ success: true });
+});
+app.post('/admin/itinerary/item/delete/:dayId/:itemId', requireAdmin, (req, res) => {
+  const days = loadContent('itinerary');
+  const day = days.find(d => d.id === req.params.dayId);
+  if (day) day.items = day.items.filter(i => i.id !== req.params.itemId);
+  saveContent('itinerary', days);
+  res.json({ success: true });
+});
+
 // ── Catch-all ────────────────────────────────────────────────────
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

@@ -885,146 +885,7 @@ img { display: block; max-width: 100%; }
       <h2 class="section-title">Grab your spot</h2>
       <p class="section-desc">Limited capacity on every trip. Sell-outs are common — book early.</p>
     </div>
-    <div class="weekends-grid">
-      <div class="wk-card" onclick="openBooking()">
-        <div class="wk-top">
-          <div class="wk-date">APR 10 &ndash; 12</div>
-          <span class="wk-badge badge-hot">Selling Fast</span>
-        </div>
-        <div class="wk-body">
-          <h3>Spring Kickoff Weekend</h3>
-          <div class="wk-route">Detroit &rarr; Windsor</div>
-          <div class="wk-details">
-            <span class="wk-detail">2 nights</span>
-            <span class="wk-detail">3 clubs</span>
-            <span class="wk-detail">12 spots left</span>
-          </div>
-        </div>
-        <div class="wk-footer">
-          <div>
-            <span class="wk-price-from">from </span>
-            <span class="wk-price-amount">$189</span>
-            <span class="wk-price-per"> /person</span>
-          </div>
-          <button class="btn-sm">Book</button>
-        </div>
-      </div>
-      <div class="wk-card" onclick="openBooking()">
-        <div class="wk-top">
-          <div class="wk-date">APR 24 &ndash; 26</div>
-          <span class="wk-badge badge-new">New</span>
-        </div>
-        <div class="wk-body">
-          <h3>Ohio State Takeover</h3>
-          <div class="wk-route">Columbus &rarr; Windsor</div>
-          <div class="wk-details">
-            <span class="wk-detail">2 nights</span>
-            <span class="wk-detail">2 clubs</span>
-            <span class="wk-detail">30 spots left</span>
-          </div>
-        </div>
-        <div class="wk-footer">
-          <div>
-            <span class="wk-price-from">from </span>
-            <span class="wk-price-amount">$219</span>
-            <span class="wk-price-per"> /person</span>
-          </div>
-          <button class="btn-sm">Book</button>
-        </div>
-      </div>
-      <div class="wk-card" onclick="openBooking()">
-        <div class="wk-top">
-          <div class="wk-date">MAY 1 &ndash; 3</div>
-          <span class="wk-badge badge-ltd">Limited</span>
-        </div>
-        <div class="wk-body">
-          <h3>Cinco de Mayo Fiesta</h3>
-          <div class="wk-route">Detroit &rarr; Windsor</div>
-          <div class="wk-details">
-            <span class="wk-detail">2 nights</span>
-            <span class="wk-detail">4 clubs</span>
-            <span class="wk-detail">8 spots left</span>
-          </div>
-        </div>
-        <div class="wk-footer">
-          <div>
-            <span class="wk-price-from">from </span>
-            <span class="wk-price-amount">$199</span>
-            <span class="wk-price-per"> /person</span>
-          </div>
-          <button class="btn-sm">Book</button>
-        </div>
-      </div>
-      <div class="wk-card" onclick="openBooking()">
-        <div class="wk-top">
-          <div class="wk-date">MAY 22 &ndash; 25</div>
-          <span class="wk-badge badge-hot">Selling Fast</span>
-        </div>
-        <div class="wk-body">
-          <h3>Memorial Day Blowout</h3>
-          <div class="wk-route">Multiple Cities &rarr; Windsor</div>
-          <div class="wk-details">
-            <span class="wk-detail">3 nights</span>
-            <span class="wk-detail">5 clubs</span>
-            <span class="wk-detail">20 spots left</span>
-          </div>
-        </div>
-        <div class="wk-footer">
-          <div>
-            <span class="wk-price-from">from </span>
-            <span class="wk-price-amount">$299</span>
-            <span class="wk-price-per"> /person</span>
-          </div>
-          <button class="btn-sm">Book</button>
-        </div>
-      </div>
-      <div class="wk-card" onclick="openBooking()">
-        <div class="wk-top">
-          <div class="wk-date">JUN 5 &ndash; 7</div>
-          <span class="wk-badge badge-new">New</span>
-        </div>
-        <div class="wk-body">
-          <h3>Summer Send-Off</h3>
-          <div class="wk-route">Buffalo &rarr; Windsor</div>
-          <div class="wk-details">
-            <span class="wk-detail">2 nights</span>
-            <span class="wk-detail">3 clubs</span>
-            <span class="wk-detail">25 spots left</span>
-          </div>
-        </div>
-        <div class="wk-footer">
-          <div>
-            <span class="wk-price-from">from </span>
-            <span class="wk-price-amount">$229</span>
-            <span class="wk-price-per"> /person</span>
-          </div>
-          <button class="btn-sm">Book</button>
-        </div>
-      </div>
-      <div class="wk-card" onclick="openBooking()">
-        <div class="wk-top">
-          <div class="wk-date">JUN 19 &ndash; 21</div>
-          <span class="wk-badge badge-ltd">VIP Only</span>
-        </div>
-        <div class="wk-body">
-          <h3>Juneteenth Festival Weekend</h3>
-          <div class="wk-route">Detroit &rarr; Windsor</div>
-          <div class="wk-details">
-            <span class="wk-detail">2 nights</span>
-            <span class="wk-detail">3 clubs + festival</span>
-            <span class="wk-detail">15 spots left</span>
-          </div>
-        </div>
-        <div class="wk-footer">
-          <div>
-            <span class="wk-price-from">from </span>
-            <span class="wk-price-amount">$249</span>
-            <span class="wk-price-per"> /person</span>
-          </div>
-          <button class="btn-sm">Book</button>
-        </div>
-      </div>
-    </div>
+    <div class="weekends-grid" id="weekends-grid"><div class="loading-msg">Loading trips...</div></div>
   </div>
 </section>
 
@@ -1038,59 +899,7 @@ img { display: block; max-width: 100%; }
       <h2 class="section-title">Choose your experience</h2>
       <p class="section-desc">Every package includes round-trip transport and border crossing coordination.</p>
     </div>
-    <div class="pkg-grid">
-      <div class="pkg-card">
-        <div class="pkg-name">Basic</div>
-        <div class="pkg-price">
-          <span class="currency">$</span><span class="amount">149</span><span class="per"> /person</span>
-        </div>
-        <ul class="pkg-features">
-          <li><span class="chk">&#10003;</span> Round-trip chartered coach</li>
-          <li><span class="chk">&#10003;</span> Border crossing coordination</li>
-          <li><span class="chk">&#10003;</span> Nightclub entry (2 venues)</li>
-          <li><span class="chk">&#10003;</span> Tour staff on-site</li>
-          <li><span class="chk">&#10003;</span> Mobile itinerary</li>
-          <li class="off"><span class="chk">&mdash;</span> Hotel accommodation</li>
-          <li class="off"><span class="chk">&mdash;</span> VIP club access</li>
-          <li class="off"><span class="chk">&mdash;</span> Drink specials</li>
-        </ul>
-        <button class="btn-pkg btn-pkg-outline" onclick="openBooking()">Select Basic</button>
-      </div>
-      <div class="pkg-card featured">
-        <div class="pkg-name">Standard</div>
-        <div class="pkg-price">
-          <span class="currency">$</span><span class="amount">249</span><span class="per"> /person</span>
-        </div>
-        <ul class="pkg-features">
-          <li><span class="chk">&#10003;</span> Round-trip chartered coach</li>
-          <li><span class="chk">&#10003;</span> Border crossing coordination</li>
-          <li><span class="chk">&#10003;</span> Nightclub entry (3 venues)</li>
-          <li><span class="chk">&#10003;</span> Tour staff on-site</li>
-          <li><span class="chk">&#10003;</span> Mobile itinerary</li>
-          <li><span class="chk">&#10003;</span> 2-night hotel stay (downtown)</li>
-          <li><span class="chk">&#10003;</span> Group dinner reservation</li>
-          <li class="off"><span class="chk">&mdash;</span> VIP club access</li>
-        </ul>
-        <button class="btn-pkg btn-pkg-filled" onclick="openBooking()">Select Standard</button>
-      </div>
-      <div class="pkg-card">
-        <div class="pkg-name">VIP</div>
-        <div class="pkg-price">
-          <span class="currency">$</span><span class="amount">399</span><span class="per"> /person</span>
-        </div>
-        <ul class="pkg-features">
-          <li><span class="chk">&#10003;</span> Round-trip chartered coach</li>
-          <li><span class="chk">&#10003;</span> Border crossing coordination</li>
-          <li><span class="chk">&#10003;</span> VIP nightclub entry (all venues)</li>
-          <li><span class="chk">&#10003;</span> Dedicated tour coordinator</li>
-          <li><span class="chk">&#10003;</span> Mobile itinerary</li>
-          <li><span class="chk">&#10003;</span> 2-night premium hotel</li>
-          <li><span class="chk">&#10003;</span> Group dinner + late-night food</li>
-          <li><span class="chk">&#10003;</span> Drink specials at all venues</li>
-        </ul>
-        <button class="btn-pkg btn-pkg-outline" onclick="openBooking()">Select VIP</button>
-      </div>
-    </div>
+    <div class="pkg-grid" id="packages-grid"><div class="loading-msg">Loading packages...</div></div>
   </div>
 </section>
 
@@ -1102,16 +911,7 @@ img { display: block; max-width: 100%; }
       <h2 class="section-title">We pick you up</h2>
       <p class="section-desc">Chartered coaches depart from campuses and central locations across the Midwest and East.</p>
     </div>
-    <div class="dest-grid">
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Detroit, MI</div><div class="dest-dist">30 min to Windsor</div><div class="dest-freq">Every weekend</div></a>
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Ann Arbor, MI</div><div class="dest-dist">1 hr to Windsor</div><div class="dest-freq">Bi-weekly</div></a>
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Columbus, OH</div><div class="dest-dist">3.5 hrs to Windsor</div><div class="dest-freq">Monthly</div></a>
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Cleveland, OH</div><div class="dest-dist">3 hrs to Windsor</div><div class="dest-freq">Monthly</div></a>
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Toledo, OH</div><div class="dest-dist">1.5 hrs to Windsor</div><div class="dest-freq">Bi-weekly</div></a>
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Buffalo, NY</div><div class="dest-dist">4 hrs to Windsor</div><div class="dest-freq">Monthly</div></a>
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Indianapolis, IN</div><div class="dest-dist">4.5 hrs to Windsor</div><div class="dest-freq">Special events</div></a>
-      <a class="dest-card" href="#weekends"><div class="dest-dot"></div><div class="dest-city">Pittsburgh, PA</div><div class="dest-dist">4.5 hrs to Windsor</div><div class="dest-freq">Special events</div></a>
-    </div>
+    <div class="dest-grid" id="cities-grid"><div class="loading-msg">Loading cities...</div></div>
   </div>
 </section>
 
@@ -1123,47 +923,7 @@ img { display: block; max-width: 100%; }
       <h2 class="section-title">Where the night takes you</h2>
       <p class="section-desc">Downtown Windsor's entertainment district — all within walking distance of your hotel.</p>
     </div>
-    <div class="clubs-grid">
-      <div class="club-card">
-        <div class="club-visual">&#127925;</div>
-        <div class="club-info">
-          <h3>Ariius Nightclub</h3>
-          <div class="club-type">Premium Nightclub</div>
-          <p>Multi-level venue with top DJs, bottle service, and a rooftop patio overlooking the river.</p>
-          <div class="club-perks">
-            <span class="club-perk">Skip the Line</span>
-            <span class="club-perk">VIP Sections</span>
-            <span class="club-perk">Rooftop</span>
-          </div>
-        </div>
-      </div>
-      <div class="club-card">
-        <div class="club-visual">&#127928;</div>
-        <div class="club-info">
-          <h3>Wild Child</h3>
-          <div class="club-type">Bar &amp; Live Music</div>
-          <p>High-energy bar with live bands, themed nights, and a legendary dance floor.</p>
-          <div class="club-perks">
-            <span class="club-perk">Live Music</span>
-            <span class="club-perk">Drink Specials</span>
-            <span class="club-perk">Theme Nights</span>
-          </div>
-        </div>
-      </div>
-      <div class="club-card">
-        <div class="club-visual">&#127864;</div>
-        <div class="club-info">
-          <h3>Downtown District</h3>
-          <div class="club-type">Bar Crawl Route</div>
-          <p>A curated crawl through Windsor's best bars — each stop brings a different vibe.</p>
-          <div class="club-perks">
-            <span class="club-perk">Multiple Venues</span>
-            <span class="club-perk">Guided Tour</span>
-            <span class="club-perk">Wristband Access</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="clubs-grid" id="clubs-grid"><div class="loading-msg">Loading venues...</div></div>
   </div>
 </section>
 
@@ -1177,27 +937,7 @@ img { display: block; max-width: 100%; }
       <h2 class="section-title">A typical NorthBound weekend</h2>
       <p class="section-desc">Here's what a Standard package weekend looks like.</p>
     </div>
-    <div class="itinerary">
-      <div class="itin-day">
-        <div class="itin-day-label">Friday</div>
-        <div class="tl-item"><div class="tl-time">5:00 PM</div><div class="tl-content"><h4>Depart from your city</h4><p>Board the chartered coach at your pickup point. Music, snacks, good vibes.</p></div></div>
-        <div class="tl-item"><div class="tl-time">7:30 PM</div><div class="tl-content"><h4>Border crossing</h4><p>Quick group processing at the Ambassador Bridge or Windsor Tunnel.</p></div></div>
-        <div class="tl-item"><div class="tl-time">8:00 PM</div><div class="tl-content"><h4>Hotel check-in</h4><p>Drop your bags at the downtown hotel. Freshen up and get ready.</p></div></div>
-        <div class="tl-item"><div class="tl-time">9:30 PM</div><div class="tl-content"><h4>Group dinner</h4><p>Optional group dinner at a downtown Windsor restaurant.</p></div></div>
-        <div class="tl-item"><div class="tl-time">11:00 PM</div><div class="tl-content"><h4>Nightclub — Venue 1</h4><p>Skip the line with your NorthBound wristband. Welcome to Canadian nightlife.</p></div></div>
-      </div>
-      <div class="itin-day">
-        <div class="itin-day-label">Saturday</div>
-        <div class="tl-item"><div class="tl-time">12:00 PM</div><div class="tl-content"><h4>Late checkout &amp; explore</h4><p>Sleep in, grab brunch, explore the riverfront or local shops.</p></div></div>
-        <div class="tl-item"><div class="tl-time">6:00 PM</div><div class="tl-content"><h4>Pre-game &amp; dinner</h4><p>Regroup with the crew. The evening out begins.</p></div></div>
-        <div class="tl-item"><div class="tl-time">10:30 PM</div><div class="tl-content"><h4>Nightclub — Venue 2 &amp; 3</h4><p>Saturday night is the main event. VIP entry, drink deals, guided nightlife crawl.</p></div></div>
-      </div>
-      <div class="itin-day">
-        <div class="itin-day-label">Sunday</div>
-        <div class="tl-item"><div class="tl-time">11:00 AM</div><div class="tl-content"><h4>Late checkout</h4><p>Pack up, grab coffee, say goodbye to Windsor.</p></div></div>
-        <div class="tl-item"><div class="tl-time">1:00 PM</div><div class="tl-content"><h4>Return transport</h4><p>Board the coach home. Nap, swap stories, start planning the next trip.</p></div></div>
-      </div>
-    </div>
+    <div class="itinerary" id="itinerary-content"><div class="loading-msg">Loading itinerary...</div></div>
   </div>
 </section>
 
@@ -1396,6 +1136,85 @@ function updateBookingUI(){for(let i=1;i<=totalSteps;i++){const s=document.getEl
 document.getElementById('bookingModal').addEventListener('click',function(e){if(e.target===this)closeBooking();});
 </script>
 <script src="/sponsor-banner.js"></script>
-<script src="/sponsor-banner.js"></script>
+<style>.loading-msg{color:#555;font-size:.9rem;padding:2rem;text-align:center;}</style>
+<script>
+(function(){
+  'use strict';
+  var BADGE={hot:{cls:'badge-hot',text:'Selling Fast'},new:{cls:'badge-new',text:'New'},ltd:{cls:'badge-ltd',text:'Limited'},vip:{cls:'badge-ltd',text:'VIP Only'}};
+
+  function renderWeekends(trips){
+    var el=document.getElementById('weekends-grid'); if(!el) return;
+    if(!trips.length){el.innerHTML='<div class="loading-msg">No upcoming trips — check back soon.</div>';return;}
+    el.innerHTML=trips.map(function(t){
+      var b=BADGE[t.badge]?'<span class="wk-badge '+BADGE[t.badge].cls+'">'+BADGE[t.badge].text+'</span>':'';
+      return '<div class="wk-card" onclick="openBooking()">'+
+        '<div class="wk-top"><div class="wk-date">'+t.dateRange+'</div>'+b+'</div>'+
+        '<div class="wk-body"><h3>'+t.name+'</h3><div class="wk-route">'+t.city+' &rarr; Windsor</div>'+
+        '<div class="wk-details"><span class="wk-detail">'+t.nights+' nights</span>'+
+        '<span class="wk-detail">'+t.clubsLabel+'</span>'+
+        '<span class="wk-detail">'+t.spotsLeft+' spots left</span></div></div>'+
+        '<div class="wk-footer"><div><span class="wk-price-from">from </span>'+
+        '<span class="wk-price-amount">$'+t.price+'</span><span class="wk-price-per"> /person</span></div>'+
+        '<button class="btn-sm">Book</button></div></div>';
+    }).join('');
+  }
+
+  function renderPackages(pkgs){
+    var el=document.getElementById('packages-grid'); if(!el) return;
+    if(!pkgs.length){el.innerHTML='<div class="loading-msg">No packages available.</div>';return;}
+    el.innerHTML=pkgs.map(function(p){
+      var fl=(p.features||[]).map(function(f){
+        return '<li'+(f.included?'':' class="off"')+'><span class="chk">'+(f.included?'&#10003;':'&mdash;')+'</span> '+f.text+'</li>';
+      }).join('');
+      var bc=p.featured?'btn-pkg btn-pkg-filled':'btn-pkg btn-pkg-outline';
+      return '<div class="pkg-card'+(p.featured?' featured':'')+'">'+
+        '<div class="pkg-name">'+p.name+'</div>'+
+        '<div class="pkg-price"><span class="currency">$</span><span class="amount">'+p.price+'</span><span class="per"> /person</span></div>'+
+        '<ul class="pkg-features">'+fl+'</ul>'+
+        '<button class="'+bc+'" onclick="openBooking()">Select '+p.name+'</button></div>';
+    }).join('');
+  }
+
+  function renderCities(cities){
+    var el=document.getElementById('cities-grid'); if(!el) return;
+    if(!cities.length){el.innerHTML='<div class="loading-msg">No departure cities listed.</div>';return;}
+    el.innerHTML=cities.map(function(c){
+      return '<a class="dest-card" href="#weekends">'+
+        '<div class="dest-dot"></div><div class="dest-city">'+c.city+'</div>'+
+        '<div class="dest-dist">'+c.distance+'</div><div class="dest-freq">'+c.frequency+'</div></a>';
+    }).join('');
+  }
+
+  function renderClubs(clubs){
+    var el=document.getElementById('clubs-grid'); if(!el) return;
+    if(!clubs.length){el.innerHTML='<div class="loading-msg">Nightlife info coming soon.</div>';return;}
+    el.innerHTML=clubs.map(function(c){
+      var perks=(c.perks||[]).map(function(p){return '<span class="club-perk">'+p+'</span>';}).join('');
+      return '<div class="club-card"><div class="club-visual">'+(c.emoji||'🎵')+'</div>'+
+        '<div class="club-info"><h3>'+c.name+'</h3><div class="club-type">'+c.type+'</div>'+
+        '<p>'+c.description+'</p><div class="club-perks">'+perks+'</div></div></div>';
+    }).join('');
+  }
+
+  function renderItinerary(days){
+    var el=document.getElementById('itinerary-content'); if(!el) return;
+    if(!days.length){el.innerHTML='<div class="loading-msg">Itinerary coming soon.</div>';return;}
+    el.innerHTML=days.map(function(d){
+      var items=(d.items||[]).map(function(i){
+        return '<div class="tl-item"><div class="tl-time">'+i.time+'</div>'+
+          '<div class="tl-content"><h4>'+i.title+'</h4><p>'+i.description+'</p></div></div>';
+      }).join('');
+      return '<div class="itin-day"><div class="itin-day-label">'+d.day+'</div>'+items+'</div>';
+    }).join('');
+  }
+
+  function load(url,fn){fetch(url).then(function(r){return r.json();}).then(fn).catch(function(){});}
+  load('/api/weekends',renderWeekends);
+  load('/api/packages',renderPackages);
+  load('/api/cities',renderCities);
+  load('/api/clubs',renderClubs);
+  load('/api/itinerary',renderItinerary);
+})();
+</script>
 </body>
 </html>

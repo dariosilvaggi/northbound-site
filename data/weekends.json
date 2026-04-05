@@ -1,0 +1,74 @@
+[
+  {
+    "id": "wk001",
+    "dateRange": "APR 10 \u2013 12",
+    "name": "Spring Kickoff Weekend",
+    "city": "Detroit, MI",
+    "nights": 2,
+    "clubsLabel": "3 clubs",
+    "spotsLeft": 12,
+    "price": 189,
+    "badge": "hot",
+    "active": true
+  },
+  {
+    "id": "wk002",
+    "dateRange": "APR 24 \u2013 26",
+    "name": "Ohio State Takeover",
+    "city": "Columbus, OH",
+    "nights": 2,
+    "clubsLabel": "2 clubs",
+    "spotsLeft": 30,
+    "price": 219,
+    "badge": "new",
+    "active": true
+  },
+  {
+    "id": "wk003",
+    "dateRange": "MAY 1 \u2013 3",
+    "name": "Cinco de Mayo Fiesta",
+    "city": "Detroit, MI",
+    "nights": 2,
+    "clubsLabel": "4 clubs",
+    "spotsLeft": 8,
+    "price": 199,
+    "badge": "ltd",
+    "active": true
+  },
+  {
+    "id": "wk004",
+    "dateRange": "MAY 22 \u2013 25",
+    "name": "Memorial Day Blowout",
+    "city": "Multiple Cities",
+    "nights": 3,
+    "clubsLabel": "5 clubs",
+    "spotsLeft": 20,
+    "price": 299,
+    "badge": "hot",
+    "active": true
+  },
+  {
+    "id": "wk005",
+    "dateRange": "JUN 5 \u2013 7",
+    "name": "Summer Send-Off",
+    "city": "Buffalo, NY",
+    "nights": 2,
+    "clubsLabel": "3 clubs",
+    "spotsLeft": 25,
+    "price": 229,
+    "badge": "new",
+    "active": true
+  },
+  {
+    "id": "wk006",
+    "dateRange": "JUN 19 \u2013 21",
+    "name": "Juneteenth Festival Weekend",
+    "city": "Detroit, MI",
+    "nights": 2,
+    "clubsLabel": "3 clubs + festival",
+    "spotsLeft": 15,
+    "price": 249,
+    "badge": "vip",
+    "active": true
+  }
+]

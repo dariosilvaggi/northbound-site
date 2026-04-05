@@ -1,0 +1,10 @@
+[
+  {"id": "cty001", "city": "Detroit, MI", "distance": "30 min to Windsor", "frequency": "Every weekend", "active": true},
+  {"id": "cty002", "city": "Ann Arbor, MI", "distance": "1 hr to Windsor", "frequency": "Bi-weekly", "active": true},
+  {"id": "cty003", "city": "Columbus, OH", "distance": "3.5 hrs to Windsor", "frequency": "Monthly", "active": true},
+  {"id": "cty004", "city": "Cleveland, OH", "distance": "3 hrs to Windsor", "frequency": "Monthly", "active": true},
+  {"id": "cty005", "city": "Toledo, OH", "distance": "1.5 hrs to Windsor", "frequency": "Bi-weekly", "active": true},
+  {"id": "cty006", "city": "Buffalo, NY", "distance": "4 hrs to Windsor", "frequency": "Monthly", "active": true},
+  {"id": "cty007", "city": "Indianapolis, IN", "distance": "4.5 hrs to Windsor", "frequency": "Special events", "active": true},
+  {"id": "cty008", "city": "Pittsburgh, PA", "distance": "4.5 hrs to Windsor", "frequency": "Special events", "active": true}
+]

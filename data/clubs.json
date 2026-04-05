@@ -1,0 +1,29 @@
+[
+  {
+    "id": "club001",
+    "name": "Ariius Nightclub",
+    "type": "Premium Nightclub",
+    "emoji": "🎵",
+    "description": "Multi-level venue with top DJs, bottle service, and a rooftop patio overlooking the river.",
+    "perks": ["Skip the Line", "VIP Sections", "Rooftop"],
+    "active": true
+  },
+  {
+    "id": "club002",
+    "name": "Wild Child",
+    "type": "Bar & Live Music",
+    "emoji": "🎸",
+    "description": "High-energy bar with live bands, themed nights, and a legendary dance floor.",
+    "perks": ["Live Music", "Drink Specials", "Theme Nights"],
+    "active": true
+  },
+  {
+    "id": "club003",
+    "name": "Downtown District",
+    "type": "Bar Crawl Route",
+    "emoji": "🍹",
+    "description": "A curated crawl through Windsor's best bars — each stop brings a different vibe.",
+    "perks": ["Multiple Venues", "Guided Tour", "Wristband Access"],
+    "active": true
+  }
+]

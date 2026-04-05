@@ -1,0 +1,33 @@
+[
+  {
+    "id": "day001",
+    "day": "Friday",
+    "active": true,
+    "items": [
+      {"id": "fri001", "time": "5:00 PM", "title": "Depart from your city", "description": "Board the chartered coach at your pickup point. Music, snacks, good vibes."},
+      {"id": "fri002", "time": "7:30 PM", "title": "Border crossing", "description": "Quick group processing at the Ambassador Bridge or Windsor Tunnel."},
+      {"id": "fri003", "time": "8:00 PM", "title": "Hotel check-in", "description": "Drop your bags at the downtown hotel. Freshen up and get ready."},
+      {"id": "fri004", "time": "9:30 PM", "title": "Group dinner", "description": "Optional group dinner at a downtown Windsor restaurant."},
+      {"id": "fri005", "time": "11:00 PM", "title": "Nightclub — Venue 1", "description": "Skip the line with your NorthBound wristband. Welcome to Canadian nightlife."}
+    ]
+  },
+  {
+    "id": "day002",
+    "day": "Saturday",
+    "active": true,
+    "items": [
+      {"id": "sat001", "time": "12:00 PM", "title": "Late checkout & explore", "description": "Sleep in, grab brunch, explore the riverfront or local shops."},
+      {"id": "sat002", "time": "6:00 PM", "title": "Pre-game & dinner", "description": "Regroup with the crew. The evening out begins."},
+      {"id": "sat003", "time": "10:30 PM", "title": "Nightclub — Venue 2 & 3", "description": "Saturday night is the main event. VIP entry, drink deals, guided nightlife crawl."}
+    ]
+  },
+  {
+    "id": "day003",
+    "day": "Sunday",
+    "active": true,
+    "items": [
+      {"id": "sun001", "time": "11:00 AM", "title": "Late checkout", "description": "Pack up, grab coffee, say goodbye to Windsor."},
+      {"id": "sun002", "time": "1:00 PM", "title": "Return transport", "description": "Board the coach home. Nap, swap stories, start planning the next trip."}
+    ]
+  }
+]
