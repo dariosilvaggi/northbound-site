@@ -227,7 +227,12 @@ app.post('/admin/weekends/add', requireAdmin, (req, res) => {
 app.post('/admin/weekends/update/:id', requireAdmin, (req, res) => {
   const items = loadContent('weekends');
   const idx = items.findIndex(x => x.id === req.params.id);
-  if (idx !== -1) items[idx] = { ...items[idx], ...req.body, active: req.body.active !== 'false' };
+  if (idx !== -1) {
+    const merged = { ...items[idx] };
+    Object.keys(req.body).forEach(k => { if (req.body[k] !== '' && req.body[k] !== undefined) merged[k] = req.body[k]; });
+    merged.active = req.body.active !== 'false';
+    items[idx] = merged;
+  }
   saveContent('weekends', items);
   res.json({ success: true });
 });
@@ -268,8 +273,15 @@ app.post('/admin/packages/update/:id', requireAdmin, (req, res) => {
     const features = (req.body.featuresRaw || '').split('\n')
       .map(l => l.trim()).filter(Boolean)
       .map(l => ({ text: l.replace(/^[-+] ?/, ''), included: !l.startsWith('-') }));
-    items[idx] = { ...items[idx], name: req.body.name, price: Number(req.body.price),
-      featured: req.body.featured === 'true', features, active: req.body.active !== 'false' };
+    const price = parseFloat(req.body.price);
+    items[idx] = {
+      ...items[idx],
+      name: req.body.name || items[idx].name,
+      price: isNaN(price) ? items[idx].price : price,
+      featured: req.body.featured === 'true',
+      features: features.length ? features : items[idx].features,
+      active: req.body.active !== 'false'
+    };
   }
   saveContent('packages', items);
   res.json({ success: true });
