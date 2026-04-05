@@ -4,6 +4,8 @@ const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
 const crypto = require('crypto');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const Stripe = require('stripe');
 const stripe = process.env.STRIPE_SECRET_KEY ? Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
@@ -69,6 +71,33 @@ app.post('/api/webhook/stripe', express.raw({ type: 'application/json' }), (req,
   }
   res.json({ received: true });
 });
+
+// ── Security ─────────────────────────────────────────────────────
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", 'js.stripe.com', 'cdnjs.cloudflare.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+      fontSrc: ["'self'", 'fonts.gstatic.com'],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'", 'api.stripe.com'],
+      frameSrc: ['js.stripe.com', 'hooks.stripe.com'],
+      upgradeInsecureRequests: [],
+    },
+  },
+  hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+}));
+app.disable('x-powered-by');
+
+// Rate limiting
+const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 60, standardHeaders: true, legacyHeaders: false });
+const checkoutLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, standardHeaders: true, legacyHeaders: false });
+const adminLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false });
+app.use('/api/', apiLimiter);
+app.use('/api/checkout', checkoutLimiter);
+app.use('/admin/', adminLimiter);
 
 // ── Middleware ───────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
@@ -516,6 +545,22 @@ app.post('/api/checkout', async (req, res) => {
 // ── Admin: Bookings ───────────────────────────────────────────────
 app.get('/admin/api/bookings', requireAdmin, (req, res) => {
   res.json(loadBookings());
+});
+
+// ── SEO: robots.txt + sitemap ────────────────────────────────────
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').send(
+    'User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin/*\n\nSitemap: https://northboundweekends.com/sitemap.xml'
+  );
+});
+app.get('/sitemap.xml', (req, res) => {
+  const base = 'https://northboundweekends.com';
+  const now = new Date().toISOString().split('T')[0];
+  res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>${base}/</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>${base}/booking-success</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+</urlset>`);
 });
 
 // ── Catch-all ────────────────────────────────────────────────────
