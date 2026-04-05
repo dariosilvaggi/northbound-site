@@ -4,6 +4,8 @@ const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
 const crypto = require('crypto');
+const Stripe = require('stripe');
+const stripe = process.env.STRIPE_SECRET_KEY ? Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,11 +14,13 @@ const PORT = process.env.PORT || 3000;
 const DATA_DIR = path.join(__dirname, 'data');
 const BANNERS_DIR = path.join(__dirname, 'public', 'banners');
 const BANNERS_JSON = path.join(DATA_DIR, 'banners.json');
+const BOOKINGS_JSON = path.join(DATA_DIR, 'bookings.json');
 
 [DATA_DIR, BANNERS_DIR].forEach(d => {
   if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
 });
 if (!fs.existsSync(BANNERS_JSON)) fs.writeFileSync(BANNERS_JSON, '[]');
+if (!fs.existsSync(BOOKINGS_JSON)) fs.writeFileSync(BOOKINGS_JSON, '[]');
 
 // ── Helpers ──────────────────────────────────────────────────────
 function loadBanners() {
@@ -26,6 +30,44 @@ function loadBanners() {
 function saveBanners(banners) {
   fs.writeFileSync(BANNERS_JSON, JSON.stringify(banners, null, 2));
 }
+function loadBookings() {
+  try { return JSON.parse(fs.readFileSync(BOOKINGS_JSON, 'utf8')); }
+  catch (e) { return []; }
+}
+function saveBookings(b) {
+  fs.writeFileSync(BOOKINGS_JSON, JSON.stringify(b, null, 2));
+}
+
+// ── Stripe webhook (raw body — must be BEFORE express.json()) ────
+app.post('/api/webhook/stripe', express.raw({ type: 'application/json' }), (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
+    return res.status(400).json({ error: 'Stripe not configured' });
+  }
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('Webhook signature error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+  if (event.type === 'checkout.session.completed') {
+    const s = event.data.object;
+    const bookings = loadBookings();
+    bookings.unshift({
+      id: s.id,
+      email: s.customer_email,
+      amountPaid: s.amount_total,
+      currency: s.currency,
+      metadata: s.metadata || {},
+      status: 'paid',
+      paidAt: new Date().toISOString()
+    });
+    saveBookings(bookings);
+    console.log('Booking recorded:', s.id, s.customer_email);
+  }
+  res.json({ received: true });
+});
 
 // ── Middleware ───────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
@@ -344,6 +386,49 @@ app.post('/admin/itinerary/item/delete/:dayId/:itemId', requireAdmin, (req, res)
   if (day) day.items = day.items.filter(i => i.id !== req.params.itemId);
   saveContent('itinerary', days);
   res.json({ success: true });
+});
+
+// ── Stripe Checkout ───────────────────────────────────────────────
+app.post('/api/checkout', async (req, res) => {
+  if (!stripe) return res.status(503).json({ error: 'Stripe not configured — add STRIPE_SECRET_KEY to Railway env vars.' });
+  const { weekend, packageName, packagePrice, travelers, firstName, lastName, email, phone, city } = req.body;
+  if (!email || !weekend || !packageName) return res.status(400).json({ error: 'Missing required fields.' });
+
+  // Deposit by package tier
+  const depositMap = { VIP: 199, Standard: 99, Basic: 49 };
+  const deposit = depositMap[packageName] || 99;
+  const siteUrl = process.env.SITE_URL || 'https://northboundweekends.com';
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: `NorthBound Weekends — ${weekend}`,
+            description: `${packageName} Package · ${travelers} traveler(s) · Deposit (balance due 14 days before trip)`,
+          },
+          unit_amount: deposit * 100,
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      customer_email: email,
+      metadata: { weekend, packageName, packagePrice: String(packagePrice || ''), travelers: String(travelers || ''), firstName, lastName, phone, city },
+      success_url: `${siteUrl}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}/booking-cancel`,
+    });
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error('Stripe checkout error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Admin: Bookings ───────────────────────────────────────────────
+app.get('/admin/api/bookings', requireAdmin, (req, res) => {
+  res.json(loadBookings());
 });
 
 // ── Catch-all ────────────────────────────────────────────────────

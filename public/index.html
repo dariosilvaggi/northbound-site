@@ -1085,32 +1085,33 @@ img { display: block; max-width: 100%; }
         <div class="booking-step" id="step4"></div>
       </div>
       <div id="bookingStep1">
-        <div class="form-group"><label class="form-label">Select Weekend</label><select class="form-select"><option>APR 10-12 — Spring Kickoff (Detroit)</option><option>APR 24-26 — Ohio State Takeover (Columbus)</option><option>MAY 1-3 — Cinco de Mayo Fiesta (Detroit)</option><option>MAY 22-25 — Memorial Day Blowout (Multiple)</option><option>JUN 5-7 — Summer Send-Off (Buffalo)</option><option>JUN 19-21 — Juneteenth Festival (Detroit)</option></select></div>
-        <div class="form-group"><label class="form-label">Package</label><select class="form-select"><option>Basic — $149/person</option><option selected>Standard — $249/person (Most Popular)</option><option>VIP — $399/person</option></select></div>
-        <div class="form-group"><label class="form-label">Number of Travelers</label><select class="form-select"><option>1 traveler</option><option selected>2 travelers</option><option>3 travelers</option><option>4 travelers</option><option>5+ travelers (group)</option></select></div>
+        <div class="form-group"><label class="form-label">Select Weekend</label><select class="form-select" id="selectWeekend"><option value="">Loading trips…</option></select></div>
+        <div class="form-group"><label class="form-label">Package</label><select class="form-select" id="selectPackage"><option value="">Loading packages…</option></select></div>
+        <div class="form-group"><label class="form-label">Number of Travelers</label><select class="form-select" id="selectTravelers"><option value="1">1 traveler</option><option value="2" selected>2 travelers</option><option value="3">3 travelers</option><option value="4">4 travelers</option><option value="5+">5+ travelers (group)</option></select></div>
       </div>
       <div id="bookingStep2" style="display:none;">
-        <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" type="text" placeholder="John"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" type="text" placeholder="Smith"></div></div>
-        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="john@university.edu"></div>
-        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(555) 123-4567"></div>
-        <div class="form-row"><div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" type="date"></div><div class="form-group"><label class="form-label">Home City</label><input class="form-input" type="text" placeholder="Detroit, MI"></div></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="inputFirstName" type="text" placeholder="John"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="inputLastName" type="text" placeholder="Smith"></div></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="inputEmail" type="email" placeholder="john@university.edu"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="inputPhone" type="tel" placeholder="(555) 123-4567"></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" id="inputDob" type="date"></div><div class="form-group"><label class="form-label">Home City</label><input class="form-input" id="inputCity" type="text" placeholder="Detroit, MI"></div></div>
       </div>
       <div id="bookingStep3" style="display:none;">
-        <div class="form-group"><label class="form-label">Border Document Type</label><select class="form-select"><option>U.S. Passport</option><option>Passport Card</option><option>Enhanced Driver's License</option><option>NEXUS Card</option></select></div>
-        <div class="form-group"><label class="form-label">Upload Document Photo</label><input class="form-input" type="file" accept="image/*,.pdf" style="padding:0.55rem;"></div>
-        <div class="form-group" style="margin-top:1.25rem;"><label style="display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;font-size:0.84rem;color:var(--gray);"><input type="checkbox" style="margin-top:0.25rem;accent-color:var(--gold);">I agree to the <a href="#" style="color:var(--gold);">Liability Waiver</a> and <a href="#" style="color:var(--gold);">Terms of Service</a>. I confirm I will be 19+ on the date of travel.</label></div>
+        <div class="form-group"><label class="form-label">Border Document Type</label><select class="form-select" id="selectDoc"><option>U.S. Passport</option><option>Passport Card</option><option>Enhanced Driver's License</option><option>NEXUS Card</option></select></div>
+        <div class="form-group"><label class="form-label">Upload Document Photo</label><input class="form-input" id="inputDocFile" type="file" accept="image/*,.pdf" style="padding:0.55rem;"></div>
+        <div class="form-group" style="margin-top:1.25rem;"><label style="display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;font-size:0.84rem;color:var(--gray);"><input type="checkbox" id="agreeWaiver" style="margin-top:0.25rem;accent-color:var(--gold);">I agree to the <a href="#" style="color:var(--gold);">Liability Waiver</a> and <a href="#" style="color:var(--gold);">Terms of Service</a>. I confirm I will be 19+ on the date of travel.</label></div>
       </div>
       <div id="bookingStep4" style="display:none;">
-        <div style="background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.15);border-radius:var(--radius-sm);padding:1.25rem;margin-bottom:1.5rem;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;"><span style="color:var(--gray);font-size:0.84rem;">Deposit due today</span><span style="font-family:'Plus Jakarta Sans';font-weight:800;color:var(--gold);font-size:1.15rem;">$99.00</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--gray-dim);font-size:0.76rem;">Balance due by Mar 27</span><span style="color:var(--gray-dim);font-size:0.82rem;">$399.00</span></div>
+        <div style="background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.15);border-radius:var(--radius-sm);padding:1.25rem;margin-bottom:1.25rem;">
+          <div style="font-size:0.8rem;color:var(--gray);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Booking Summary</div>
+          <div id="summaryWeekend" style="font-weight:700;margin-bottom:0.25rem;"></div>
+          <div id="summaryPackage" style="font-size:0.85rem;color:var(--gray);margin-bottom:0.75rem;"></div>
+          <div style="border-top:1px solid rgba(200,135,76,0.15);padding-top:0.75rem;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-size:0.8rem;color:var(--gray);">Deposit due today</div><div style="font-size:0.72rem;color:var(--gray-dim);" id="summaryBalance"></div></div>
+            <div id="summaryDeposit" style="font-family:'Plus Jakarta Sans';font-weight:800;color:var(--gold);font-size:1.25rem;"></div>
+          </div>
         </div>
-        <div class="form-group"><label class="form-label">Card Number</label><input class="form-input" type="text" placeholder="4242 4242 4242 4242"></div>
-        <div class="form-row"><div class="form-group"><label class="form-label">Expiry</label><input class="form-input" type="text" placeholder="MM / YY"></div><div class="form-group"><label class="form-label">CVC</label><input class="form-input" type="text" placeholder="123"></div></div>
-        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
-          <button style="flex:1;padding:0.65rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--gray);font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;">Apple Pay</button>
-          <button style="flex:1;padding:0.65rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--gray);font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;">Google Pay</button>
-        </div>
+        <div style="font-size:0.78rem;color:var(--gray-dim);text-align:center;margin-bottom:0.5rem;">You'll be redirected to Stripe's secure checkout. We accept all major cards, Apple Pay &amp; Google Pay.</div>
+        <div id="stripeError" style="display:none;background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.3);border-radius:6px;padding:0.75rem;font-size:0.82rem;color:#f87171;margin-top:0.5rem;"></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1128,11 +1129,99 @@ const observer=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 function toggleFaq(btn){const item=btn.parentElement;document.querySelectorAll('.faq-item').forEach(i=>{if(i!==item)i.classList.remove('open');});item.classList.toggle('open');}
 let currentStep=1;const totalSteps=4;
-function openBooking(){currentStep=1;updateBookingUI();document.getElementById('bookingModal').classList.add('active');document.body.style.overflow='hidden';}
+var _bookingTrips=[];var _bookingPkgs=[];
+
+function populateBookingSelects(trips,pkgs){
+  _bookingTrips=trips||[];_bookingPkgs=pkgs||[];
+  var ws=document.getElementById('selectWeekend');
+  if(ws&&_bookingTrips.length){ws.innerHTML=_bookingTrips.map(function(t){return'<option value="'+t.name+'" data-price="'+t.price+'">'+t.dateRange+' — '+t.name+' ('+t.city+')</option>';}).join('');}
+  var ps=document.getElementById('selectPackage');
+  if(ps&&_bookingPkgs.length){ps.innerHTML=_bookingPkgs.map(function(p){var lbl=p.featured?' (Most Popular)':'';return'<option value="'+p.name+'" data-price="'+p.price+'"'+(p.featured?' selected':'')+'>'+p.name+' — $'+p.price+'/person'+lbl+'</option>';}).join('');}
+}
+
+function getDepositForPackage(name){return name==='VIP'?199:name==='Standard'?99:49;}
+
+function buildSummary(){
+  var ws=document.getElementById('selectWeekend');
+  var ps=document.getElementById('selectPackage');
+  var tv=document.getElementById('selectTravelers');
+  var wn=ws?ws.options[ws.selectedIndex].value:'';
+  var pn=ps?ps.options[ps.selectedIndex].value:'';
+  var pp=ps?ps.options[ps.selectedIndex].getAttribute('data-price'):'0';
+  var tr=tv?tv.value:'1';
+  var dep=getDepositForPackage(pn);
+  var bal=parseInt(pp||0)-dep;
+  document.getElementById('summaryWeekend').textContent=wn;
+  document.getElementById('summaryPackage').textContent=pn+' Package · '+tr+' traveler(s)';
+  document.getElementById('summaryDeposit').textContent='$'+dep+'.00';
+  document.getElementById('summaryBalance').textContent='Balance $'+bal+' due 14 days before trip';
+}
+
+function openBooking(tripName){
+  currentStep=1;
+  updateBookingUI();
+  document.getElementById('bookingModal').classList.add('active');
+  document.body.style.overflow='hidden';
+  if(tripName){var ws=document.getElementById('selectWeekend');if(ws){for(var i=0;i<ws.options.length;i++){if(ws.options[i].value===tripName){ws.selectedIndex=i;break;}}}}
+}
 function closeBooking(){document.getElementById('bookingModal').classList.remove('active');document.body.style.overflow='';}
-function nextStep(){if(currentStep<totalSteps){currentStep++;updateBookingUI();}else{closeBooking();alert("Booking submitted! You'll receive a confirmation email shortly.");}}
+
+function nextStep(){
+  if(currentStep===2){
+    var em=document.getElementById('inputEmail');var fn=document.getElementById('inputFirstName');
+    if(!fn||!fn.value.trim()||!em||!em.value.trim()){alert('Please fill in your name and email.');return;}
+  }
+  if(currentStep===3){
+    var cb=document.getElementById('agreeWaiver');
+    if(!cb||!cb.checked){alert('Please agree to the waiver and terms.');return;}
+    buildSummary();
+  }
+  if(currentStep<totalSteps){currentStep++;updateBookingUI();}
+  else{submitToStripe();}
+}
 function prevStep(){if(currentStep>1){currentStep--;updateBookingUI();}}
-function updateBookingUI(){for(let i=1;i<=totalSteps;i++){const s=document.getElementById('step'+i),c=document.getElementById('bookingStep'+i);if(s)s.classList.toggle('active',i<=currentStep);if(c)c.style.display=i===currentStep?'block':'none';}document.getElementById('bookingBack').style.display=currentStep>1?'inline-flex':'none';document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $99 Deposit':'Continue';}
+function updateBookingUI(){
+  for(var i=1;i<=totalSteps;i++){
+    var s=document.getElementById('step'+i),c=document.getElementById('bookingStep'+i);
+    if(s)s.classList.toggle('active',i<=currentStep);
+    if(c)c.style.display=i===currentStep?'block':'none';
+  }
+  document.getElementById('bookingBack').style.display=currentStep>1?'inline-flex':'none';
+  var ws=document.getElementById('selectPackage');var pn=ws?ws.options[ws.selectedIndex].value:'Standard';
+  var dep=getDepositForPackage(pn);
+  document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $'+dep+' Deposit →':'Continue';
+}
+
+async function submitToStripe(){
+  var btn=document.getElementById('bookingNext');
+  var errEl=document.getElementById('stripeError');
+  btn.textContent='Redirecting to payment…';btn.disabled=true;
+  errEl.style.display='none';
+  var ws=document.getElementById('selectWeekend');
+  var ps=document.getElementById('selectPackage');
+  var tv=document.getElementById('selectTravelers');
+  var payload={
+    weekend:ws?ws.options[ws.selectedIndex].value:'',
+    packageName:ps?ps.options[ps.selectedIndex].value:'',
+    packagePrice:ps?ps.options[ps.selectedIndex].getAttribute('data-price'):'0',
+    travelers:tv?tv.value:'1',
+    firstName:document.getElementById('inputFirstName').value,
+    lastName:document.getElementById('inputLastName').value,
+    email:document.getElementById('inputEmail').value,
+    phone:document.getElementById('inputPhone').value,
+    city:document.getElementById('inputCity').value
+  };
+  try{
+    var r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    var d=await r.json();
+    if(d.url){window.location.href=d.url;}
+    else{errEl.textContent=d.error||'Payment error. Please try again.';errEl.style.display='block';btn.textContent='Pay Deposit →';btn.disabled=false;}
+  }catch(e){
+    errEl.textContent='Connection error. Please try again.';errEl.style.display='block';
+    btn.textContent='Pay Deposit →';btn.disabled=false;
+  }
+}
+
 document.getElementById('bookingModal').addEventListener('click',function(e){if(e.target===this)closeBooking();});
 </script>
 <script src="/sponsor-banner.js"></script>
@@ -1209,8 +1298,9 @@ document.getElementById('bookingModal').addEventListener('click',function(e){if(
   }
 
   function load(url,fn){fetch(url).then(function(r){return r.json();}).then(fn).catch(function(){});}
-  load('/api/weekends',renderWeekends);
-  load('/api/packages',renderPackages);
+  var _trips=[],_pkgs=[];
+  fetch('/api/weekends').then(function(r){return r.json();}).then(function(d){_trips=d;renderWeekends(d);if(_pkgs.length)populateBookingSelects(_trips,_pkgs);}).catch(function(){});
+  fetch('/api/packages').then(function(r){return r.json();}).then(function(d){_pkgs=d;renderPackages(d);if(_trips.length)populateBookingSelects(_trips,_pkgs);}).catch(function(){});
   load('/api/cities',renderCities);
   load('/api/clubs',renderClubs);
   load('/api/itinerary',renderItinerary);
