@@ -1381,5 +1381,7 @@ function prevStep(){if(currentStep>1){currentStep--;updateBookingUI();}}
 function updateBookingUI(){for(let i=1;i<=totalSteps;i++){const s=document.getElementById('step'+i),c=document.getElementById('bookingStep'+i);if(s)s.classList.toggle('active',i<=currentStep);if(c)c.style.display=i===currentStep?'block':'none';}document.getElementById('bookingBack').style.display=currentStep>1?'inline-flex':'none';document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $99 Deposit':'Continue';}
 document.getElementById('bookingModal').addEventListener('click',function(e){if(e.target===this)closeBooking();});
 </script>
+<script src="/sponsor-banner.js"></script>
+<script src="/sponsor-banner.js"></script>
 </body>
 </html>

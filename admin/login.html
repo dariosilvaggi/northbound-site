@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NorthBound Admin</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a0f;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e8e0d0;
+  }
+  .card {
+    background: #111118;
+    border: 1px solid rgba(200,151,78,0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 60px rgba(200,151,78,0.06);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .logo img { height: 44px; width: auto; }
+  .logo-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: linear-gradient(135deg, #C8974E, #e8c080);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .logo-sub {
+    font-size: 0.7rem;
+    color: #666;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 1px;
+  }
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: #f0e8d8;
+  }
+  .subtitle {
+    font-size: 0.84rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  .error-msg {
+    background: rgba(182,30,26,0.15);
+    border: 1px solid rgba(182,30,26,0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.84rem;
+    color: #e06060;
+    margin-bottom: 1.25rem;
+  }
+  label {
+    display: block;
+    font-size: 0.8rem;
+    color: #999;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  input {
+    width: 100%;
+    background: #0d0d14;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: #f0e8d8;
+    font-size: 0.95rem;
+    font-family: inherit;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  input:focus { border-color: rgba(200,151,78,0.5); }
+  button {
+    width: 100%;
+    background: linear-gradient(135deg, #C8974E, #b07030);
+    border: none;
+    border-radius: 8px;
+    padding: 0.85rem;
+    color: #0a0a0f;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-family: inherit;
+    margin-top: 0.25rem;
+  }
+  button:hover { opacity: 0.9; }
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: #555;
+    text-decoration: none;
+  }
+  .back-link:hover { color: #C8974E; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <img src="/logo.png" alt="NorthBound">
+    <div>
+      <div class="logo-text">NORTHBOUND</div>
+      <span class="logo-sub">Admin Portal</span>
+    </div>
+  </div>
+  <h1>Sign In</h1>
+  <p class="subtitle">Sponsor banner management</p>
+
+  <div id="errorMsg" class="error-msg" style="display:none;">
+    Invalid credentials. Please try again.
+  </div>
+
+  <form method="POST" action="/admin/login">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" autocomplete="username" required placeholder="admin">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="••••••••">
+
+    <button type="submit">Sign In →</button>
+  </form>
+
+  <a href="/" class="back-link">← Back to site</a>
+</div>
+
+<script>
+  if (new URLSearchParams(location.search).get('error')) {
+    document.getElementById('errorMsg').style.display = 'block';
+  }
+</script>
+</body>
+</html>
