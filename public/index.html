@@ -365,6 +365,14 @@ img { display: block; max-width: 100%; }
   transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
 }
+.wk-img {
+  width: 100%;
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 14px 14px 0 0;
+  margin: -1px -1px 0;
+}
 .wk-top {
   padding: 1.5rem 1.5rem 0.75rem;
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -1254,7 +1262,8 @@ document.getElementById('bookingModal').addEventListener('click',function(e){if(
     if(!trips.length){el.innerHTML='<div class="loading-msg">No upcoming trips — check back soon.</div>';return;}
     el.innerHTML=trips.map(function(t){
       var b=BADGE[t.badge]?'<span class="wk-badge '+BADGE[t.badge].cls+'">'+BADGE[t.badge].text+'</span>':'';
-      return '<div class="wk-card" onclick="openBooking()">'+
+      var imgHtml=t.image?'<div class="wk-img" style="background-image:url(\''+t.image+'\')"></div>':'';
+      return '<div class="wk-card" onclick="openBooking()">'+imgHtml+
         '<div class="wk-top"><div class="wk-date">'+t.dateRange+'</div>'+b+'</div>'+
         '<div class="wk-body"><h3>'+t.name+'</h3><div class="wk-route">'+t.city+' &rarr; Windsor</div>'+
         '<div class="wk-details"><span class="wk-detail">'+t.nights+' nights</span>'+

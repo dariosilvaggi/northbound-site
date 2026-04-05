@@ -395,6 +395,15 @@ function editWeekend(id){
   api('/admin/api/weekends').then(function(items){
     var t=items.find(function(x){return x.id===id;});if(!t)return;
     var badgeOpts=[{v:'',l:'None'},{v:'hot',l:'Selling Fast'},{v:'new',l:'New'},{v:'ltd',l:'Limited'},{v:'vip',l:'VIP Only'}];
+    var imgSection=
+      '<div class="fg" style="margin-top:.9rem;grid-column:1/-1"><label>Card Image</label>'+
+      (t.image?
+        '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem">'+
+        '<img src="'+esc(t.image)+'" style="height:64px;width:96px;object-fit:cover;border-radius:6px;border:1px solid rgba(255,255,255,.08)">'+
+        '<button type="button" onclick="removeWeekendImage(\''+id+'\')" style="font-size:.72rem;padding:.3rem .65rem;border-radius:6px;border:1px solid rgba(182,30,26,.3);background:transparent;color:#c06060;cursor:pointer">Remove</button>'+
+        '</div>':'')+
+      '<input type="file" id="ew-img-file" accept="image/*" style="background:#0d0d14;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.5rem .8rem;color:#aaa;width:100%;font-size:.82rem;cursor:pointer">'+
+      '<div style="font-size:.68rem;color:#555;margin-top:.3rem">JPG/PNG/WebP · max 5MB · 16:9 recommended</div></div>';
     openModal('Edit Trip',
       fld('Trip Name','ew-name','text',t.name)+
       fld('Date Range','ew-date','text',t.dateRange)+
@@ -404,12 +413,21 @@ function editWeekend(id){
       fld('Clubs Label','ew-clubs','text',t.clubsLabel)+
       fld('Spots Left','ew-spots','number',t.spotsLeft)+
       fld('Price ($)','ew-price','number',t.price)+'</div>'+
-      selFld('Badge','ew-badge',badgeOpts,t.badge||''),
-      function(){
+      selFld('Badge','ew-badge',badgeOpts,t.badge||'')+
+      imgSection,
+      async function(){
+        var imgFile=document.getElementById('ew-img-file');
+        if(imgFile&&imgFile.files.length){
+          var fd=new FormData();fd.append('image',imgFile.files[0]);
+          await fetch('/admin/weekends/upload-image/'+id,{method:'POST',body:fd});
+        }
         post('/admin/weekends/update/'+id,{name:v('ew-name'),dateRange:v('ew-date'),city:v('ew-city'),nights:v('ew-nights'),clubsLabel:v('ew-clubs'),spotsLeft:v('ew-spots'),price:v('ew-price'),badge:v('ew-badge'),active:String(t.active)})
           .then(function(){closeModal();loadWeekends();});
       });
   });
+}
+function removeWeekendImage(id){
+  fetch('/admin/weekends/remove-image/'+id,{method:'POST'}).then(function(){loadWeekends();closeModal();});
 }
 
 // ── PACKAGES ──────────────────────────────────────────────────

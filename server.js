@@ -13,10 +13,11 @@ const PORT = process.env.PORT || 3000;
 // ── Directory setup ──────────────────────────────────────────────
 const DATA_DIR = path.join(__dirname, 'data');
 const BANNERS_DIR = path.join(__dirname, 'public', 'banners');
+const WEEKENDS_IMG_DIR = path.join(__dirname, 'public', 'weekends-images');
 const BANNERS_JSON = path.join(DATA_DIR, 'banners.json');
 const BOOKINGS_JSON = path.join(DATA_DIR, 'bookings.json');
 
-[DATA_DIR, BANNERS_DIR].forEach(d => {
+[DATA_DIR, BANNERS_DIR, WEEKENDS_IMG_DIR].forEach(d => {
   if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
 });
 if (!fs.existsSync(BANNERS_JSON)) fs.writeFileSync(BANNERS_JSON, '[]');
@@ -81,21 +82,24 @@ app.use(session({
 }));
 
 // ── File upload ──────────────────────────────────────────────────
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, BANNERS_DIR),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`);
-  }
-});
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) cb(null, true);
-    else cb(new Error('Images only'));
-  }
-});
+function makeUploader(dir) {
+  return multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => cb(null, dir),
+      filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname).toLowerCase();
+        cb(null, `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`);
+      }
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype.startsWith('image/')) cb(null, true);
+      else cb(new Error('Images only'));
+    }
+  });
+}
+const upload = makeUploader(BANNERS_DIR);
+const weekendUpload = makeUploader(WEEKENDS_IMG_DIR);
 
 // ── Auth middleware ──────────────────────────────────────────────
 function requireAdmin(req, res, next) {
@@ -238,6 +242,31 @@ app.post('/admin/weekends/update/:id', requireAdmin, (req, res) => {
 });
 app.post('/admin/weekends/delete/:id', requireAdmin, (req, res) => {
   saveContent('weekends', loadContent('weekends').filter(x => x.id !== req.params.id));
+  res.json({ success: true });
+});
+app.post('/admin/weekends/upload-image/:id', requireAdmin, weekendUpload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+  const items = loadContent('weekends');
+  const item = items.find(x => x.id === req.params.id);
+  if (!item) return res.status(404).json({ error: 'Weekend not found' });
+  // Delete old image if exists
+  if (item.image) {
+    const oldPath = path.join(WEEKENDS_IMG_DIR, path.basename(item.image));
+    if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+  }
+  item.image = `/weekends-images/${req.file.filename}`;
+  saveContent('weekends', items);
+  res.json({ success: true, image: item.image });
+});
+app.post('/admin/weekends/remove-image/:id', requireAdmin, (req, res) => {
+  const items = loadContent('weekends');
+  const item = items.find(x => x.id === req.params.id);
+  if (item && item.image) {
+    const oldPath = path.join(WEEKENDS_IMG_DIR, path.basename(item.image));
+    if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+    delete item.image;
+    saveContent('weekends', items);
+  }
   res.json({ success: true });
 });
 app.post('/admin/weekends/toggle/:id', requireAdmin, (req, res) => {
