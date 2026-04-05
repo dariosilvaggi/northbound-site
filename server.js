@@ -406,28 +406,74 @@ app.post('/api/checkout', async (req, res) => {
   const { weekend, packageName, packagePrice, travelers, firstName, lastName, email, phone, city } = req.body;
   if (!email || !weekend || !packageName) return res.status(400).json({ error: 'Missing required fields.' });
 
-  // Deposit by package tier
-  const depositMap = { VIP: 199, Standard: 99, Basic: 49 };
-  const deposit = depositMap[packageName] || 99;
+  // Deposit by package tier (USD cents)
+  const depositMap = { VIP: 19900, Standard: 9900, Basic: 4900 };
+  const depositCents = depositMap[packageName] || 9900;
+
+  // MAT 6% → HST 13% on (deposit + MAT)
+  const matCents   = Math.round(depositCents * 0.06);
+  const hstCents   = Math.round((depositCents + matCents) * 0.13);
+
+  // Admin fee by group size
+  const numTravelers = parseInt(travelers) || 1;
+  const adminFeeMap  = { 2: 200, 3: 300, 4: 400 };
+  const adminCents   = adminFeeMap[numTravelers] || 0;
+
   const siteUrl = process.env.SITE_URL || 'https://northboundweekends.com';
+
+  const lineItems = [
+    {
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: `NorthBound Weekends — ${weekend}`,
+          description: `${packageName} Package · ${numTravelers} traveler(s) · Deposit (balance due 14 days before trip)`,
+        },
+        unit_amount: depositCents,
+      },
+      quantity: 1,
+    },
+    {
+      price_data: {
+        currency: 'usd',
+        product_data: { name: 'Municipal Accommodation Tax (MAT 6%)' },
+        unit_amount: matCents,
+      },
+      quantity: 1,
+    },
+    {
+      price_data: {
+        currency: 'usd',
+        product_data: { name: 'HST (13%)' },
+        unit_amount: hstCents,
+      },
+      quantity: 1,
+    },
+  ];
+
+  if (adminCents > 0) {
+    lineItems.push({
+      price_data: {
+        currency: 'usd',
+        product_data: { name: `Admin Fee (group of ${numTravelers})` },
+        unit_amount: adminCents,
+      },
+      quantity: 1,
+    });
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: `NorthBound Weekends — ${weekend}`,
-            description: `${packageName} Package · ${travelers} traveler(s) · Deposit (balance due 14 days before trip)`,
-          },
-          unit_amount: deposit * 100,
-        },
-        quantity: 1,
-      }],
+      line_items: lineItems,
       mode: 'payment',
       customer_email: email,
-      metadata: { weekend, packageName, packagePrice: String(packagePrice || ''), travelers: String(travelers || ''), firstName, lastName, phone, city },
+      metadata: {
+        weekend, packageName, packagePrice: String(packagePrice || ''),
+        travelers: String(numTravelers), firstName, lastName, phone, city,
+        depositCents: String(depositCents), matCents: String(matCents),
+        hstCents: String(hstCents), adminCents: String(adminCents),
+      },
       success_url: `${siteUrl}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/booking-cancel`,
     });

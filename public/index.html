@@ -1141,6 +1141,16 @@ function populateBookingSelects(trips,pkgs){
 
 function getDepositForPackage(name){return name==='VIP'?199:name==='Standard'?99:49;}
 
+function calcCharges(pn, tr){
+  var dep=getDepositForPackage(pn);
+  var mat=parseFloat((dep*0.06).toFixed(2));
+  var hst=parseFloat(((dep+mat)*0.13).toFixed(2));
+  var adminMap={'2':2,'3':3,'4':4};
+  var adm=adminMap[String(tr)]||0;
+  var total=parseFloat((dep+mat+hst+adm).toFixed(2));
+  return {dep:dep,mat:mat,hst:hst,adm:adm,total:total};
+}
+
 function buildSummary(){
   var ws=document.getElementById('selectWeekend');
   var ps=document.getElementById('selectPackage');
@@ -1149,12 +1159,19 @@ function buildSummary(){
   var pn=ps?ps.options[ps.selectedIndex].value:'';
   var pp=ps?ps.options[ps.selectedIndex].getAttribute('data-price'):'0';
   var tr=tv?tv.value:'1';
-  var dep=getDepositForPackage(pn);
-  var bal=parseInt(pp||0)-dep;
+  var c=calcCharges(pn,tr);
+  var bal=parseInt(pp||0)-c.dep;
   document.getElementById('summaryWeekend').textContent=wn;
   document.getElementById('summaryPackage').textContent=pn+' Package · '+tr+' traveler(s)';
-  document.getElementById('summaryDeposit').textContent='$'+dep+'.00';
-  document.getElementById('summaryBalance').textContent='Balance $'+bal+' due 14 days before trip';
+  document.getElementById('summaryDeposit').textContent='$'+c.total.toFixed(2);
+  var breakdownHtml=
+    '<div style="font-size:0.72rem;color:var(--gray-dim);margin-bottom:0.5rem;line-height:1.9">'+
+    'Deposit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.dep.toFixed(2)+'</span><br>'+
+    'MAT (6%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.mat.toFixed(2)+'</span><br>'+
+    'HST (13%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.hst.toFixed(2)+'</span>'+
+    (c.adm>0?'<br>Admin fee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.adm.toFixed(2)+'</span>':'')+
+    '</div>';
+  document.getElementById('summaryBalance').innerHTML=breakdownHtml+'Balance $'+Math.max(0,bal)+' due 14 days before trip';
 }
 
 function openBooking(tripName){
@@ -1188,8 +1205,9 @@ function updateBookingUI(){
   }
   document.getElementById('bookingBack').style.display=currentStep>1?'inline-flex':'none';
   var ws=document.getElementById('selectPackage');var pn=ws?ws.options[ws.selectedIndex].value:'Standard';
-  var dep=getDepositForPackage(pn);
-  document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $'+dep+' Deposit →':'Continue';
+  var tv2=document.getElementById('selectTravelers');var tr2=tv2?tv2.value:'1';
+  var c2=calcCharges(pn,tr2);
+  document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $'+c2.total.toFixed(2)+' →':'Continue';
 }
 
 async function submitToStripe(){
