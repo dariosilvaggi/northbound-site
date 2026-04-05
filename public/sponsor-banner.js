@@ -1,278 +1,260 @@
 /**
- * NorthBound Sponsor Banner — Floating Sidebar Carousel
- * Include this script before </body> in index.html
- * Fetches active banners from /api/banners and auto-rotates them
+ * NorthBound Sponsor Banner — Horizontal Bar (below nav)
+ * Full-width, responsive. Auto-positions under the fixed nav.
+ * Single sponsor: centred display. Multiple sponsors: continuous ticker.
  */
 (function () {
   'use strict';
 
-  const ROTATE_MS = 5000; // ms between banner transitions
-  const MIN_BANNERS = 1;
+  var BAR_HEIGHT_DESKTOP = 52;   // px — desktop bar height
+  var BAR_HEIGHT_MOBILE  = 40;   // px — mobile bar height (≤768px)
+  var TICKER_SPEED       = 60;   // px per second for ticker scroll
 
   // ── Styles ──────────────────────────────────────────────────────────────────
-  const css = `
-    #nb-sponsor-sidebar {
-      position: fixed;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0;
-    }
+  var css = '\
+#nb-sponsor-bar {\
+  position: fixed;\
+  left: 0;\
+  right: 0;\
+  width: 100%;\
+  height: ' + BAR_HEIGHT_DESKTOP + 'px;\
+  background: #0c0c12;\
+  border-bottom: 1px solid rgba(200,151,78,0.35);\
+  border-top: 1px solid rgba(200,151,78,0.15);\
+  z-index: 999;\
+  display: flex;\
+  align-items: center;\
+  overflow: hidden;\
+  box-sizing: border-box;\
+}\
+\
+#nb-sponsor-label {\
+  flex-shrink: 0;\
+  padding: 0 14px 0 18px;\
+  font-family: "Segoe UI", system-ui, sans-serif;\
+  font-size: 0.58rem;\
+  font-weight: 700;\
+  letter-spacing: 0.18em;\
+  text-transform: uppercase;\
+  color: #C8974E;\
+  border-right: 1px solid rgba(200,151,78,0.25);\
+  height: 100%;\
+  display: flex;\
+  align-items: center;\
+  white-space: nowrap;\
+}\
+\
+#nb-sponsor-track {\
+  flex: 1;\
+  height: 100%;\
+  overflow: hidden;\
+  position: relative;\
+}\
+\
+#nb-banner-single {\
+  width: 100%;\
+  height: 100%;\
+  display: flex;\
+  align-items: center;\
+  justify-content: center;\
+}\
+#nb-banner-single a { display: flex; align-items: center; height: 100%; }\
+#nb-banner-single img {\
+  max-height: 36px;\
+  max-width: 260px;\
+  object-fit: contain;\
+}\
+\
+#nb-ticker-inner {\
+  display: flex;\
+  align-items: center;\
+  height: 100%;\
+  will-change: transform;\
+  white-space: nowrap;\
+}\
+\
+.nb-ticker-item {\
+  display: inline-flex;\
+  align-items: center;\
+  padding: 0 40px;\
+  height: 100%;\
+  flex-shrink: 0;\
+}\
+.nb-ticker-item a { display: flex; align-items: center; }\
+.nb-ticker-item img {\
+  max-height: 36px;\
+  max-width: 180px;\
+  object-fit: contain;\
+}\
+\
+.nb-ticker-sep {\
+  display: inline-flex;\
+  align-self: center;\
+  width: 1px;\
+  height: 22px;\
+  background: rgba(200,151,78,0.22);\
+  flex-shrink: 0;\
+}\
+\
+@media (max-width: 768px) {\
+  #nb-sponsor-bar { height: ' + BAR_HEIGHT_MOBILE + 'px; }\
+  #nb-sponsor-label { font-size: 0.5rem; padding: 0 10px 0 12px; }\
+  #nb-banner-single img { max-height: 26px; max-width: 160px; }\
+  .nb-ticker-item { padding: 0 24px; }\
+  .nb-ticker-item img { max-height: 26px; max-width: 130px; }\
+}';
 
-    #nb-sponsor-toggle {
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      background: #C8974E;
-      color: #0a0a0f;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.85rem 0.45rem;
-      border-radius: 8px 0 0 8px;
-      cursor: pointer;
-      border: none;
-      user-select: none;
-      transition: background 0.2s;
-      flex-shrink: 0;
-      align-self: flex-end;
-    }
-    #nb-sponsor-toggle:hover { background: #d9a85e; }
-
-    #nb-sponsor-panel {
-      background: #111118;
-      border: 1px solid rgba(200,151,78,0.25);
-      border-right: none;
-      border-radius: 12px 0 0 12px;
-      overflow: hidden;
-      width: 160px;
-      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                  opacity 0.3s ease;
-      opacity: 1;
-    }
-    #nb-sponsor-panel.collapsed {
-      width: 0;
-      opacity: 0;
-      border-width: 0;
-    }
-
-    #nb-sponsor-inner {
-      width: 160px;
-      padding: 0.75rem 0.65rem 0.65rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.55rem;
-    }
-
-    .nb-sponsor-label {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #555;
-      text-align: center;
-    }
-
-    #nb-banner-wrap {
-      position: relative;
-      width: 128px;
-      height: 256px;
-      overflow: hidden;
-      border-radius: 8px;
-      background: #0d0d14;
-    }
-
-    .nb-banner-slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .nb-banner-slide.visible { opacity: 1; }
-
-    .nb-banner-slide a {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    .nb-banner-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    #nb-banner-dots {
-      display: flex;
-      gap: 4px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .nb-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #333;
-      transition: background 0.2s;
-      cursor: pointer;
-      border: none;
-      padding: 0;
-    }
-    .nb-dot.active { background: #C8974E; }
-
-    /* Mobile: hide on very small screens to avoid blocking content */
-    @media (max-width: 480px) {
-      #nb-sponsor-sidebar { display: none; }
-    }
-  `;
-
-  // ── Inject CSS ───────────────────────────────────────────────────────────────
-  const styleEl = document.createElement('style');
+  var styleEl = document.createElement('style');
   styleEl.textContent = css;
   document.head.appendChild(styleEl);
 
   // ── Build DOM ────────────────────────────────────────────────────────────────
-  const sidebar = document.createElement('div');
-  sidebar.id = 'nb-sponsor-sidebar';
+  var bar = document.createElement('div');
+  bar.id = 'nb-sponsor-bar';
+  bar.style.display = 'none'; // hidden until banners confirmed
 
-  const panel = document.createElement('div');
-  panel.id = 'nb-sponsor-panel';
+  var labelEl = document.createElement('div');
+  labelEl.id = 'nb-sponsor-label';
+  labelEl.textContent = 'Sponsors';
 
-  const inner = document.createElement('div');
-  inner.id = 'nb-sponsor-inner';
+  var track = document.createElement('div');
+  track.id = 'nb-sponsor-track';
 
-  const label = document.createElement('div');
-  label.className = 'nb-sponsor-label';
-  label.textContent = 'Sponsors';
+  bar.appendChild(labelEl);
+  bar.appendChild(track);
+  document.body.appendChild(bar);
 
-  const bannerWrap = document.createElement('div');
-  bannerWrap.id = 'nb-banner-wrap';
+  // ── Position bar below nav & push page content down ──────────────────────────
+  function getBarHeight() {
+    return window.innerWidth <= 768 ? BAR_HEIGHT_MOBILE : BAR_HEIGHT_DESKTOP;
+  }
 
-  const dotsEl = document.createElement('div');
-  dotsEl.id = 'nb-banner-dots';
+  function positionBar() {
+    if (bar.style.display === 'none') return;
+    var nav = document.getElementById('nav') || document.querySelector('nav');
+    var navH = nav ? nav.offsetHeight : 0;
+    bar.style.top = navH + 'px';
 
-  inner.appendChild(label);
-  inner.appendChild(bannerWrap);
-  inner.appendChild(dotsEl);
-  panel.appendChild(inner);
-
-  const toggle = document.createElement('button');
-  toggle.id = 'nb-sponsor-toggle';
-  toggle.textContent = 'Sponsors';
-  toggle.setAttribute('aria-label', 'Toggle sponsor banners');
-
-  sidebar.appendChild(panel);
-  sidebar.appendChild(toggle);
-  document.body.appendChild(sidebar);
-
-  // ── Toggle collapse ──────────────────────────────────────────────────────────
-  let collapsed = false;
-  toggle.addEventListener('click', function () {
-    collapsed = !collapsed;
-    panel.classList.toggle('collapsed', collapsed);
-    toggle.textContent = collapsed ? '►' : 'Sponsors';
-  });
-
-  // ── Carousel logic ───────────────────────────────────────────────────────────
-  let banners = [];
-  let current = 0;
-  let timer = null;
-  let slides = [];
-  let dots = [];
-
-  function buildSlides() {
-    bannerWrap.innerHTML = '';
-    dotsEl.innerHTML = '';
-    slides = [];
-    dots = [];
-
-    banners.forEach(function (b, i) {
-      const slide = document.createElement('div');
-      slide.className = 'nb-banner-slide' + (i === 0 ? ' visible' : '');
-
-      const content = b.url
-        ? (() => {
-            const a = document.createElement('a');
-            a.href = b.url;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            const img = document.createElement('img');
-            img.src = '/banners/' + b.filename;
-            img.alt = 'Sponsor';
-            a.appendChild(img);
-            return a;
-          })()
-        : (() => {
-            const img = document.createElement('img');
-            img.src = '/banners/' + b.filename;
-            img.alt = 'Sponsor';
-            return img;
-          })();
-
-      slide.appendChild(content);
-      bannerWrap.appendChild(slide);
-      slides.push(slide);
-
-      if (banners.length > 1) {
-        const dot = document.createElement('button');
-        dot.className = 'nb-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', 'Banner ' + (i + 1));
-        dot.addEventListener('click', function () { goTo(i); resetTimer(); });
-        dotsEl.appendChild(dot);
-        dots.push(dot);
+    // Increase padding-top on the hero/first section so content isn't hidden behind bar
+    var hero = document.getElementById('hero') || document.querySelector('section');
+    if (hero) {
+      if (!hero.dataset.nbOrigPad) {
+        hero.dataset.nbOrigPad = parseInt(window.getComputedStyle(hero).paddingTop, 10) || 0;
       }
-    });
-  }
-
-  function goTo(index) {
-    if (!slides.length) return;
-    slides[current].classList.remove('visible');
-    if (dots[current]) dots[current].classList.remove('active');
-    current = (index + slides.length) % slides.length;
-    slides[current].classList.add('visible');
-    if (dots[current]) dots[current].classList.add('active');
-  }
-
-  function resetTimer() {
-    if (timer) clearInterval(timer);
-    if (banners.length > 1) {
-      timer = setInterval(function () { goTo(current + 1); }, ROTATE_MS);
+      var origPad = parseInt(hero.dataset.nbOrigPad, 10);
+      hero.style.paddingTop = (origPad + getBarHeight()) + 'px';
     }
   }
 
+  window.addEventListener('resize', positionBar);
+
+  // ── Image/link helper ────────────────────────────────────────────────────────
+  function makeContent(b, forTicker) {
+    var img = document.createElement('img');
+    img.src = '/banners/' + b.filename;
+    img.alt = 'Sponsor';
+    img.loading = 'lazy';
+
+    var inner = img;
+    if (b.url) {
+      var a = document.createElement('a');
+      a.href = b.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.appendChild(img);
+      inner = a;
+    }
+
+    if (!forTicker) return inner;
+
+    var item = document.createElement('div');
+    item.className = 'nb-ticker-item';
+    item.appendChild(inner);
+    return item;
+  }
+
+  // ── Single-banner layout ─────────────────────────────────────────────────────
+  function renderSingle(b) {
+    var wrap = document.createElement('div');
+    wrap.id = 'nb-banner-single';
+    wrap.appendChild(makeContent(b, false));
+    track.appendChild(wrap);
+  }
+
+  // ── Ticker layout for multiple banners ───────────────────────────────────────
+  function renderTicker(banners) {
+    var inner = document.createElement('div');
+    inner.id = 'nb-ticker-inner';
+
+    // Original set + duplicate for seamless loop
+    var doubled = banners.concat(banners);
+    doubled.forEach(function (b, i) {
+      inner.appendChild(makeContent(b, true));
+      // Separator between items (not after the last in each half)
+      if ((i + 1) % banners.length !== 0) {
+        var sep = document.createElement('div');
+        sep.className = 'nb-ticker-sep';
+        inner.appendChild(sep);
+      }
+    });
+
+    track.appendChild(inner);
+
+    // Measure one full pass width, then animate at constant px/s
+    function startTicker() {
+      var items = inner.querySelectorAll('.nb-ticker-item');
+      if (!items.length) return;
+
+      var halfWidth = 0;
+      for (var i = 0; i < banners.length; i++) {
+        halfWidth += items[i].offsetWidth;
+      }
+      var seps = inner.querySelectorAll('.nb-ticker-sep');
+      var sepCount = Math.min(seps.length / 2, banners.length - 1);
+      for (var j = 0; j < sepCount; j++) {
+        halfWidth += seps[j].offsetWidth;
+      }
+
+      if (halfWidth === 0) { setTimeout(startTicker, 150); return; }
+
+      var dur = (halfWidth / TICKER_SPEED).toFixed(2);
+      var kfName = 'nb_tick_' + Date.now();
+      var kfStyle = document.createElement('style');
+      kfStyle.textContent = '@keyframes ' + kfName + ' { 0% { transform:translateX(0); } 100% { transform:translateX(-' + halfWidth + 'px); } }';
+      document.head.appendChild(kfStyle);
+
+      inner.style.animation = kfName + ' ' + dur + 's linear infinite';
+    }
+
+    setTimeout(startTicker, 120);
+  }
+
+  // ── Fetch banners & init ─────────────────────────────────────────────────────
   function loadBanners() {
     fetch('/api/banners')
       .then(function (res) { return res.json(); })
       .then(function (data) {
-        if (!Array.isArray(data) || data.length < MIN_BANNERS) {
-          sidebar.style.display = 'none';
+        if (!Array.isArray(data) || data.length === 0) {
+          bar.style.display = 'none';
           return;
         }
-        banners = data;
-        current = 0;
-        sidebar.style.display = '';
-        buildSlides();
-        resetTimer();
+        bar.style.display = '';
+        if (data.length === 1) {
+          renderSingle(data[0]);
+        } else {
+          renderTicker(data);
+        }
+        positionBar();
       })
       .catch(function () {
-        sidebar.style.display = 'none';
+        bar.style.display = 'none';
       });
   }
 
-  // ── Init ─────────────────────────────────────────────────────────────────────
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadBanners);
   } else {
     loadBanners();
   }
+
 })();
