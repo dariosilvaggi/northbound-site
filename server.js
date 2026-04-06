@@ -464,13 +464,13 @@ app.post('/api/checkout', async (req, res) => {
   const { weekend, packageName, packagePrice, travelers, firstName, lastName, email, phone, city } = req.body;
   if (!email || !weekend || !packageName) return res.status(400).json({ error: 'Missing required fields.' });
 
-  // Deposit by package tier (USD cents)
-  const depositMap = { VIP: 19900, Standard: 9900, Basic: 4900 };
-  const depositCents = depositMap[packageName] || 9900;
+  // Full price in cents — no deposit model
+  const baseCents = Math.round(parseFloat(packagePrice || 0) * 100);
+  if (!baseCents) return res.status(400).json({ error: 'Invalid package price.' });
 
-  // MAT 6% → HST 13% on (deposit + MAT)
-  const matCents   = Math.round(depositCents * 0.06);
-  const hstCents   = Math.round((depositCents + matCents) * 0.13);
+  // MAT 6% → HST 13% on (base + MAT)
+  const matCents = Math.round(baseCents * 0.06);
+  const hstCents = Math.round((baseCents + matCents) * 0.13);
 
   // Admin fee by group size
   const numTravelers = parseInt(travelers) || 1;
@@ -485,9 +485,9 @@ app.post('/api/checkout', async (req, res) => {
         currency: 'usd',
         product_data: {
           name: `NorthBound Weekends — ${weekend}`,
-          description: `${packageName} Package · ${numTravelers} traveler(s) · Deposit (balance due 14 days before trip)`,
+          description: `${packageName} Package · ${numTravelers} traveler(s) · No refunds`,
         },
-        unit_amount: depositCents,
+        unit_amount: baseCents,
       },
       quantity: 1,
     },
@@ -529,7 +529,7 @@ app.post('/api/checkout', async (req, res) => {
       metadata: {
         weekend, packageName, packagePrice: String(packagePrice || ''),
         travelers: String(numTravelers), firstName, lastName, phone, city,
-        depositCents: String(depositCents), matCents: String(matCents),
+        baseCents: String(baseCents), matCents: String(matCents),
         hstCents: String(hstCents), adminCents: String(adminCents),
       },
       success_url: `${siteUrl}/booking-success?session_id={CHECKOUT_SESSION_ID}`,

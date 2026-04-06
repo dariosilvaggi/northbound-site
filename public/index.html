@@ -1208,11 +1208,11 @@ img { display: block; max-width: 100%; }
           <div id="summaryWeekend" style="font-weight:700;margin-bottom:0.25rem;"></div>
           <div id="summaryPackage" style="font-size:0.85rem;color:var(--gray);margin-bottom:0.75rem;"></div>
           <div style="border-top:1px solid rgba(200,135,76,0.15);padding-top:0.75rem;display:flex;justify-content:space-between;align-items:center;">
-            <div><div style="font-size:0.8rem;color:var(--gray);">Deposit due today</div><div style="font-size:0.72rem;color:var(--gray-dim);" id="summaryBalance"></div></div>
+            <div><div style="font-size:0.8rem;color:var(--gray);">Total due today</div><div style="font-size:0.72rem;color:var(--gray-dim);" id="summaryBalance"></div></div>
             <div id="summaryDeposit" style="font-family:'Plus Jakarta Sans';font-weight:800;color:var(--gold);font-size:1.25rem;"></div>
           </div>
         </div>
-        <div style="font-size:0.78rem;color:var(--gray-dim);text-align:center;margin-bottom:0.5rem;">You'll be redirected to Stripe's secure checkout. We accept all major cards, Apple Pay &amp; Google Pay.</div>
+        <div style="font-size:0.78rem;color:var(--gray-dim);text-align:center;margin-bottom:0.5rem;">You'll be redirected to Stripe's secure checkout. Full payment required. All sales final — no refunds. We accept all major cards, Apple Pay &amp; Google Pay.</div>
         <div id="stripeError" style="display:none;background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.3);border-radius:6px;padding:0.75rem;font-size:0.82rem;color:#f87171;margin-top:0.5rem;"></div>
       </div>
     </div>
@@ -1241,16 +1241,14 @@ function populateBookingSelects(trips,pkgs){
   if(ps&&_bookingPkgs.length){ps.innerHTML=_bookingPkgs.map(function(p){var lbl=p.featured?' (Most Popular)':'';return'<option value="'+p.name+'" data-price="'+p.price+'"'+(p.featured?' selected':'')+'>'+p.name+' — $'+p.price+'/person'+lbl+'</option>';}).join('');}
 }
 
-function getDepositForPackage(name){return name==='VIP'?199:name==='Standard'?99:49;}
-
-function calcCharges(pn, tr){
-  var dep=getDepositForPackage(pn);
-  var mat=parseFloat((dep*0.06).toFixed(2));
-  var hst=parseFloat(((dep+mat)*0.13).toFixed(2));
+function calcCharges(pp, tr){
+  var base=parseFloat(pp||0);
+  var mat=parseFloat((base*0.06).toFixed(2));
+  var hst=parseFloat(((base+mat)*0.13).toFixed(2));
   var adminMap={'2':2,'3':3,'4':4};
   var adm=adminMap[String(tr)]||0;
-  var total=parseFloat((dep+mat+hst+adm).toFixed(2));
-  return {dep:dep,mat:mat,hst:hst,adm:adm,total:total};
+  var total=parseFloat((base+mat+hst+adm).toFixed(2));
+  return {base:base,mat:mat,hst:hst,adm:adm,total:total};
 }
 
 function buildSummary(){
@@ -1261,19 +1259,18 @@ function buildSummary(){
   var pn=ps?ps.options[ps.selectedIndex].value:'';
   var pp=ps?ps.options[ps.selectedIndex].getAttribute('data-price'):'0';
   var tr=tv?tv.value:'1';
-  var c=calcCharges(pn,tr);
-  var bal=parseInt(pp||0)-c.dep;
+  var c=calcCharges(pp,tr);
   document.getElementById('summaryWeekend').textContent=wn;
   document.getElementById('summaryPackage').textContent=pn+' Package · '+tr+' traveler(s)';
   document.getElementById('summaryDeposit').textContent='$'+c.total.toFixed(2);
   var breakdownHtml=
     '<div style="font-size:0.72rem;color:var(--gray-dim);margin-bottom:0.5rem;line-height:1.9">'+
-    'Deposit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.dep.toFixed(2)+'</span><br>'+
+    'Package price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.base.toFixed(2)+'</span><br>'+
     'MAT (6%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.mat.toFixed(2)+'</span><br>'+
     'HST (13%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.hst.toFixed(2)+'</span>'+
     (c.adm>0?'<br>Admin fee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.adm.toFixed(2)+'</span>':'')+
     '</div>';
-  document.getElementById('summaryBalance').innerHTML=breakdownHtml+'Balance $'+Math.max(0,bal)+' due 14 days before trip';
+  document.getElementById('summaryBalance').innerHTML=breakdownHtml+'<span style="font-size:0.72rem;color:#c06060">All sales final — no refunds</span>';
 }
 
 function openBooking(tripName){
@@ -1306,9 +1303,10 @@ function updateBookingUI(){
     if(c)c.style.display=i===currentStep?'block':'none';
   }
   document.getElementById('bookingBack').style.display=currentStep>1?'inline-flex':'none';
-  var ws=document.getElementById('selectPackage');var pn=ws?ws.options[ws.selectedIndex].value:'Standard';
+  var ws=document.getElementById('selectPackage');
+  var pp2=ws&&ws.selectedIndex>=0?ws.options[ws.selectedIndex].getAttribute('data-price'):'0';
   var tv2=document.getElementById('selectTravelers');var tr2=tv2?tv2.value:'1';
-  var c2=calcCharges(pn,tr2);
+  var c2=calcCharges(pp2,tr2);
   document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $'+c2.total.toFixed(2)+' →':'Continue';
 }
 
