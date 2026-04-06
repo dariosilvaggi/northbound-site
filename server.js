@@ -269,6 +269,9 @@ app.get('/admin/login', (req, res) => {
   fs.readFile(fp, 'utf8', (err, html) => {
     if (err) return res.status(500).send('File error: ' + err.message);
     res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.send(html);
   });
 });
@@ -292,6 +295,9 @@ app.get('/admin', requireAdmin, (req, res) => {
   fs.readFile(fp, 'utf8', (err, html) => {
     if (err) return res.status(500).send('File error: ' + err.message);
     res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.send(html);
   });
 });
