@@ -885,7 +885,7 @@ img { display: block; max-width: 100%; }
 <!-- ── NAV ── -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <div class="nav-logo" onclick="scrollToSection('hero')">
+    <div class="nav-logo" data-action="scrollTo" data-target="hero">
       <img src="logo.png" alt="NorthBound Weekends">
       <div class="nav-logo-text"><span class="nav-logo-main">NORTHBOUND</span><span class="nav-logo-sub">WEEKENDS</span></div>
     </div>
@@ -895,9 +895,9 @@ img { display: block; max-width: 100%; }
       <a href="#destinations">Cities</a>
       <a href="#nightlife">Nightlife</a>
       <a href="#faq">FAQ</a>
-      <a class="btn-nav" onclick="openBooking()">Book Now</a>
+      <a class="btn-nav" data-action="openBooking">Book Now</a>
     </div>
-    <button class="mobile-toggle" onclick="toggleMobileNav()">&#9776;</button>
+    <button class="mobile-toggle" data-action="toggleMobileNav">&#9776;</button>
   </div>
 </nav>
 
@@ -912,7 +912,7 @@ img { display: block; max-width: 100%; }
       <h1>Cross the border.<br>Own the <span class="gradient-text">night.</span></h1>
       <p class="hero-sub">Organized overnight trips from the US to Windsor, Ontario. Chartered coach, hotel, skip-the-line nightclub access. Drink legally at 19.</p>
       <div class="hero-ctas">
-        <button class="btn-gold" onclick="openBooking()">Book Your Weekend &rarr;</button>
+        <button class="btn-gold" data-action="openBooking">Book Your Weekend &rarr;</button>
         <a class="btn-ghost" href="#weekends">View Upcoming Trips</a>
       </div>
     </div>
@@ -1103,14 +1103,14 @@ img { display: block; max-width: 100%; }
       <p class="section-desc">Everything you need to know before your first NorthBound trip.</p>
     </div>
     <div class="faq-list">
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Do I need a passport to go to Windsor?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Yes. To enter Canada from the U.S. you need a valid passport, passport card, enhanced driver's license (available in MI, NY, VT, WA, MN), or NEXUS card. A regular driver's license is not accepted.</p></div></div>
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Can I drink in Windsor if I'm under 21?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Yes — Ontario's legal drinking age is 19. If you're 19 or older, you can drink legally in Windsor. You must be at least 19 to access nightlife venues on our tours.</p></div></div>
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What's the payment structure?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>A deposit of $49&ndash;$99 secures your spot. The remaining balance is due 14 days before your trip. We accept all major credit cards, Apple Pay, and Google Pay.</p></div></div>
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Can my friends and I book together?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Absolutely. Our group booking feature lets you reserve together, share a booking link with friends, and split payments. You can also add friends to an existing booking later.</p></div></div>
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What happens at the border?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>We handle the logistics. The coach stops at the border, an officer boards or you walk through inspection, show your document, and you're through. Smooth and quick.</p></div></div>
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Is this safe?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Safety is built into every trip. Tour leaders, buddy system, headcounts at every stop, 24/7 emergency line, and a behavior agreement. Windsor is a safe, walkable city and all venues are in the downtown core.</p></div></div>
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What's the cancellation policy?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Full refund 30+ days before your trip. 50% refund for 15&ndash;29 days. No refund within 14 days. You can transfer your booking to a friend at any time.</p></div></div>
-      <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Can I bring cannabis across the border?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>No. Even though cannabis is legal in both countries, transporting it across the international border is a federal offense. Do not bring any cannabis products — covered in the pre-trip orientation.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Do I need a passport to go to Windsor?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Yes. To enter Canada from the U.S. you need a valid passport, passport card, enhanced driver's license (available in MI, NY, VT, WA, MN), or NEXUS card. A regular driver's license is not accepted.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Can I drink in Windsor if I'm under 21?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Yes — Ontario's legal drinking age is 19. If you're 19 or older, you can drink legally in Windsor. You must be at least 19 to access nightlife venues on our tours.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What's the payment structure?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>A deposit of $49&ndash;$99 secures your spot. The remaining balance is due 14 days before your trip. We accept all major credit cards, Apple Pay, and Google Pay.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Can my friends and I book together?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Absolutely. Our group booking feature lets you reserve together, share a booking link with friends, and split payments. You can also add friends to an existing booking later.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What happens at the border?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>We handle the logistics. The coach stops at the border, an officer boards or you walk through inspection, show your document, and you're through. Smooth and quick.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Is this safe?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Safety is built into every trip. Tour leaders, buddy system, headcounts at every stop, 24/7 emergency line, and a behavior agreement. Windsor is a safe, walkable city and all venues are in the downtown core.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What's the cancellation policy?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Full refund 30+ days before your trip. 50% refund for 15&ndash;29 days. No refund within 14 days. You can transfer your booking to a friend at any time.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Can I bring cannabis across the border?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>No. Even though cannabis is legal in both countries, transporting it across the international border is a federal offense. Do not bring any cannabis products — covered in the pre-trip orientation.</p></div></div>
     </div>
   </div>
 </section>
@@ -1120,7 +1120,7 @@ img { display: block; max-width: 100%; }
   <div class="container">
     <h2>Ready to go <span class="gradient-text">NorthBound</span>?</h2>
     <p>Your first legal night out is waiting across the border.</p>
-    <button class="btn-gold" onclick="openBooking()">Book Your Weekend &rarr;</button>
+    <button class="btn-gold" data-action="openBooking">Book Your Weekend &rarr;</button>
   </div>
 </section>
 
@@ -1174,7 +1174,7 @@ img { display: block; max-width: 100%; }
 <!-- ── BOOKING MODAL ── -->
 <div class="modal-overlay" id="bookingModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeBooking()">&times;</button>
+    <button class="modal-close" data-action="closeBooking">&times;</button>
     <div class="modal-header">
       <h2>Book Your Weekend</h2>
       <p>Secure your spot with a deposit. Balance due 14 days before departure.</p>
@@ -1217,8 +1217,8 @@ img { display: block; max-width: 100%; }
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-ghost" id="bookingBack" onclick="prevStep()" style="display:none;flex:0 0 auto;padding:0.75rem 1.5rem;">Back</button>
-      <button class="btn-gold" id="bookingNext" onclick="nextStep()" style="flex:1;justify-content:center;">Continue</button>
+      <button class="btn-ghost" id="bookingBack" data-action="prevStep" style="display:none;flex:0 0 auto;padding:0.75rem 1.5rem;">Back</button>
+      <button class="btn-gold" id="bookingNext" data-action="nextStep" style="flex:1;justify-content:center;">Continue</button>
     </div>
   </div>
 </div>
@@ -1355,7 +1355,7 @@ document.getElementById('bookingModal').addEventListener('click',function(e){if(
     el.innerHTML=trips.map(function(t){
       var b=BADGE[t.badge]?'<span class="wk-badge '+BADGE[t.badge].cls+'">'+BADGE[t.badge].text+'</span>':'';
       var imgHtml=t.image?'<div class="wk-img" style="background-image:url(\''+t.image+'\')"></div>':'';
-      return '<div class="wk-card" onclick="openBooking()">'+imgHtml+
+      return '<div class="wk-card" data-action="openBooking">'+imgHtml+
         '<div class="wk-top"><div class="wk-date">'+t.dateRange+'</div>'+b+'</div>'+
         '<div class="wk-body"><h3>'+t.name+'</h3><div class="wk-route">'+t.city+' &rarr; Windsor</div>'+
         '<div class="wk-details"><span class="wk-detail">'+t.nights+' nights</span>'+
@@ -1379,7 +1379,7 @@ document.getElementById('bookingModal').addEventListener('click',function(e){if(
         '<div class="pkg-name">'+p.name+'</div>'+
         '<div class="pkg-price"><span class="currency">$</span><span class="amount">'+p.price+'</span><span class="per"> /person</span></div>'+
         '<ul class="pkg-features">'+fl+'</ul>'+
-        '<button class="'+bc+'" onclick="openBooking()">Select '+p.name+'</button></div>';
+        '<button class="'+bc+'" data-action="openBooking">Select '+p.name+'</button></div>';
     }).join('');
   }
 
@@ -1424,6 +1424,23 @@ document.getElementById('bookingModal').addEventListener('click',function(e){if(
   load('/api/clubs',renderClubs);
   load('/api/itinerary',renderItinerary);
 })();
+</script>
+
+<script>
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('[data-action]');
+  if(!btn)return;
+  var action=btn.dataset.action;
+  switch(action){
+    case 'openBooking': openBooking(); break;
+    case 'closeBooking': closeBooking(); break;
+    case 'prevStep': prevStep(); break;
+    case 'nextStep': nextStep(); break;
+    case 'toggleMobileNav': toggleMobileNav(); break;
+    case 'toggleFaq': toggleFaq(btn); break;
+    case 'scrollTo': scrollToSection(btn.dataset.target); break;
+  }
+});
 </script>
 </body>
 </html>
