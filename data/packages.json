@@ -1,52 +1,14 @@
 [
   {
-    "id": "pkg001",
-    "name": "Basic",
-    "price": 149,
-    "featured": false,
-    "features": [
-      {"text": "Round-trip chartered coach", "included": true},
-      {"text": "Border crossing coordination", "included": true},
-      {"text": "Nightclub entry (2 venues)", "included": true},
-      {"text": "Tour staff on-site", "included": true},
-      {"text": "Mobile itinerary", "included": true},
-      {"text": "Hotel accommodation", "included": false},
-      {"text": "VIP club access", "included": false},
-      {"text": "Drink specials", "included": false}
-    ],
-    "active": true
-  },
-  {
-    "id": "pkg002",
-    "name": "Standard",
-    "price": 249,
+    "id": "eddfb976bcfa",
+    "name": "4 Guest 1 Night Stay",
+    "price": 276,
     "featured": true,
     "features": [
       {"text": "Round-trip chartered coach", "included": true},
       {"text": "Border crossing coordination", "included": true},
-      {"text": "Nightclub entry (3 venues)", "included": true},
-      {"text": "Tour staff on-site", "included": true},
-      {"text": "Mobile itinerary", "included": true},
-      {"text": "2-night hotel stay (downtown)", "included": true},
-      {"text": "Group dinner reservation", "included": true},
-      {"text": "VIP club access", "included": false}
-    ],
-    "active": true
-  },
-  {
-    "id": "pkg003",
-    "name": "VIP",
-    "price": 399,
-    "featured": false,
-    "features": [
-      {"text": "Round-trip chartered coach", "included": true},
-      {"text": "Border crossing coordination", "included": true},
-      {"text": "VIP nightclub entry (all venues)", "included": true},
-      {"text": "Dedicated tour coordinator", "included": true},
-      {"text": "Mobile itinerary", "included": true},
-      {"text": "2-night premium hotel", "included": true},
-      {"text": "Group dinner + late-night food", "included": true},
-      {"text": "Drink specials at all venues", "included": true}
+      {"text": "1-night hotel stay (downtown Detroit)", "included": true},
+      {"text": "Tour staff on-site", "included": true}
     ],
     "active": true
   }
