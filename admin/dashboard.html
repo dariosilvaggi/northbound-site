@@ -332,9 +332,11 @@ function selFld(lbl,id,opts,cur){
 }
 function api(url){return fetch(url).then(function(r){return r.json();});}
 function post(url,data){
-  var fd=new FormData();
-  Object.keys(data).forEach(function(k){fd.append(k,data[k]);});
-  return fetch(url,{method:'POST',body:fd}).then(function(r){return r.json();});
+  return fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:new URLSearchParams(data).toString()
+  }).then(function(r){return r.json();});
 }
 
 // Modal
