@@ -1418,8 +1418,9 @@ document.getElementById('bookingModal').addEventListener('click',function(e){if(
 
   function load(url,fn){fetch(url).then(function(r){return r.json();}).then(fn).catch(function(){});}
   var _trips=[],_pkgs=[];
-  fetch('/api/weekends').then(function(r){return r.json();}).then(function(d){_trips=d;renderWeekends(d);if(_pkgs.length)populateBookingSelects(_trips,_pkgs);}).catch(function(){});
-  fetch('/api/packages').then(function(r){return r.json();}).then(function(d){_pkgs=d;renderPackages(d);if(_trips.length)populateBookingSelects(_trips,_pkgs);}).catch(function(){});
+  var _tripsLoaded=false,_pkgsLoaded=false;
+  fetch('/api/weekends').then(function(r){return r.json();}).then(function(d){_trips=d;_tripsLoaded=true;renderWeekends(d);if(_pkgsLoaded)populateBookingSelects(_trips,_pkgs);}).catch(function(){_tripsLoaded=true;});
+  fetch('/api/packages').then(function(r){return r.json();}).then(function(d){_pkgs=d;_pkgsLoaded=true;renderPackages(d);if(_tripsLoaded)populateBookingSelects(_trips,_pkgs);}).catch(function(){_pkgsLoaded=true;});
   load('/api/cities',renderCities);
   load('/api/clubs',renderClubs);
   load('/api/itinerary',renderItinerary);
