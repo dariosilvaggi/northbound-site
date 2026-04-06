@@ -157,7 +157,7 @@ input[type=file]{display:none;}
             <select id="wk-badge"><option value="">None</option><option value="hot">Selling Fast</option><option value="new">New</option><option value="ltd">Limited</option><option value="vip">VIP Only</option></select>
           </div>
         </div>
-        <button class="btn-add" onclick="addWeekend()">+ Add Trip</button>
+        <button class="btn-add" data-action="addWeekend">+ Add Trip</button>
         <div id="wk-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Trips</span><span class="count-badge" id="wk-count">0</span></div>
@@ -178,7 +178,7 @@ input[type=file]{display:none;}
             <textarea id="pkg-features" rows="6" placeholder="Round-trip chartered coach&#10;Nightclub entry (3 venues)&#10;Hotel stay&#10;- VIP access&#10;- Drink specials"></textarea>
           </div>
         </div>
-        <button class="btn-add" onclick="addPackage()">+ Add Package</button>
+        <button class="btn-add" data-action="addPackage">+ Add Package</button>
         <div id="pkg-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Packages</span><span class="count-badge" id="pkg-count">0</span></div>
@@ -196,7 +196,7 @@ input[type=file]{display:none;}
           <div class="fg"><label>Distance to Windsor</label><input type="text" id="cty-dist" placeholder="30 min to Windsor"></div>
           <div class="fg"><label>Frequency</label><input type="text" id="cty-freq" placeholder="Every weekend"></div>
         </div>
-        <button class="btn-add" onclick="addCity()">+ Add City</button>
+        <button class="btn-add" data-action="addCity">+ Add City</button>
         <div id="cty-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Departure Cities</span><span class="count-badge" id="cty-count">0</span></div>
@@ -216,7 +216,7 @@ input[type=file]{display:none;}
           <div class="fg full"><label>Description</label><textarea id="cl-desc" rows="2" placeholder="Multi-level venue with top DJs..."></textarea></div>
           <div class="fg full"><label>Perks (comma-separated)</label><input type="text" id="cl-perks" placeholder="Skip the Line, VIP Sections, Rooftop"></div>
         </div>
-        <button class="btn-add" onclick="addClub()">+ Add Venue</button>
+        <button class="btn-add" data-action="addClub">+ Add Venue</button>
         <div id="cl-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Venues</span><span class="count-badge" id="cl-count">0</span></div>
@@ -232,7 +232,7 @@ input[type=file]{display:none;}
         <div class="form-grid">
           <div class="fg"><label>Day Label</label><input type="text" id="itin-day" placeholder="Friday"></div>
         </div>
-        <button class="btn-add" onclick="addDay()">+ Add Day</button>
+        <button class="btn-add" data-action="addDay">+ Add Day</button>
         <div id="itin-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div id="itinerary-admin"></div>
@@ -302,8 +302,8 @@ input[type=file]{display:none;}
     <div class="modal-title" id="modal-title">Edit</div>
     <div id="modal-body"></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" onclick="saveModal()">Save Changes</button>
+      <button class="btn-cancel" data-action="closeModal">Cancel</button>
+      <button class="btn-save" data-action="saveModal">Save Changes</button>
     </div>
   </div>
 </div>
@@ -707,6 +707,14 @@ document.addEventListener('click',function(e){
     case 'addItinItem': addItinItem(id); break;
     case 'toggleBanner': toggleBanner(id); break;
     case 'deleteBanner': deleteBanner(id); break;
+    case 'addWeekend': addWeekend(); break;
+    case 'addPackage': addPackage(); break;
+    case 'addCity': addCity(); break;
+    case 'addClub': addClub(); break;
+    case 'addDay': addDay(); break;
+    case 'closeModal': closeModal(); break;
+    case 'saveModal': saveModal(); break;
+    case 'removeWeekendImage': removeWeekendImage(id); break;
   }
 });
 
