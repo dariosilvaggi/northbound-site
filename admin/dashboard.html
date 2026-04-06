@@ -392,9 +392,9 @@ function loadWeekends(){
         '<span class="item-tag">$'+t.price+'/pp</span><span class="item-tag">'+t.spotsLeft+' spots</span>' +
         (t.badge?'<span class="item-tag" style="color:#C8974E">'+(BADGES[t.badge]||t.badge)+'</span>':'')+'</div></div>' +
         '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editWeekend(\''+t.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(t.active?'':' off')+'" onclick="toggleItem(\'weekends\',\''+t.id+'\')">'+(t.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'weekends\',\''+t.id+'\')">✕</button>' +
+        '<button class="btn-sm-edit" data-action="edit" data-section="weekends" data-id="'+t.id+'">Edit</button>' +
+        '<button class="btn-sm-toggle'+(t.active?'':' off')+'" data-action="toggle" data-section="weekends" data-id="'+t.id+'">'+(t.active?'Live':'Hidden')+'</button>' +
+        '<button class="btn-sm-del" data-action="delete" data-section="weekends" data-id="'+t.id+'">✕</button>' +
         '</div></div>';
     }).join('');
   });
@@ -458,9 +458,9 @@ function loadPackages(){
         '<div class="item-main"><div class="item-title">'+p.name+(p.featured?' <span style="font-size:.68rem;color:#C8974E">(featured)</span>':'')+'</div>' +
         '<div class="item-meta"><span class="item-tag">$'+p.price+'/pp</span><span class="item-tag">'+inc+' included</span></div></div>' +
         '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editPackage(\''+p.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(p.active?'':' off')+'" onclick="toggleItem(\'packages\',\''+p.id+'\')">'+(p.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'packages\',\''+p.id+'\')">✕</button>' +
+        '<button class="btn-sm-edit" data-action="edit" data-section="packages" data-id="'+p.id+'">Edit</button>' +
+        '<button class="btn-sm-toggle'+(p.active?'':' off')+'" data-action="toggle" data-section="packages" data-id="'+p.id+'">'+(p.active?'Live':'Hidden')+'</button>' +
+        '<button class="btn-sm-del" data-action="delete" data-section="packages" data-id="'+p.id+'">✕</button>' +
         '</div></div>';
     }).join('');
   });
@@ -474,7 +474,7 @@ function addPackage(){
     .then(function(){clr(['pkg-name','pkg-price','pkg-features']);loadPackages();});
 }
 function editPackage(id){
-  var btn=document.querySelector('.btn-sm-edit[onclick="editPackage(\''+id+'\')"]');
+  var btn=document.querySelector('.btn-sm-edit[data-id="'+id+'"][data-section="packages"]');
   if(btn){btn.disabled=true;btn.textContent='Loading…';}
   api('/admin/api/packages').then(function(items){
     if(btn){btn.disabled=false;btn.textContent='Edit';}
@@ -503,9 +503,9 @@ function loadCities(){
         '<div class="item-main"><div class="item-title">'+c.city+'</div>' +
         '<div class="item-meta"><span class="item-tag">'+c.distance+'</span><span class="item-tag">'+c.frequency+'</span></div></div>' +
         '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editCity(\''+c.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(c.active?'':' off')+'" onclick="toggleItem(\'cities\',\''+c.id+'\')">'+(c.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'cities\',\''+c.id+'\')">✕</button>' +
+        '<button class="btn-sm-edit" data-action="edit" data-section="cities" data-id="'+c.id+'">Edit</button>' +
+        '<button class="btn-sm-toggle'+(c.active?'':' off')+'" data-action="toggle" data-section="cities" data-id="'+c.id+'">'+(c.active?'Live':'Hidden')+'</button>' +
+        '<button class="btn-sm-del" data-action="delete" data-section="cities" data-id="'+c.id+'">✕</button>' +
         '</div></div>';
     }).join('');
   });
@@ -537,9 +537,9 @@ function loadClubs(){
         '<div class="item-meta"><span class="item-tag">'+c.type+'</span>'+
         (c.perks||[]).map(function(p){return '<span class="item-tag">'+p+'</span>';}).join('')+'</div></div>' +
         '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editClub(\''+c.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(c.active?'':' off')+'" onclick="toggleItem(\'clubs\',\''+c.id+'\')">'+(c.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'clubs\',\''+c.id+'\')">✕</button>' +
+        '<button class="btn-sm-edit" data-action="edit" data-section="clubs" data-id="'+c.id+'">Edit</button>' +
+        '<button class="btn-sm-toggle'+(c.active?'':' off')+'" data-action="toggle" data-section="clubs" data-id="'+c.id+'">'+(c.active?'Live':'Hidden')+'</button>' +
+        '<button class="btn-sm-del" data-action="delete" data-section="clubs" data-id="'+c.id+'">✕</button>' +
         '</div></div>';
     }).join('');
   });
@@ -573,15 +573,15 @@ function loadItinerary(){
           '<div class="tl-time">'+i.time+'</div>' +
           '<div class="tl-info"><div class="tl-name">'+i.title+'</div><div class="tl-desc">'+i.description+'</div></div>' +
           '<div class="tl-acts">' +
-          '<button class="btn-sm-edit" onclick="editItinItem(\''+d.id+'\',\''+i.id+'\')">Edit</button>' +
-          '<button class="btn-sm-del" onclick="delItinItem(\''+d.id+'\',\''+i.id+'\')">✕</button>' +
+          '<button class="btn-sm-edit" data-action="editItinItem" data-day="'+d.id+'" data-id="'+i.id+'">Edit</button>' +
+          '<button class="btn-sm-del" data-action="delItinItem" data-day="'+d.id+'" data-id="'+i.id+'">✕</button>' +
           '</div></div>';
       }).join('')||'<div style="font-size:.76rem;color:#555;padding:.4rem 0">No items yet.</div>';
       return '<div class="day-block">' +
         '<div class="day-header"><span class="day-lbl">'+d.day+'</span>' +
         '<div style="display:flex;gap:.45rem">' +
-        '<button class="btn-sm-edit" onclick="renameDay(\''+d.id+'\',\''+d.day+'\')">Rename</button>' +
-        '<button class="btn-sm-del" onclick="delDay(\''+d.id+'\')">Delete Day</button>' +
+        '<button class="btn-sm-edit" data-action="renameDay" data-id="'+d.id+'" data-day="'+d.day+'">Rename</button>' +
+        '<button class="btn-sm-del" data-action="delDay" data-id="'+d.id+'">Delete Day</button>' +
         '</div></div>' +
         '<div class="day-items">'+rows+'</div>' +
         '<div class="day-add"><div class="day-add-lbl">Add Timeline Item</div>' +
@@ -590,7 +590,7 @@ function loadItinerary(){
         '<input type="text" id="it-title-'+d.id+'" placeholder="Item title">' +
         '</div>' +
         '<textarea id="it-desc-'+d.id+'" rows="2" placeholder="Description..." style="margin-top:.45rem;width:100%"></textarea>' +
-        '<button class="btn-add-item" style="margin-top:.45rem" onclick="addItinItem(\''+d.id+'\')">+ Add Item</button>' +
+        '<button class="btn-add-item" style="margin-top:.45rem" data-action="addItinItem" data-id="'+d.id+'">+ Add Item</button>' +
         '<div id="itin-err-'+d.id+'" style="display:none;color:#e05252;font-size:.82rem;margin-top:.3rem;"></div>' +
         '</div></div>';
     }).join('');
@@ -642,8 +642,8 @@ function loadBanners(){
         '<span class="banner-status '+(b.active?'active':'inactive')+'">'+(b.active?'Active':'Paused')+'</span></div>' +
         '<div class="banner-body"><div class="banner-url">'+(b.url?'<a href="'+b.url+'" target="_blank">'+b.url+'</a>':'<span style="color:#333">No URL</span>')+'</div>' +
         '<div class="banner-actions">' +
-        '<button class="btn-toggle'+(b.active?' active':'')+'" onclick="toggleBanner(\''+b.id+'\')">'+(b.active?'⏸ Pause':'▶ Activate')+'</button>' +
-        '<button class="btn-delete" onclick="deleteBanner(\''+b.id+'\')">Delete</button>' +
+        '<button class="btn-toggle'+(b.active?' active':'')+'" data-action="toggleBanner" data-id="'+b.id+'">'+(b.active?'⏸ Pause':'▶ Activate')+'</button>' +
+        '<button class="btn-delete" data-action="deleteBanner" data-id="'+b.id+'">Delete</button>' +
         '</div></div></div>';
     }).join('');
   });
@@ -684,6 +684,31 @@ function loadBookings(){
     document.getElementById('bookings-tbody').innerHTML='<tr><td colspan="7" style="padding:2rem;text-align:center;color:#c06060;font-size:.84rem">Failed to load bookings.</td></tr>';
   });
 }
+
+
+// -- Event delegation -- replaces ALL inline onclick on dynamic buttons --
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('[data-action]');
+  if(!btn)return;
+  var action=btn.dataset.action, id=btn.dataset.id, sec=btn.dataset.section, day=btn.dataset.day;
+  switch(action){
+    case 'edit':
+      if(sec==='packages')editPackage(id);
+      else if(sec==='weekends')editWeekend(id);
+      else if(sec==='cities')editCity(id);
+      else if(sec==='clubs')editClub(id);
+      break;
+    case 'toggle': toggleItem(sec,id); break;
+    case 'delete': deleteItem(sec,id); break;
+    case 'editItinItem': editItinItem(day,id); break;
+    case 'delItinItem': delItinItem(day,id); break;
+    case 'renameDay': renameDay(id,btn.dataset.day); break;
+    case 'delDay': delDay(id); break;
+    case 'addItinItem': addItinItem(id); break;
+    case 'toggleBanner': toggleBanner(id); break;
+    case 'deleteBanner': deleteBanner(id); break;
+  }
+});
 
 // Init
 loadWeekends();loadPackages();loadCities();loadClubs();loadItinerary();
