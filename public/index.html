@@ -963,7 +963,7 @@ img { display: block; max-width: 100%; }
       <div class="step-card">
         <div class="step-num">02</div>
         <h3>Book &amp; Upload Docs</h3>
-        <p>Reserve your spot with a deposit, upload your passport or enhanced ID, and sign the waiver.</p>
+        <p>Book your spot, upload your passport or enhanced ID, and sign the waiver.</p>
       </div>
       <div class="step-card">
         <div class="step-num">03</div>
@@ -1105,11 +1105,11 @@ img { display: block; max-width: 100%; }
     <div class="faq-list">
       <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Do I need a passport to go to Windsor?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Yes. To enter Canada from the U.S. you need a valid passport, passport card, enhanced driver's license (available in MI, NY, VT, WA, MN), or NEXUS card. A regular driver's license is not accepted.</p></div></div>
       <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Can I drink in Windsor if I'm under 21?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Yes — Ontario's legal drinking age is 19. If you're 19 or older, you can drink legally in Windsor. You must be at least 19 to access nightlife venues on our tours.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What's the payment structure?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>A deposit of $49&ndash;$99 secures your spot. The remaining balance is due 14 days before your trip. We accept all major credit cards, Apple Pay, and Google Pay.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What's the payment structure?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Full payment is required at the time of booking. We accept all major credit cards, Apple Pay, and Google Pay. All sales are final — no refunds.</p></div></div>
       <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Can my friends and I book together?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Absolutely. Our group booking feature lets you reserve together, share a booking link with friends, and split payments. You can also add friends to an existing booking later.</p></div></div>
       <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What happens at the border?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>We handle the logistics. The coach stops at the border, an officer boards or you walk through inspection, show your document, and you're through. Smooth and quick.</p></div></div>
       <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Is this safe?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Safety is built into every trip. Tour leaders, buddy system, headcounts at every stop, 24/7 emergency line, and a behavior agreement. Windsor is a safe, walkable city and all venues are in the downtown core.</p></div></div>
-      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What's the cancellation policy?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>Full refund 30+ days before your trip. 50% refund for 15&ndash;29 days. No refund within 14 days. You can transfer your booking to a friend at any time.</p></div></div>
+      <div class="faq-item"><button class="faq-question" data-action="toggleFaq">What's the cancellation policy?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>All sales are final — no refunds. You can transfer your booking to a friend at any time.</p></div></div>
       <div class="faq-item"><button class="faq-question" data-action="toggleFaq">Can I bring cannabis across the border?<span class="faq-arrow">+</span></button><div class="faq-answer"><p>No. Even though cannabis is legal in both countries, transporting it across the international border is a federal offense. Do not bring any cannabis products — covered in the pre-trip orientation.</p></div></div>
     </div>
   </div>
@@ -1177,7 +1177,7 @@ img { display: block; max-width: 100%; }
     <button class="modal-close" data-action="closeBooking">&times;</button>
     <div class="modal-header">
       <h2>Book Your Weekend</h2>
-      <p>Secure your spot with a deposit. Balance due 14 days before departure.</p>
+      <p>Full payment at checkout. All sales final — no refunds.</p>
     </div>
     <div class="modal-body">
       <div class="booking-steps">
@@ -1209,7 +1209,7 @@ img { display: block; max-width: 100%; }
           <div id="summaryPackage" style="font-size:0.85rem;color:var(--gray);margin-bottom:0.75rem;"></div>
           <div style="border-top:1px solid rgba(200,135,76,0.15);padding-top:0.75rem;display:flex;justify-content:space-between;align-items:center;">
             <div><div style="font-size:0.8rem;color:var(--gray);">Total due today</div><div style="font-size:0.72rem;color:var(--gray-dim);" id="summaryBalance"></div></div>
-            <div id="summaryDeposit" style="font-family:'Plus Jakarta Sans';font-weight:800;color:var(--gold);font-size:1.25rem;"></div>
+            <div id="summaryTotal" style="font-family:'Plus Jakarta Sans';font-weight:800;color:var(--gold);font-size:1.25rem;"></div>
           </div>
         </div>
         <div style="font-size:0.78rem;color:var(--gray-dim);text-align:center;margin-bottom:0.5rem;">You'll be redirected to Stripe's secure checkout. Full payment required. All sales final — no refunds. We accept all major cards, Apple Pay &amp; Google Pay.</div>
@@ -1262,7 +1262,7 @@ function buildSummary(){
   var c=calcCharges(pp,tr);
   document.getElementById('summaryWeekend').textContent=wn;
   document.getElementById('summaryPackage').textContent=pn+' Package · '+tr+' traveler(s)';
-  document.getElementById('summaryDeposit').textContent='$'+c.total.toFixed(2);
+  document.getElementById('summaryTotal').textContent='$'+c.total.toFixed(2);
   var breakdownHtml=
     '<div style="font-size:0.72rem;color:var(--gray-dim);margin-bottom:0.5rem;line-height:1.9">'+
     'Package price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.base.toFixed(2)+'</span><br>'+
@@ -1333,10 +1333,10 @@ async function submitToStripe(){
     var r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     var d=await r.json();
     if(d.url){window.location.href=d.url;}
-    else{errEl.textContent=d.error||'Payment error. Please try again.';errEl.style.display='block';btn.textContent='Pay Deposit →';btn.disabled=false;}
+    else{errEl.textContent=d.error||'Payment error. Please try again.';errEl.style.display='block';btn.textContent='Pay Now →';btn.disabled=false;}
   }catch(e){
     errEl.textContent='Connection error. Please try again.';errEl.style.display='block';
-    btn.textContent='Pay Deposit →';btn.disabled=false;
+    btn.textContent='Pay Now →';btn.disabled=false;
   }
 }
 
