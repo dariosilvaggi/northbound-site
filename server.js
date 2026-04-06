@@ -197,6 +197,9 @@ app.post('/api/webhook/stripe', express.raw({ type: 'application/json' }), async
   res.json({ received: true });
 });
 
+// Trust Railway's reverse proxy (needed for express-rate-limit X-Forwarded-For)
+app.set('trust proxy', 1);
+
 // ── Security ─────────────────────────────────────────────────────
 app.use(helmet({
   contentSecurityPolicy: {
