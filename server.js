@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
 const multer = require('multer');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -231,6 +232,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
+  store:             pool ? new pgSession({ pool, createTableIfMissing: true }) : undefined,
   secret:            process.env.SESSION_SECRET || 'nb-admin-secret-change-me',
   resave:            false,
   saveUninitialized: false,
@@ -260,6 +262,10 @@ const weekendUpload = makeUploader(WEEKENDS_IMG_DIR);
 // ── Auth middleware ──────────────────────────────────────────────
 function requireAdmin(req, res, next) {
   if (req.session && req.session.isAdmin) return next();
+  // API routes get JSON 401; page routes get redirect
+  if (req.path.startsWith('/admin/api/')) {
+    return res.status(401).json({ error: 'Session expired. Please refresh and log in again.' });
+  }
   res.redirect('/admin/login');
 }
 

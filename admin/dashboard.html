@@ -335,13 +335,17 @@ function selFld(lbl,id,opts,cur){
   var os=opts.map(function(o){return '<option value="'+o.v+'"'+(o.v===cur?' selected':'')+'>'+o.l+'</option>';}).join('');
   return '<div class="fg" style="margin-top:.7rem"><label>'+lbl+'</label><select id="'+id+'">'+os+'</select></div>';
 }
-function api(url){return fetch(url).then(function(r){return r.json();});}
+function handleAuthError(r){
+  if(r.status===401||r.redirected){alert('Session expired \u2014 logging you back in.');window.location.href='/admin/login';throw new Error('auth');}
+  return r;
+}
+function api(url){return fetch(url).then(handleAuthError).then(function(r){return r.json();});}
 function post(url,data){
   return fetch(url,{
     method:'POST',
     headers:{'Content-Type':'application/x-www-form-urlencoded'},
     body:new URLSearchParams(data).toString()
-  }).then(function(r){return r.json();});
+  }).then(handleAuthError).then(function(r){return r.json();});
 }
 
 // Modal
