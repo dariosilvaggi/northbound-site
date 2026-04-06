@@ -3,686 +3,398 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NorthBound — Admin</title>
+<title>NorthBound — Sponsor Banners</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a0f;color:#e8e0d0;min-height:100vh;display:flex;flex-direction:column;}
-.topbar{background:#111118;border-bottom:1px solid rgba(255,255,255,0.06);padding:0 1.5rem;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.topbar-left{display:flex;align-items:center;gap:.6rem;}
-.topbar-left img{height:32px;width:auto;}
-.topbar-title{font-size:.9rem;font-weight:700;letter-spacing:.06em;background:linear-gradient(135deg,#C8974E,#e8c080);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.topbar-sub{font-size:.68rem;color:#555;letter-spacing:.1em;text-transform:uppercase;}
-.topbar-right{display:flex;align-items:center;gap:1rem;}
-.btn-logout{background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:.35rem .85rem;color:#888;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none;}
-.btn-logout:hover{border-color:rgba(200,151,78,.4);color:#C8974E;}
-.visit-link{font-size:.78rem;color:#555;text-decoration:none;transition:color .2s;}
-.visit-link:hover{color:#C8974E;}
-.layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 58px);}
-.sidebar{width:195px;background:#0d0d14;border-right:1px solid rgba(255,255,255,0.05);padding:1.25rem 0;flex-shrink:0;overflow-y:auto;}
-.nav-label{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#444;padding:.5rem 1.25rem .35rem;}
-.nav-item{display:flex;align-items:center;gap:.55rem;padding:.58rem 1.25rem;font-size:.82rem;color:#888;cursor:pointer;transition:all .15s;border-left:2px solid transparent;text-decoration:none;}
-.nav-item:hover{color:#ccc;background:rgba(255,255,255,.03);}
-.nav-item.active{color:#C8974E;border-left-color:#C8974E;background:rgba(200,151,78,.07);}
-.nav-icon{font-size:.95rem;width:18px;text-align:center;}
-.main{flex:1;overflow-y:auto;padding:2rem;}
-.panel{display:none;}
-.panel.active{display:block;}
-.panel-title{font-size:1.3rem;font-weight:700;margin-bottom:.3rem;}
-.panel-sub{font-size:.82rem;color:#666;margin-bottom:1.75rem;}
-.card{background:#111118;border:1px solid rgba(200,151,78,.15);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;}
-.card-heading{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#C8974E;margin-bottom:1.1rem;}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:.8rem;align-items:end;}
-.form-grid.two{grid-template-columns:1fr 1fr;}
-.fg{display:flex;flex-direction:column;gap:.32rem;}
-.fg.full{grid-column:1/-1;}
-label{font-size:.7rem;color:#888;letter-spacing:.06em;text-transform:uppercase;}
-input[type=text],input[type=number],input[type=url],select,textarea{width:100%;background:#0d0d14;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.58rem .82rem;color:#f0e8d8;font-size:.87rem;font-family:inherit;outline:none;transition:border-color .2s;}
-input:focus,select:focus,textarea:focus{border-color:rgba(200,151,78,.5);}
-textarea{resize:vertical;min-height:78px;line-height:1.5;}
-select{cursor:pointer;}
-select option{background:#0d0d14;}
-.btn-add{background:linear-gradient(135deg,#C8974E,#b07030);border:none;border-radius:8px;padding:.58rem 1.35rem;color:#0a0a0f;font-size:.83rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;margin-top:.6rem;}
-.btn-add:hover{opacity:.85;}
-.section-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
-.section-label{font-size:.88rem;font-weight:600;color:#ccc;}
-.count-badge{font-size:.68rem;background:rgba(200,151,78,.15);color:#C8974E;border:1px solid rgba(200,151,78,.2);border-radius:20px;padding:.15rem .6rem;font-weight:600;}
-.item-list{display:flex;flex-direction:column;gap:.55rem;}
-.item-row{background:#111118;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:.8rem 1rem;display:flex;align-items:flex-start;gap:.8rem;transition:border-color .2s;}
-.item-row:hover{border-color:rgba(200,151,78,.2);}
-.item-row.inactive{opacity:.4;}
-.item-main{flex:1;min-width:0;}
-.item-title{font-size:.88rem;font-weight:600;color:#e8e0d0;margin-bottom:.22rem;}
-.item-meta{font-size:.74rem;color:#666;display:flex;flex-wrap:wrap;gap:.4rem;}
-.item-tag{background:rgba(255,255,255,.05);border-radius:4px;padding:.08rem .42rem;font-size:.7rem;color:#888;}
-.item-actions{display:flex;gap:.38rem;flex-shrink:0;align-items:center;}
-.btn-sm-edit{padding:.32rem .7rem;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#aaa;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;}
-.btn-sm-edit:hover{border-color:rgba(200,151,78,.4);color:#C8974E;}
-.btn-sm-toggle{padding:.32rem .7rem;border-radius:6px;font-size:.72rem;cursor:pointer;font-family:inherit;white-space:nowrap;border:1px solid rgba(50,200,100,.25);background:transparent;color:#50d080;transition:all .2s;}
-.btn-sm-toggle.off{border-color:rgba(255,255,255,.08);color:#555;}
-.btn-sm-toggle:hover{opacity:.75;}
-.btn-sm-del{padding:.32rem .6rem;border-radius:6px;border:1px solid rgba(182,30,26,.2);background:transparent;color:#c06060;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s;}
-.btn-sm-del:hover{background:rgba(182,30,26,.1);border-color:rgba(182,30,26,.4);}
-.empty-state{text-align:center;padding:2.5rem 1rem;color:#444;font-size:.85rem;border:1px dashed rgba(255,255,255,.05);border-radius:10px;}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1000;align-items:center;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal{background:#111118;border:1px solid rgba(200,151,78,.2);border-radius:16px;padding:1.75rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;}
-.modal-title{font-size:1.05rem;font-weight:700;margin-bottom:1.2rem;}
-.modal-actions{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.2rem;}
-.btn-cancel{padding:.52rem 1rem;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#888;font-size:.83rem;cursor:pointer;font-family:inherit;}
-.btn-save{padding:.52rem 1.25rem;border-radius:8px;background:linear-gradient(135deg,#C8974E,#b07030);border:none;color:#0a0a0f;font-size:.83rem;font-weight:700;cursor:pointer;font-family:inherit;}
-.day-block{background:#111118;border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:1rem;overflow:hidden;}
-.day-header{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1rem;background:rgba(200,151,78,.05);border-bottom:1px solid rgba(255,255,255,.05);}
-.day-lbl{font-size:.9rem;font-weight:700;color:#C8974E;}
-.day-items{padding:.7rem 1rem;}
-.tl-row{display:flex;align-items:flex-start;gap:.7rem;padding:.55rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.tl-row:last-child{border-bottom:none;}
-.tl-time{font-size:.76rem;color:#C8974E;min-width:68px;font-weight:600;padding-top:2px;}
-.tl-info{flex:1;}
-.tl-name{font-size:.84rem;font-weight:600;color:#e8e0d0;}
-.tl-desc{font-size:.74rem;color:#666;margin-top:2px;}
-.tl-acts{display:flex;gap:.38rem;flex-shrink:0;}
-.day-add{padding:.7rem 1rem;background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.04);}
-.day-add-lbl{font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#555;margin-bottom:.55rem;}
-.day-add-row{display:grid;grid-template-columns:95px 1fr;gap:.45rem;}
-.btn-add-item{padding:.48rem .95rem;border-radius:6px;background:rgba(200,151,78,.12);border:1px solid rgba(200,151,78,.28);color:#C8974E;font-size:.74rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;margin-top:.45rem;}
-.btn-add-item:hover{background:rgba(200,151,78,.22);}
-.form-group{flex:1;min-width:170px;}
-.file-label{display:flex;align-items:center;gap:.55rem;background:#0d0d14;border:1px dashed rgba(200,151,78,.3);border-radius:8px;padding:.58rem .82rem;cursor:pointer;font-size:.84rem;color:#888;transition:all .2s;}
-.file-label:hover,.file-label.has-file{border-color:#C8974E;color:#C8974E;}
-input[type=file]{display:none;}
-.btn-upload{background:linear-gradient(135deg,#C8974E,#b07030);border:none;border-radius:8px;padding:.58rem 1.25rem;color:#0a0a0f;font-size:.83rem;font-weight:700;cursor:pointer;font-family:inherit;height:40px;}
-.form-row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;}
-.hint{font-size:.7rem;color:#444;margin-top:.55rem;}
-.banner-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.9rem;}
-.banner-card{background:#111118;border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;transition:border-color .2s;}
-.banner-card:hover{border-color:rgba(200,151,78,.2);}
-.banner-card.inactive{opacity:.45;}
-.banner-img-wrap{position:relative;height:128px;background:#0d0d14;overflow:hidden;}
-.banner-img-wrap img{width:100%;height:100%;object-fit:cover;}
-.banner-status{position:absolute;top:7px;right:7px;font-size:.64rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.18rem .52rem;border-radius:20px;}
-.banner-status.active{background:rgba(50,200,100,.2);color:#50d080;border:1px solid rgba(50,200,100,.3);}
-.banner-status.inactive{background:rgba(150,150,150,.15);color:#888;border:1px solid rgba(150,150,150,.2);}
-.banner-body{padding:.75rem;}
-.banner-url{font-size:.73rem;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.6rem;}
-.banner-url a{color:#C8974E;text-decoration:none;}
-.banner-actions{display:flex;gap:.42rem;}
-.btn-toggle{flex:1;padding:.38rem .5rem;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#aaa;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s;}
-.btn-toggle.active{border-color:rgba(50,200,100,.3);color:#50d080;background:rgba(50,200,100,.05);}
-.btn-toggle:hover{opacity:.8;}
-.btn-delete{padding:.38rem .58rem;border-radius:6px;border:1px solid rgba(182,30,26,.2);background:transparent;color:#c06060;font-size:.72rem;cursor:pointer;font-family:inherit;}
-.btn-delete:hover{background:rgba(182,30,26,.1);}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a0f;
+    color: #e8e0d0;
+    min-height: 100vh;
+  }
+
+  /* ── Nav ── */
+  .topbar {
+    background: #111118;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 0.75rem; }
+  .topbar-left img { height: 36px; width: auto; }
+  .topbar-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, #C8974E, #e8c080);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .topbar-sub { font-size: 0.72rem; color: #555; letter-spacing: 0.1em; text-transform: uppercase; }
+  .topbar-right { display: flex; align-items: center; gap: 1rem; }
+  .btn-logout {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 0.4rem 0.9rem;
+    color: #888;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn-logout:hover { border-color: rgba(200,151,78,0.4); color: #C8974E; }
+  .visit-link {
+    font-size: 0.8rem;
+    color: #555;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .visit-link:hover { color: #C8974E; }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+  }
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .page-sub { font-size: 0.84rem; color: #666; margin-bottom: 2.5rem; }
+
+  /* ── Upload card ── */
+  .upload-card {
+    background: #111118;
+    border: 1px solid rgba(200,151,78,0.2);
+    border-radius: 14px;
+    padding: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .card-heading {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #C8974E;
+    margin-bottom: 1.25rem;
+  }
+  .form-row { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; }
+  .form-group { flex: 1; min-width: 200px; }
+  label {
+    display: block;
+    font-size: 0.78rem;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  input[type="text"], input[type="url"] {
+    width: 100%;
+    background: #0d0d14;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    color: #f0e8d8;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus, input[type="url"]:focus {
+    border-color: rgba(200,151,78,0.5);
+  }
+  .file-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #0d0d14;
+    border: 1px dashed rgba(200,151,78,0.3);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: #888;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .file-label:hover { border-color: #C8974E; color: #C8974E; }
+  .file-label.has-file { border-color: rgba(200,151,78,0.6); color: #C8974E; }
+  input[type="file"] { display: none; }
+  .btn-upload {
+    background: linear-gradient(135deg, #C8974E, #b07030);
+    border: none;
+    border-radius: 8px;
+    padding: 0.68rem 1.5rem;
+    color: #0a0a0f;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    height: 42px;
+  }
+  .btn-upload:hover { opacity: 0.88; }
+  .upload-hint {
+    font-size: 0.76rem;
+    color: #444;
+    margin-top: 0.75rem;
+  }
+
+  /* ── Banner list ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .section-title { font-size: 1rem; font-weight: 600; color: #ccc; }
+  .badge {
+    font-size: 0.72rem;
+    background: rgba(200,151,78,0.15);
+    color: #C8974E;
+    border: 1px solid rgba(200,151,78,0.2);
+    border-radius: 20px;
+    padding: 0.2rem 0.65rem;
+    font-weight: 600;
+  }
+  .banner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .banner-card {
+    background: #111118;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .banner-card:hover { border-color: rgba(200,151,78,0.2); }
+  .banner-card.inactive { opacity: 0.45; }
+  .banner-img-wrap {
+    position: relative;
+    height: 140px;
+    background: #0d0d14;
+    overflow: hidden;
+  }
+  .banner-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .banner-status {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+  }
+  .banner-status.active {
+    background: rgba(50,200,100,0.2);
+    color: #50d080;
+    border: 1px solid rgba(50,200,100,0.3);
+  }
+  .banner-status.inactive {
+    background: rgba(150,150,150,0.15);
+    color: #888;
+    border: 1px solid rgba(150,150,150,0.2);
+  }
+  .banner-body { padding: 0.85rem 1rem; }
+  .banner-url {
+    font-size: 0.78rem;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.75rem;
+    min-height: 1.1em;
+  }
+  .banner-url a { color: #C8974E; text-decoration: none; }
+  .banner-actions { display: flex; gap: 0.5rem; }
+  .btn-toggle {
+    flex: 1;
+    padding: 0.45rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: #aaa;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-toggle:hover { border-color: rgba(200,151,78,0.4); color: #C8974E; }
+  .btn-toggle.active { border-color: rgba(50,200,100,0.3); color: #50d080; background: rgba(50,200,100,0.05); }
+  .btn-delete {
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid rgba(182,30,26,0.2);
+    background: transparent;
+    color: #c06060;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-delete:hover { background: rgba(182,30,26,0.1); border-color: rgba(182,30,26,0.4); }
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #444;
+    font-size: 0.9rem;
+    border: 1px dashed rgba(255,255,255,0.06);
+    border-radius: 12px;
+  }
+  .empty-state svg { margin-bottom: 0.75rem; opacity: 0.3; }
 </style>
 </head>
 <body>
+
 <div class="topbar">
   <div class="topbar-left">
     <img src="/logo.png" alt="NorthBound">
-    <div><div class="topbar-title">NORTHBOUND</div><div class="topbar-sub">Admin</div></div>
+    <div>
+      <div class="topbar-title">NORTHBOUND</div>
+      <div class="topbar-sub">Admin</div>
+    </div>
   </div>
   <div class="topbar-right">
     <a href="/" class="visit-link" target="_blank">View site ↗</a>
     <a href="/admin/logout" class="btn-logout">Sign out</a>
   </div>
 </div>
-<div class="layout">
-  <nav class="sidebar">
-    <div class="nav-label">Content</div>
-    <a class="nav-item active" data-panel="weekends" href="#"><span class="nav-icon">📅</span> Weekends</a>
-    <a class="nav-item" data-panel="packages" href="#"><span class="nav-icon">📦</span> Packages</a>
-    <a class="nav-item" data-panel="cities" href="#"><span class="nav-icon">🚌</span> Pickup Cities</a>
-    <a class="nav-item" data-panel="clubs" href="#"><span class="nav-icon">🌙</span> Nightlife</a>
-    <a class="nav-item" data-panel="itinerary" href="#"><span class="nav-icon">🗓</span> Itinerary</a>
-    <div class="nav-label" style="margin-top:.75rem">Marketing</div>
-    <a class="nav-item" data-panel="banners" href="#"><span class="nav-icon">🖼</span> Banners</a>
-    <div class="nav-label" style="margin-top:.75rem">Sales</div>
-    <a class="nav-item" data-panel="bookings" href="#"><span class="nav-icon">💳</span> Bookings</a>
-  </nav>
-  <main class="main">
 
-    <!-- WEEKENDS -->
-    <div class="panel active" id="panel-weekends">
-      <div class="panel-title">Grab Your Spot</div>
-      <p class="panel-sub">Manage upcoming weekend trips. Toggle to hide without deleting.</p>
-      <div class="card">
-        <div class="card-heading">Add New Trip</div>
-        <div class="form-grid">
-          <div class="fg"><label>Trip Name</label><input type="text" id="wk-name" placeholder="Spring Kickoff Weekend"></div>
-          <div class="fg"><label>Date Range</label><input type="text" id="wk-date" placeholder="APR 10 – 12"></div>
-          <div class="fg"><label>Departure City</label><input type="text" id="wk-city" placeholder="Detroit, MI"></div>
-          <div class="fg"><label>Nights</label><input type="number" id="wk-nights" placeholder="2" min="1"></div>
-          <div class="fg"><label>Clubs Label</label><input type="text" id="wk-clubs" placeholder="3 clubs"></div>
-          <div class="fg"><label>Spots Left</label><input type="number" id="wk-spots" placeholder="20" min="0"></div>
-          <div class="fg"><label>Price ($)</label><input type="number" id="wk-price" placeholder="199"></div>
-          <div class="fg"><label>Badge</label>
-            <select id="wk-badge"><option value="">None</option><option value="hot">Selling Fast</option><option value="new">New</option><option value="ltd">Limited</option><option value="vip">VIP Only</option></select>
-          </div>
+<div class="container">
+  <div class="page-title">Sponsor Banners</div>
+  <p class="page-sub">Upload and manage sponsor banners displayed on the site. Banners rotate automatically in the sidebar.</p>
+
+  <!-- Upload form -->
+  <div class="upload-card">
+    <div class="card-heading">Upload New Banner</div>
+    <form method="POST" action="/admin/upload" enctype="multipart/form-data" id="uploadForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Banner Image</label>
+          <label class="file-label" id="fileLabel" for="bannerFile">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
+            <span id="fileLabelText">Choose image file…</span>
+          </label>
+          <input type="file" id="bannerFile" name="banner" accept="image/*" required>
         </div>
-        <button class="btn-add" onclick="addWeekend()">+ Add Trip</button>
-        <div id="wk-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
-      </div>
-      <div class="section-bar"><span class="section-label">All Trips</span><span class="count-badge" id="wk-count">0</span></div>
-      <div class="item-list" id="weekends-list"></div>
-    </div>
-
-    <!-- PACKAGES -->
-    <div class="panel" id="panel-packages">
-      <div class="panel-title">Choose Your Experience</div>
-      <p class="panel-sub">Manage packages. Prefix a feature with <strong style="color:#C8974E">-</strong> to mark it as not included.</p>
-      <div class="card">
-        <div class="card-heading">Add New Package</div>
-        <div class="form-grid two">
-          <div class="fg"><label>Package Name</label><input type="text" id="pkg-name" placeholder="Standard"></div>
-          <div class="fg"><label>Price ($)</label><input type="number" id="pkg-price" placeholder="249"></div>
-          <div class="fg"><label>Featured Card</label><select id="pkg-featured"><option value="false">No</option><option value="true">Yes — highlight this card</option></select></div>
-          <div class="fg full"><label>Features (one per line — prefix "-" for excluded)</label>
-            <textarea id="pkg-features" rows="6" placeholder="Round-trip chartered coach&#10;Nightclub entry (3 venues)&#10;Hotel stay&#10;- VIP access&#10;- Drink specials"></textarea>
-          </div>
+        <div class="form-group">
+          <label>Click-through URL (optional)</label>
+          <input type="url" name="url" placeholder="https://sponsor.com">
         </div>
-        <button class="btn-add" onclick="addPackage()">+ Add Package</button>
-        <div id="pkg-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
-      </div>
-      <div class="section-bar"><span class="section-label">All Packages</span><span class="count-badge" id="pkg-count">0</span></div>
-      <div class="item-list" id="packages-list"></div>
-    </div>
-
-    <!-- CITIES -->
-    <div class="panel" id="panel-cities">
-      <div class="panel-title">We Pick You Up</div>
-      <p class="panel-sub">Manage departure cities shown in the pickup grid.</p>
-      <div class="card">
-        <div class="card-heading">Add Departure City</div>
-        <div class="form-grid">
-          <div class="fg"><label>City & State</label><input type="text" id="cty-city" placeholder="Detroit, MI"></div>
-          <div class="fg"><label>Distance to Windsor</label><input type="text" id="cty-dist" placeholder="30 min to Windsor"></div>
-          <div class="fg"><label>Frequency</label><input type="text" id="cty-freq" placeholder="Every weekend"></div>
-        </div>
-        <button class="btn-add" onclick="addCity()">+ Add City</button>
-        <div id="cty-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
-      </div>
-      <div class="section-bar"><span class="section-label">All Departure Cities</span><span class="count-badge" id="cty-count">0</span></div>
-      <div class="item-list" id="cities-list"></div>
-    </div>
-
-    <!-- CLUBS -->
-    <div class="panel" id="panel-clubs">
-      <div class="panel-title">Where the Night Takes You</div>
-      <p class="panel-sub">Manage Windsor nightlife venues displayed on the site.</p>
-      <div class="card">
-        <div class="card-heading">Add Venue</div>
-        <div class="form-grid">
-          <div class="fg"><label>Venue Name</label><input type="text" id="cl-name" placeholder="Ariius Nightclub"></div>
-          <div class="fg"><label>Type</label><input type="text" id="cl-type" placeholder="Premium Nightclub"></div>
-          <div class="fg"><label>Emoji Icon</label><input type="text" id="cl-emoji" placeholder="🎵" style="max-width:80px"></div>
-          <div class="fg full"><label>Description</label><textarea id="cl-desc" rows="2" placeholder="Multi-level venue with top DJs..."></textarea></div>
-          <div class="fg full"><label>Perks (comma-separated)</label><input type="text" id="cl-perks" placeholder="Skip the Line, VIP Sections, Rooftop"></div>
-        </div>
-        <button class="btn-add" onclick="addClub()">+ Add Venue</button>
-        <div id="cl-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
-      </div>
-      <div class="section-bar"><span class="section-label">All Venues</span><span class="count-badge" id="cl-count">0</span></div>
-      <div class="item-list" id="clubs-list"></div>
-    </div>
-
-    <!-- ITINERARY -->
-    <div class="panel" id="panel-itinerary">
-      <div class="panel-title">Sample Itinerary</div>
-      <p class="panel-sub">Manage days and timeline items for the sample itinerary section.</p>
-      <div class="card">
-        <div class="card-heading">Add Day</div>
-        <div class="form-grid">
-          <div class="fg"><label>Day Label</label><input type="text" id="itin-day" placeholder="Friday"></div>
-        </div>
-        <button class="btn-add" onclick="addDay()">+ Add Day</button>
-        <div id="itin-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
-      </div>
-      <div id="itinerary-admin"></div>
-    </div>
-
-    <!-- BOOKINGS -->
-    <div class="panel" id="panel-bookings">
-      <div class="panel-title">Bookings</div>
-      <p class="panel-sub">Stripe deposit payments received. Each row is a completed checkout session.</p>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
-        <span class="section-label">All Bookings</span>
-        <span class="count-badge" id="bk-count">0</span>
-      </div>
-      <div class="card" style="padding:0;overflow:hidden">
-        <div id="bookings-table-wrap" style="overflow-x:auto">
-          <table style="width:100%;border-collapse:collapse;font-size:.81rem">
-            <thead>
-              <tr style="background:rgba(200,151,78,.07);border-bottom:1px solid rgba(255,255,255,.06)">
-                <th style="padding:.7rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#888;font-weight:600">Email</th>
-                <th style="padding:.7rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#888;font-weight:600">Trip</th>
-                <th style="padding:.7rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#888;font-weight:600">Package</th>
-                <th style="padding:.7rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#888;font-weight:600">Travelers</th>
-                <th style="padding:.7rem 1rem;text-align:right;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#888;font-weight:600">Deposit</th>
-                <th style="padding:.7rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#888;font-weight:600">Status</th>
-                <th style="padding:.7rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#888;font-weight:600">Date</th>
-              </tr>
-            </thead>
-            <tbody id="bookings-tbody">
-              <tr><td colspan="7" class="empty-state" style="padding:2rem;border:none;display:table-cell;text-align:center">Loading…</td></tr>
-            </tbody>
-          </table>
+        <div>
+          <label style="opacity:0">Upload</label>
+          <button type="submit" class="btn-upload">Upload Banner</button>
         </div>
       </div>
-    </div>
+      <p class="upload-hint">Max 5MB · JPG, PNG, GIF, WebP accepted · Recommended size: 300×600px</p>
+    </form>
+  </div>
 
-    <!-- BANNERS -->
-    <div class="panel" id="panel-banners">
-      <div class="panel-title">Sponsor Banners</div>
-      <p class="panel-sub">Upload and manage banners shown in the site header bar.</p>
-      <div class="card">
-        <div class="card-heading">Upload New Banner</div>
-        <form method="POST" action="/admin/upload" enctype="multipart/form-data">
-          <div class="form-row">
-            <div class="form-group"><label>Banner Image</label>
-              <label class="file-label" id="fileLabel" for="bannerFile">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-                <span id="fileLabelText">Choose image…</span>
-              </label>
-              <input type="file" id="bannerFile" name="banner" accept="image/*" required>
-            </div>
-            <div class="form-group"><label>Click-through URL (optional)</label><input type="url" name="url" placeholder="https://sponsor.com"></div>
-            <div><label style="opacity:0">x</label><button type="submit" class="btn-upload">Upload</button></div>
-          </div>
-          <p class="hint">Max 5MB · JPG PNG GIF WebP</p>
-        </form>
-      </div>
-      <div class="section-bar"><span class="section-label">All Banners</span><span class="count-badge" id="banner-count">0 active</span></div>
-      <div class="banner-grid" id="bannerGrid"><div class="empty-state">No banners yet.</div></div>
-    </div>
+  <!-- Banner list -->
+  <div class="section-header">
+    <span class="section-title">All Banners</span>
+    <span class="badge" id="activeBadge">0 active</span>
+  </div>
 
-  </main>
-</div>
-
-<!-- Edit Modal -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal">
-    <div class="modal-title" id="modal-title">Edit</div>
-    <div id="modal-body"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" onclick="saveModal()">Save Changes</button>
+  <div class="banner-grid" id="bannerGrid">
+    <div class="empty-state">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+      </svg>
+      <div>No banners uploaded yet</div>
     </div>
   </div>
 </div>
 
 <script>
-// Tab nav
-document.querySelectorAll('.nav-item').forEach(function(a){
-  a.addEventListener('click',function(e){
-    e.preventDefault();
-    var p=this.dataset.panel;
-    document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
-    document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('active');});
-    this.classList.add('active');
-    document.getElementById('panel-'+p).classList.add('active');
-    if(p==='banners') loadBanners();
-    if(p==='bookings') loadBookings();
-  });
+// File label update
+document.getElementById('bannerFile').addEventListener('change', function() {
+  const label = document.getElementById('fileLabel');
+  const text = document.getElementById('fileLabelText');
+  if (this.files[0]) {
+    text.textContent = this.files[0].name;
+    label.classList.add('has-file');
+  } else {
+    text.textContent = 'Choose image file…';
+    label.classList.remove('has-file');
+  }
 });
 
-// Helpers
-function v(id){var e=document.getElementById(id);return e?e.value:'';}
-function clr(ids){ids.forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fld(lbl,id,type,val){
-  var ctrl=type==='textarea'?'<textarea id="'+id+'" rows="3">'+esc(val)+'</textarea>':'<input type="'+type+'" id="'+id+'" value="'+esc(val)+'">';
-  return '<div class="fg" style="margin-top:.7rem"><label>'+lbl+'</label>'+ctrl+'</div>';
-}
-function selFld(lbl,id,opts,cur){
-  var os=opts.map(function(o){return '<option value="'+o.v+'"'+(o.v===cur?' selected':'')+'>'+o.l+'</option>';}).join('');
-  return '<div class="fg" style="margin-top:.7rem"><label>'+lbl+'</label><select id="'+id+'">'+os+'</select></div>';
-}
-function api(url){return fetch(url).then(function(r){return r.json();});}
-function post(url,data){
-  return fetch(url,{
-    method:'POST',
-    headers:{'Content-Type':'application/x-www-form-urlencoded'},
-    body:new URLSearchParams(data).toString()
-  }).then(function(r){return r.json();});
+// Load banners
+async function loadBanners() {
+  const res = await fetch('/admin/api/banners');
+  const banners = await res.json();
+  renderBanners(banners);
 }
 
-// Modal
-var _save=null;
-function openModal(title,html,fn){
-  var m=document.getElementById('editModal');
-  document.getElementById('modal-title').textContent=title;
-  document.getElementById('modal-body').innerHTML=html;
-  _save=fn;
-  m.classList.add('open');
-  m.style.display='flex';
-  m._openedAt=Date.now();
-}
-function closeModal(){var m=document.getElementById('editModal');m.classList.remove('open');m.style.display='none';m._openedAt=0;}
-function saveModal(){if(_save)_save();}
-document.getElementById('editModal').addEventListener('click',function(e){if(e.target===this&&this._openedAt&&Date.now()-this._openedAt>400)closeModal();});
+function renderBanners(banners) {
+  const grid = document.getElementById('bannerGrid');
+  const active = banners.filter(b => b.active).length;
+  document.getElementById('activeBadge').textContent = `${active} active`;
 
-// Generic toggle/delete
-function toggleItem(sec,id){
-  post('/admin/'+sec+'/toggle/'+id,{}).then(function(){reload(sec);});
-}
-function deleteItem(sec,id){
-  if(!confirm('Delete this item?'))return;
-  post('/admin/'+sec+'/delete/'+id,{}).then(function(){reload(sec);});
-}
-function reload(sec){
-  if(sec==='weekends')loadWeekends();
-  else if(sec==='packages')loadPackages();
-  else if(sec==='cities')loadCities();
-  else if(sec==='clubs')loadClubs();
-}
+  if (!banners.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+      </svg>
+      <div>No banners uploaded yet</div>
+    </div>`;
+    return;
+  }
 
-// ── WEEKENDS ──────────────────────────────────────────────────
-var BADGES={hot:'Selling Fast',new:'New',ltd:'Limited',vip:'VIP Only'};
-function loadWeekends(){
-  api('/admin/api/weekends').then(function(items){
-    document.getElementById('wk-count').textContent=items.length;
-    var el=document.getElementById('weekends-list');
-    if(!items.length){el.innerHTML='<div class="empty-state">No trips yet.</div>';return;}
-    el.innerHTML=items.map(function(t){
-      return '<div class="item-row'+(t.active?'':' inactive')+'">' +
-        '<div class="item-main"><div class="item-title">'+t.name+'</div>' +
-        '<div class="item-meta"><span class="item-tag">'+t.dateRange+'</span><span class="item-tag">'+t.city+'</span>' +
-        '<span class="item-tag">$'+t.price+'/pp</span><span class="item-tag">'+t.spotsLeft+' spots</span>' +
-        (t.badge?'<span class="item-tag" style="color:#C8974E">'+(BADGES[t.badge]||t.badge)+'</span>':'')+'</div></div>' +
-        '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editWeekend(\''+t.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(t.active?'':' off')+'" onclick="toggleItem(\'weekends\',\''+t.id+'\')">'+(t.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'weekends\',\''+t.id+'\')">✕</button>' +
-        '</div></div>';
-    }).join('');
-  });
-}
-function addWeekend(){
-  var name=v('wk-name'),date=v('wk-date'),city=v('wk-city');
-  var errEl=document.getElementById('wk-add-err');
-  if(!name||!date||!city){errEl.textContent='Name, date and city are required.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  post('/admin/weekends/add',{name,dateRange:date,city,nights:v('wk-nights'),clubsLabel:v('wk-clubs'),spotsLeft:v('wk-spots'),price:v('wk-price'),badge:v('wk-badge'),active:'true'})
-    .then(function(){clr(['wk-name','wk-date','wk-city','wk-nights','wk-clubs','wk-spots','wk-price']);loadWeekends();});
-}
-function editWeekend(id){
-  api('/admin/api/weekends').then(function(items){
-    var t=items.find(function(x){return x.id===id;});if(!t)return;
-    var badgeOpts=[{v:'',l:'None'},{v:'hot',l:'Selling Fast'},{v:'new',l:'New'},{v:'ltd',l:'Limited'},{v:'vip',l:'VIP Only'}];
-    var imgSection=
-      '<div class="fg" style="margin-top:.9rem;grid-column:1/-1"><label>Card Image</label>'+
-      (t.image?
-        '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem">'+
-        '<img src="'+esc(t.image)+'" style="height:64px;width:96px;object-fit:cover;border-radius:6px;border:1px solid rgba(255,255,255,.08)">'+
-        '<button type="button" onclick="removeWeekendImage(\''+id+'\')" style="font-size:.72rem;padding:.3rem .65rem;border-radius:6px;border:1px solid rgba(182,30,26,.3);background:transparent;color:#c06060;cursor:pointer">Remove</button>'+
-        '</div>':'')+
-      '<input type="file" id="ew-img-file" accept="image/*" style="background:#0d0d14;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:.5rem .8rem;color:#aaa;width:100%;font-size:.82rem;cursor:pointer">'+
-      '<div style="font-size:.68rem;color:#555;margin-top:.3rem">JPG/PNG/WebP · max 5MB · 16:9 recommended</div></div>';
-    openModal('Edit Trip',
-      fld('Trip Name','ew-name','text',t.name)+
-      fld('Date Range','ew-date','text',t.dateRange)+
-      fld('City','ew-city','text',t.city)+
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">'+
-      fld('Nights','ew-nights','number',t.nights)+
-      fld('Clubs Label','ew-clubs','text',t.clubsLabel)+
-      fld('Spots Left','ew-spots','number',t.spotsLeft)+
-      fld('Price ($)','ew-price','number',t.price)+'</div>'+
-      selFld('Badge','ew-badge',badgeOpts,t.badge||'')+
-      imgSection,
-      async function(){
-        var imgFile=document.getElementById('ew-img-file');
-        if(imgFile&&imgFile.files.length){
-          var fd=new FormData();fd.append('image',imgFile.files[0]);
-          await fetch('/admin/weekends/upload-image/'+id,{method:'POST',body:fd});
-        }
-        post('/admin/weekends/update/'+id,{name:v('ew-name'),dateRange:v('ew-date'),city:v('ew-city'),nights:v('ew-nights'),clubsLabel:v('ew-clubs'),spotsLeft:v('ew-spots'),price:v('ew-price'),badge:v('ew-badge'),active:String(t.active)})
-          .then(function(){closeModal();loadWeekends();});
-      });
-  });
-}
-function removeWeekendImage(id){
-  fetch('/admin/weekends/remove-image/'+id,{method:'POST'}).then(function(){loadWeekends();closeModal();});
+  grid.innerHTML = banners.map(b => `
+    <div class="banner-card ${b.active ? '' : 'inactive'}" id="card-${b.id}">
+      <div class="banner-img-wrap">
+        <img src="/banners/${b.filename}" alt="Sponsor banner">
+        <span class="banner-status ${b.active ? 'active' : 'inactive'}">${b.active ? 'Active' : 'Paused'}</span>
+      </div>
+      <div class="banner-body">
+        <div class="banner-url">${b.url ? `<a href="${b.url}" target="_blank">${b.url}</a>` : '<span style="color:#333">No URL set</span>'}</div>
+        <div class="banner-actions">
+          <button class="btn-toggle ${b.active ? 'active' : ''}" onclick="toggleBanner('${b.id}', this)">
+            ${b.active ? '⏸ Pause' : '▶ Activate'}
+          </button>
+          <button class="btn-delete" onclick="deleteBanner('${b.id}')">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
-// ── PACKAGES ──────────────────────────────────────────────────
-function loadPackages(){
-  api('/admin/api/packages').then(function(items){
-    document.getElementById('pkg-count').textContent=items.length;
-    var el=document.getElementById('packages-list');
-    if(!items.length){el.innerHTML='<div class="empty-state">No packages yet.</div>';return;}
-    el.innerHTML=items.map(function(p){
-      var inc=(p.features||[]).filter(function(f){return f.included;}).length;
-      return '<div class="item-row'+(p.active?'':' inactive')+'">' +
-        '<div class="item-main"><div class="item-title">'+p.name+(p.featured?' <span style="font-size:.68rem;color:#C8974E">(featured)</span>':'')+'</div>' +
-        '<div class="item-meta"><span class="item-tag">$'+p.price+'/pp</span><span class="item-tag">'+inc+' included</span></div></div>' +
-        '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editPackage(\''+p.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(p.active?'':' off')+'" onclick="toggleItem(\'packages\',\''+p.id+'\')">'+(p.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'packages\',\''+p.id+'\')">✕</button>' +
-        '</div></div>';
-    }).join('');
-  });
-}
-function addPackage(){
-  var name=v('pkg-name'),price=v('pkg-price');
-  var errEl=document.getElementById('pkg-add-err');
-  if(!name||!price){errEl.textContent='Name and price are required.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  post('/admin/packages/add',{name,price,featured:v('pkg-featured'),featuresRaw:v('pkg-features'),active:'true'})
-    .then(function(){clr(['pkg-name','pkg-price','pkg-features']);loadPackages();});
-}
-function editPackage(id){
-  var btn=document.querySelector('.btn-sm-edit[onclick="editPackage(\''+id+'\')"]');
-  if(btn){btn.disabled=true;btn.textContent='Loading…';}
-  api('/admin/api/packages').then(function(items){
-    if(btn){btn.disabled=false;btn.textContent='Edit';}
-    var p=items.find(function(x){return x.id===id;});if(!p)return;
-    var raw=(p.features||[]).map(function(f){return (f.included?'':'- ')+f.text;}).join('\n');
-    openModal('Edit Package',
-      fld('Name','ep-name','text',p.name)+
-      fld('Price ($)','ep-price','number',p.price)+
-      selFld('Featured','ep-feat',[{v:'false',l:'No'},{v:'true',l:'Yes — highlight this card'}],String(p.featured))+
-      '<div class="fg" style="margin-top:.7rem"><label>Features (prefix "-" for excluded)</label><textarea id="ep-features" rows="7">'+esc(raw)+'</textarea></div>',
-      function(){
-        post('/admin/packages/update/'+id,{name:v('ep-name'),price:v('ep-price'),featured:v('ep-feat'),featuresRaw:v('ep-features'),active:String(p.active)})
-          .then(function(){closeModal();loadPackages();});
-      });
-  }).catch(function(){if(btn){btn.disabled=false;btn.textContent='Edit';}});
+async function toggleBanner(id, btn) {
+  const res = await fetch(`/admin/toggle/${id}`, { method: 'POST' });
+  const data = await res.json();
+  if (data.success) loadBanners();
 }
 
-// ── CITIES ────────────────────────────────────────────────────
-function loadCities(){
-  api('/admin/api/cities').then(function(items){
-    document.getElementById('cty-count').textContent=items.length;
-    var el=document.getElementById('cities-list');
-    if(!items.length){el.innerHTML='<div class="empty-state">No cities yet.</div>';return;}
-    el.innerHTML=items.map(function(c){
-      return '<div class="item-row'+(c.active?'':' inactive')+'">' +
-        '<div class="item-main"><div class="item-title">'+c.city+'</div>' +
-        '<div class="item-meta"><span class="item-tag">'+c.distance+'</span><span class="item-tag">'+c.frequency+'</span></div></div>' +
-        '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editCity(\''+c.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(c.active?'':' off')+'" onclick="toggleItem(\'cities\',\''+c.id+'\')">'+(c.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'cities\',\''+c.id+'\')">✕</button>' +
-        '</div></div>';
-    }).join('');
-  });
-}
-function addCity(){
-  var city=v('cty-city');var errEl=document.getElementById('cty-add-err');
-  if(!city){errEl.textContent='City name is required.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  post('/admin/cities/add',{city,distance:v('cty-dist'),frequency:v('cty-freq'),active:'true'})
-    .then(function(){clr(['cty-city','cty-dist','cty-freq']);loadCities();});
-}
-function editCity(id){
-  api('/admin/api/cities').then(function(items){
-    var c=items.find(function(x){return x.id===id;});if(!c)return;
-    openModal('Edit City',fld('City & State','ec-city','text',c.city)+fld('Distance','ec-dist','text',c.distance)+fld('Frequency','ec-freq','text',c.frequency),
-      function(){post('/admin/cities/update/'+id,{city:v('ec-city'),distance:v('ec-dist'),frequency:v('ec-freq'),active:String(c.active)}).then(function(){closeModal();loadCities();});});
-  });
+async function deleteBanner(id) {
+  if (!confirm('Delete this banner? This cannot be undone.')) return;
+  await fetch(`/admin/delete/${id}`, { method: 'POST' });
+  loadBanners();
 }
 
-// ── CLUBS ─────────────────────────────────────────────────────
-function loadClubs(){
-  api('/admin/api/clubs').then(function(items){
-    document.getElementById('cl-count').textContent=items.length;
-    var el=document.getElementById('clubs-list');
-    if(!items.length){el.innerHTML='<div class="empty-state">No venues yet.</div>';return;}
-    el.innerHTML=items.map(function(c){
-      return '<div class="item-row'+(c.active?'':' inactive')+'">' +
-        '<div class="item-main"><div class="item-title">'+(c.emoji||'')+' '+c.name+'</div>' +
-        '<div class="item-meta"><span class="item-tag">'+c.type+'</span>'+
-        (c.perks||[]).map(function(p){return '<span class="item-tag">'+p+'</span>';}).join('')+'</div></div>' +
-        '<div class="item-actions">' +
-        '<button class="btn-sm-edit" onclick="editClub(\''+c.id+'\')">Edit</button>' +
-        '<button class="btn-sm-toggle'+(c.active?'':' off')+'" onclick="toggleItem(\'clubs\',\''+c.id+'\')">'+(c.active?'Live':'Hidden')+'</button>' +
-        '<button class="btn-sm-del" onclick="deleteItem(\'clubs\',\''+c.id+'\')">✕</button>' +
-        '</div></div>';
-    }).join('');
-  });
-}
-function addClub(){
-  var name=v('cl-name');var errEl=document.getElementById('cl-add-err');
-  if(!name){errEl.textContent='Venue name is required.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  post('/admin/clubs/add',{name,type:v('cl-type'),emoji:v('cl-emoji'),description:v('cl-desc'),perksRaw:v('cl-perks'),active:'true'})
-    .then(function(){clr(['cl-name','cl-type','cl-emoji','cl-desc','cl-perks']);loadClubs();});
-}
-function editClub(id){
-  api('/admin/api/clubs').then(function(items){
-    var c=items.find(function(x){return x.id===id;});if(!c)return;
-    openModal('Edit Venue',
-      fld('Name','ecl-name','text',c.name)+fld('Type','ecl-type','text',c.type)+fld('Emoji','ecl-emoji','text',c.emoji||'')+
-      '<div class="fg" style="margin-top:.7rem"><label>Description</label><textarea id="ecl-desc" rows="2">'+esc(c.description)+'</textarea></div>'+
-      fld('Perks (comma-separated)','ecl-perks','text',(c.perks||[]).join(', ')),
-      function(){post('/admin/clubs/update/'+id,{name:v('ecl-name'),type:v('ecl-type'),emoji:v('ecl-emoji'),description:v('ecl-desc'),perksRaw:v('ecl-perks'),active:String(c.active)}).then(function(){closeModal();loadClubs();});});
-  });
-}
-
-// ── ITINERARY ─────────────────────────────────────────────────
-function loadItinerary(){
-  api('/admin/api/itinerary').then(function(days){
-    var el=document.getElementById('itinerary-admin');
-    if(!days.length){el.innerHTML='<div class="empty-state">No days yet — add one above.</div>';return;}
-    el.innerHTML=days.map(function(d){
-      var rows=(d.items||[]).map(function(i){
-        return '<div class="tl-row">' +
-          '<div class="tl-time">'+i.time+'</div>' +
-          '<div class="tl-info"><div class="tl-name">'+i.title+'</div><div class="tl-desc">'+i.description+'</div></div>' +
-          '<div class="tl-acts">' +
-          '<button class="btn-sm-edit" onclick="editItinItem(\''+d.id+'\',\''+i.id+'\')">Edit</button>' +
-          '<button class="btn-sm-del" onclick="delItinItem(\''+d.id+'\',\''+i.id+'\')">✕</button>' +
-          '</div></div>';
-      }).join('')||'<div style="font-size:.76rem;color:#555;padding:.4rem 0">No items yet.</div>';
-      return '<div class="day-block">' +
-        '<div class="day-header"><span class="day-lbl">'+d.day+'</span>' +
-        '<div style="display:flex;gap:.45rem">' +
-        '<button class="btn-sm-edit" onclick="renameDay(\''+d.id+'\',\''+d.day+'\')">Rename</button>' +
-        '<button class="btn-sm-del" onclick="delDay(\''+d.id+'\')">Delete Day</button>' +
-        '</div></div>' +
-        '<div class="day-items">'+rows+'</div>' +
-        '<div class="day-add"><div class="day-add-lbl">Add Timeline Item</div>' +
-        '<div class="day-add-row">' +
-        '<input type="text" id="it-time-'+d.id+'" placeholder="9:30 PM">' +
-        '<input type="text" id="it-title-'+d.id+'" placeholder="Item title">' +
-        '</div>' +
-        '<textarea id="it-desc-'+d.id+'" rows="2" placeholder="Description..." style="margin-top:.45rem;width:100%"></textarea>' +
-        '<button class="btn-add-item" style="margin-top:.45rem" onclick="addItinItem(\''+d.id+'\')">+ Add Item</button>' +
-        '<div id="itin-err-'+d.id+'" style="display:none;color:#e05252;font-size:.82rem;margin-top:.3rem;"></div>' +
-        '</div></div>';
-    }).join('');
-  });
-}
-function addDay(){
-  var day=v('itin-day');var errEl=document.getElementById('itin-add-err');
-  if(!day){errEl.textContent='Day label is required.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  post('/admin/itinerary/day/add',{day}).then(function(){document.getElementById('itin-day').value='';loadItinerary();});
-}
-function delDay(id){if(!confirm('Delete this day and all its items?'))return;post('/admin/itinerary/day/delete/'+id,{}).then(loadItinerary);}
-function renameDay(id,cur){
-  openModal('Rename Day',fld('Day Label','rd-lbl','text',cur),
-    function(){post('/admin/itinerary/day/rename/'+id,{day:v('rd-lbl')}).then(function(){closeModal();loadItinerary();});});
-}
-function addItinItem(dayId){
-  var time=v('it-time-'+dayId),title=v('it-title-'+dayId);
-  var errEl=document.getElementById('itin-err-'+dayId);
-  if(!time||!title){if(errEl){errEl.textContent='Time and title are required.';errEl.style.display='block';}return;}
-  if(errEl)errEl.style.display='none';
-  post('/admin/itinerary/item/add/'+dayId,{time,title,description:v('it-desc-'+dayId)}).then(loadItinerary);
-}
-function editItinItem(dayId,itemId){
-  api('/admin/api/itinerary').then(function(days){
-    var day=days.find(function(d){return d.id===dayId;});
-    var item=day&&day.items.find(function(i){return i.id===itemId;});
-    if(!item)return;
-    openModal('Edit Item',fld('Time','ei-time','text',item.time)+fld('Title','ei-title','text',item.title)+
-      '<div class="fg" style="margin-top:.7rem"><label>Description</label><textarea id="ei-desc" rows="3">'+esc(item.description)+'</textarea></div>',
-      function(){post('/admin/itinerary/item/update/'+dayId+'/'+itemId,{time:v('ei-time'),title:v('ei-title'),description:v('ei-desc')}).then(function(){closeModal();loadItinerary();});});
-  });
-}
-function delItinItem(dayId,itemId){
-  if(!confirm('Delete this item?'))return;
-  post('/admin/itinerary/item/delete/'+dayId+'/'+itemId,{}).then(loadItinerary);
-}
-
-// ── BANNERS ───────────────────────────────────────────────────
-function loadBanners(){
-  api('/admin/api/banners').then(function(banners){
-    var active=banners.filter(function(b){return b.active;}).length;
-    document.getElementById('banner-count').textContent=active+' active';
-    var grid=document.getElementById('bannerGrid');
-    if(!banners.length){grid.innerHTML='<div class="empty-state">No banners yet.</div>';return;}
-    grid.innerHTML=banners.map(function(b){
-      return '<div class="banner-card'+(b.active?'':' inactive')+'">' +
-        '<div class="banner-img-wrap"><img src="/banners/'+b.filename+'" alt="">' +
-        '<span class="banner-status '+(b.active?'active':'inactive')+'">'+(b.active?'Active':'Paused')+'</span></div>' +
-        '<div class="banner-body"><div class="banner-url">'+(b.url?'<a href="'+b.url+'" target="_blank">'+b.url+'</a>':'<span style="color:#333">No URL</span>')+'</div>' +
-        '<div class="banner-actions">' +
-        '<button class="btn-toggle'+(b.active?' active':'')+'" onclick="toggleBanner(\''+b.id+'\')">'+(b.active?'⏸ Pause':'▶ Activate')+'</button>' +
-        '<button class="btn-delete" onclick="deleteBanner(\''+b.id+'\')">Delete</button>' +
-        '</div></div></div>';
-    }).join('');
-  });
-}
-function toggleBanner(id){post('/admin/toggle/'+id,{}).then(loadBanners);}
-function deleteBanner(id){if(!confirm('Delete banner?'))return;post('/admin/delete/'+id,{}).then(loadBanners);}
-document.getElementById('bannerFile').addEventListener('change',function(){
-  var lbl=document.getElementById('fileLabel'),txt=document.getElementById('fileLabelText');
-  txt.textContent=this.files[0]?this.files[0].name:'Choose image…';
-  lbl.classList.toggle('has-file',!!this.files[0]);
-});
-
-// ── BOOKINGS ──────────────────────────────────────────────────
-function loadBookings(){
-  api('/admin/api/bookings').then(function(items){
-    document.getElementById('bk-count').textContent=items.length+' booking'+(items.length===1?'':'s');
-    var tbody=document.getElementById('bookings-tbody');
-    if(!items.length){
-      tbody.innerHTML='<tr><td colspan="7" style="padding:2rem;text-align:center;color:#444;font-size:.84rem">No bookings yet.</td></tr>';
-      return;
-    }
-    tbody.innerHTML=items.map(function(b){
-      var amt=b.amountPaid?'$'+(b.amountPaid/100).toFixed(2)+' '+b.currency.toUpperCase():'—';
-      var date=b.paidAt?new Date(b.paidAt).toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
-      var m=b.metadata||{};
-      var statusColor=b.status==='paid'?'#50d080':'#aaa';
-      return '<tr style="border-bottom:1px solid rgba(255,255,255,.04)">' +
-        '<td style="padding:.7rem 1rem;color:#e8e0d0">'+esc(b.email||'—')+'</td>' +
-        '<td style="padding:.7rem 1rem;color:#ccc">'+esc(m.weekend||'—')+'</td>' +
-        '<td style="padding:.7rem 1rem;color:#ccc">'+esc(m.package||'—')+'</td>' +
-        '<td style="padding:.7rem 1rem;color:#888;text-align:center">'+esc(m.travelers||'—')+'</td>' +
-        '<td style="padding:.7rem 1rem;color:#C8974E;text-align:right;font-weight:600">'+esc(amt)+'</td>' +
-        '<td style="padding:.7rem 1rem"><span style="color:'+statusColor+';font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em">'+esc(b.status||'—')+'</span></td>' +
-        '<td style="padding:.7rem 1rem;color:#666;font-size:.76rem">'+esc(date)+'</td>' +
-        '</tr>';
-    }).join('');
-  }).catch(function(){
-    document.getElementById('bookings-tbody').innerHTML='<tr><td colspan="7" style="padding:2rem;text-align:center;color:#c06060;font-size:.84rem">Failed to load bookings.</td></tr>';
-  });
-}
-
-// Init
-loadWeekends();loadPackages();loadCities();loadClubs();loadItinerary();
+loadBanners();
 </script>
 </body>
 </html>
