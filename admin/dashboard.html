@@ -347,12 +347,14 @@ function post(url,data){
 // Modal
 var _save=null;
 function openModal(title,html,fn){
+  var m=document.getElementById('editModal');
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-body').innerHTML=html;
   _save=fn;
-  document.getElementById('editModal').classList.add('open');
+  m.classList.add('open');
+  m.style.display='flex';
 }
-function closeModal(){document.getElementById('editModal').classList.remove('open');}
+function closeModal(){var m=document.getElementById('editModal');m.classList.remove('open');m.style.display='none';}
 function saveModal(){if(_save)_save();}
 document.getElementById('editModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
