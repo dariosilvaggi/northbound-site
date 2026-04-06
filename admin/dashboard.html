@@ -158,6 +158,7 @@ input[type=file]{display:none;}
           </div>
         </div>
         <button class="btn-add" onclick="addWeekend()">+ Add Trip</button>
+        <div id="wk-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Trips</span><span class="count-badge" id="wk-count">0</span></div>
       <div class="item-list" id="weekends-list"></div>
@@ -178,6 +179,7 @@ input[type=file]{display:none;}
           </div>
         </div>
         <button class="btn-add" onclick="addPackage()">+ Add Package</button>
+        <div id="pkg-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Packages</span><span class="count-badge" id="pkg-count">0</span></div>
       <div class="item-list" id="packages-list"></div>
@@ -195,6 +197,7 @@ input[type=file]{display:none;}
           <div class="fg"><label>Frequency</label><input type="text" id="cty-freq" placeholder="Every weekend"></div>
         </div>
         <button class="btn-add" onclick="addCity()">+ Add City</button>
+        <div id="cty-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Departure Cities</span><span class="count-badge" id="cty-count">0</span></div>
       <div class="item-list" id="cities-list"></div>
@@ -214,6 +217,7 @@ input[type=file]{display:none;}
           <div class="fg full"><label>Perks (comma-separated)</label><input type="text" id="cl-perks" placeholder="Skip the Line, VIP Sections, Rooftop"></div>
         </div>
         <button class="btn-add" onclick="addClub()">+ Add Venue</button>
+        <div id="cl-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div class="section-bar"><span class="section-label">All Venues</span><span class="count-badge" id="cl-count">0</span></div>
       <div class="item-list" id="clubs-list"></div>
@@ -229,6 +233,7 @@ input[type=file]{display:none;}
           <div class="fg"><label>Day Label</label><input type="text" id="itin-day" placeholder="Friday"></div>
         </div>
         <button class="btn-add" onclick="addDay()">+ Add Day</button>
+        <div id="itin-add-err" style="display:none;color:#e05252;font-size:.82rem;margin-top:.4rem;"></div>
       </div>
       <div id="itinerary-admin"></div>
     </div>
@@ -389,7 +394,9 @@ function loadWeekends(){
 }
 function addWeekend(){
   var name=v('wk-name'),date=v('wk-date'),city=v('wk-city');
-  if(!name||!date||!city)return alert('Name, date and city required.');
+  var errEl=document.getElementById('wk-add-err');
+  if(!name||!date||!city){errEl.textContent='Name, date and city are required.';errEl.style.display='block';return;}
+  errEl.style.display='none';
   post('/admin/weekends/add',{name,dateRange:date,city,nights:v('wk-nights'),clubsLabel:v('wk-clubs'),spotsLeft:v('wk-spots'),price:v('wk-price'),badge:v('wk-badge'),active:'true'})
     .then(function(){clr(['wk-name','wk-date','wk-city','wk-nights','wk-clubs','wk-spots','wk-price']);loadWeekends();});
 }
@@ -453,12 +460,17 @@ function loadPackages(){
 }
 function addPackage(){
   var name=v('pkg-name'),price=v('pkg-price');
-  if(!name||!price)return alert('Name and price required.');
+  var errEl=document.getElementById('pkg-add-err');
+  if(!name||!price){errEl.textContent='Name and price are required.';errEl.style.display='block';return;}
+  errEl.style.display='none';
   post('/admin/packages/add',{name,price,featured:v('pkg-featured'),featuresRaw:v('pkg-features'),active:'true'})
     .then(function(){clr(['pkg-name','pkg-price','pkg-features']);loadPackages();});
 }
 function editPackage(id){
+  var btn=document.querySelector('.btn-sm-edit[onclick="editPackage(\''+id+'\')"]');
+  if(btn){btn.disabled=true;btn.textContent='Loading…';}
   api('/admin/api/packages').then(function(items){
+    if(btn){btn.disabled=false;btn.textContent='Edit';}
     var p=items.find(function(x){return x.id===id;});if(!p)return;
     var raw=(p.features||[]).map(function(f){return (f.included?'':'- ')+f.text;}).join('\n');
     openModal('Edit Package',
@@ -470,7 +482,7 @@ function editPackage(id){
         post('/admin/packages/update/'+id,{name:v('ep-name'),price:v('ep-price'),featured:v('ep-feat'),featuresRaw:v('ep-features'),active:String(p.active)})
           .then(function(){closeModal();loadPackages();});
       });
-  });
+  }).catch(function(){if(btn){btn.disabled=false;btn.textContent='Edit';}});
 }
 
 // ── CITIES ────────────────────────────────────────────────────
@@ -492,7 +504,9 @@ function loadCities(){
   });
 }
 function addCity(){
-  var city=v('cty-city');if(!city)return alert('City name required.');
+  var city=v('cty-city');var errEl=document.getElementById('cty-add-err');
+  if(!city){errEl.textContent='City name is required.';errEl.style.display='block';return;}
+  errEl.style.display='none';
   post('/admin/cities/add',{city,distance:v('cty-dist'),frequency:v('cty-freq'),active:'true'})
     .then(function(){clr(['cty-city','cty-dist','cty-freq']);loadCities();});
 }
@@ -524,7 +538,9 @@ function loadClubs(){
   });
 }
 function addClub(){
-  var name=v('cl-name');if(!name)return alert('Venue name required.');
+  var name=v('cl-name');var errEl=document.getElementById('cl-add-err');
+  if(!name){errEl.textContent='Venue name is required.';errEl.style.display='block';return;}
+  errEl.style.display='none';
   post('/admin/clubs/add',{name,type:v('cl-type'),emoji:v('cl-emoji'),description:v('cl-desc'),perksRaw:v('cl-perks'),active:'true'})
     .then(function(){clr(['cl-name','cl-type','cl-emoji','cl-desc','cl-perks']);loadClubs();});
 }
@@ -568,12 +584,15 @@ function loadItinerary(){
         '</div>' +
         '<textarea id="it-desc-'+d.id+'" rows="2" placeholder="Description..." style="margin-top:.45rem;width:100%"></textarea>' +
         '<button class="btn-add-item" style="margin-top:.45rem" onclick="addItinItem(\''+d.id+'\')">+ Add Item</button>' +
+        '<div id="itin-err-'+d.id+'" style="display:none;color:#e05252;font-size:.82rem;margin-top:.3rem;"></div>' +
         '</div></div>';
     }).join('');
   });
 }
 function addDay(){
-  var day=v('itin-day');if(!day)return alert('Day label required.');
+  var day=v('itin-day');var errEl=document.getElementById('itin-add-err');
+  if(!day){errEl.textContent='Day label is required.';errEl.style.display='block';return;}
+  errEl.style.display='none';
   post('/admin/itinerary/day/add',{day}).then(function(){document.getElementById('itin-day').value='';loadItinerary();});
 }
 function delDay(id){if(!confirm('Delete this day and all its items?'))return;post('/admin/itinerary/day/delete/'+id,{}).then(loadItinerary);}
@@ -583,7 +602,9 @@ function renameDay(id,cur){
 }
 function addItinItem(dayId){
   var time=v('it-time-'+dayId),title=v('it-title-'+dayId);
-  if(!time||!title)return alert('Time and title required.');
+  var errEl=document.getElementById('itin-err-'+dayId);
+  if(!time||!title){if(errEl){errEl.textContent='Time and title are required.';errEl.style.display='block';}return;}
+  if(errEl)errEl.style.display='none';
   post('/admin/itinerary/item/add/'+dayId,{time,title,description:v('it-desc-'+dayId)}).then(loadItinerary);
 }
 function editItinItem(dayId,itemId){
