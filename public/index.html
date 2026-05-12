@@ -946,14 +946,6 @@ img { display: block; max-width: 100%; }
       </div>
     </div>
       <div class="stat-item">
-        <div class="stat-num red">2,500+</div>
-        <div class="stat-label">Happy travelers</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num purple">4.9 &#9733;</div>
-        <div class="stat-label">Average trip rating</div>
-      </div>
-      <div class="stat-item">
         <div class="stat-num gold">30 min</div>
         <div class="stat-label">Detroit to Windsor</div>
       </div>
@@ -968,30 +960,16 @@ img { display: block; max-width: 100%; }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow">How It Works</div>
-      <h2 class="section-title">Your weekend in four steps</h2>
-      <p class="section-desc">From booking to border crossing — we handle everything so you don't have to.</p>
+      <h2 class="section-title">Your weekend in six easy steps</h2>
+      <p class="section-subtitle">You get yourself to Windsor — we take care of the rest.</p>
     </div>
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <h3>Pick Your Weekend</h3>
-        <p>Choose from upcoming dates and select your weekend date. Browse packages and pricing.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <h3>Book &amp; Upload Docs</h3>
-        <p>Book your spot, upload your passport or enhanced ID, and sign the waiver.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <h3>Board the Coach</h3>
-        <p>Show up at your hotel. We handle the weekend details — you just enjoy your weekend.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">04</div>
-        <h3>Live the Night</h3>
-        <p>Check into your hotel, hit the clubs with skip-the-line access, and own the night.</p>
-      </div>
+    <div class="steps-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;">
+      <div class="step-card"><div class="step-num">01</div><h3>Pick Your Weekend</h3><p>Choose a one-night or two-night Windsor nightlife package.</p></div>
+      <div class="step-card"><div class="step-num">02</div><h3>Choose Your Room Style</h3><p>Pick 2 to a room or 4 to a room depending on your group size and budget.</p></div>
+      <div class="step-card"><div class="step-num">03</div><h3>Travel to Windsor</h3><p>You get yourself to Windsor. NorthBound provides hotel check-in details, required ID reminders, and weekend instructions.</p></div>
+      <div class="step-card"><div class="step-num">04</div><h3>Check In &amp; Get Your Pass</h3><p>Check into the hotel and receive your NorthBound nightlife access details.</p></div>
+      <div class="step-card"><div class="step-num">05</div><h3>Hit the Clubs</h3><p>Enjoy included access at participating venues with no cover and skip-the-line entry where available.</p></div>
+      <div class="step-card"><div class="step-num">06</div><h3>Breakfast &amp; Check Out</h3><p>Breakfast is included at the hotel before checkout. Explore Windsor or head home.</p></div>
     </div>
   </div>
 </section>
@@ -1026,11 +1004,20 @@ img { display: block; max-width: 100%; }
 <section class="section reveal" id="destinations">
   <div class="container">
     <div class="section-header">
-      <div class="eyebrow">Weekend Dates</div>
-      <h2 class="section-title">You travel to Windsor</h2>
-      <p class="section-desc">Hotel packagees depart from campuses and central locations across the Midwest and East.</p>
+      <div class="eyebrow">Included Nightlife Access</div>
+      <h2 class="section-title">Your NorthBound pass gets you in</h2>
+      <p class="section-subtitle">Your NorthBound Weekend includes access to participating Windsor nightlife venues. No cover. Skip-the-line entry where available.</p>
     </div>
-    <div class="dest-grid" id="cities-grid"><div class="loading-msg">Loading cities...</div></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-top:2.5rem;text-align:center;">
+      <div class="step-card" style="padding:2rem 1rem;"><h3 style="font-size:1.2rem;">Ariius</h3></div>
+      <div class="step-card" style="padding:2rem 1rem;"><h3 style="font-size:1.2rem;">Wild Child</h3></div>
+      <div class="step-card" style="padding:2rem 1rem;"><h3 style="font-size:1.2rem;">Disco Inferno</h3></div>
+      <div class="step-card" style="padding:2rem 1rem;"><h3 style="font-size:1.2rem;">TQLA</h3></div>
+      <div class="step-card" style="padding:2rem 1rem;"><h3 style="font-size:1.2rem;">Blanche</h3></div>
+      <div class="step-card" style="padding:2rem 1rem;"><h3 style="font-size:1.2rem;">Joywave</h3></div>
+      <div class="step-card" style="padding:2rem 1rem;"><h3 style="font-size:1.2rem;">Prototype</h3></div>
+    </div>
+    <p style="text-align:center;margin-top:2rem;color:rgba(255,255,255,0.5);font-size:0.9rem;">Typical club cover runs $10–$15 per venue. With NorthBound, participating venue access is built into the package.</p>
   </div>
 </section>
 
@@ -1040,9 +1027,30 @@ img { display: block; max-width: 100%; }
     <div class="section-header">
       <div class="eyebrow">Windsor Nightlife</div>
       <h2 class="section-title">Where the night takes you</h2>
-      <p class="section-desc">Downtown Windsor's entertainment district — all within walking distance of your hotel.</p>
+      <p class="section-subtitle">Downtown Windsor's entertainment district — all within walking distance of your hotel.</p>
     </div>
-    <div class="clubs-grid" id="clubs-grid"><div class="loading-msg">Loading venues...</div></div>
+
+    <div class="section-header" style="margin-top:4rem;">
+      <div class="eyebrow">Why Not Just Do It Yourself?</div>
+      <h2 class="section-title" style="margin-top:0.5rem;">NorthBound vs. going solo</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:2rem;border-radius:16px;overflow:hidden;border:1px solid rgba(200,151,78,0.2);">
+      <div style="padding:1rem 1.5rem;background:rgba(255,255,255,0.03);font-weight:700;color:rgba(255,255,255,0.5);border-bottom:1px solid rgba(200,151,78,0.15);">Doing It Yourself</div>
+      <div style="padding:1rem 1.5rem;background:rgba(200,151,78,0.08);font-weight:700;color:#C8974E;border-bottom:1px solid rgba(200,151,78,0.15);">With NorthBound</div>
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.6);">Book your own hotel</div>
+      <div style="padding:1rem 1.5rem;background:rgba(200,151,78,0.04);border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.9);">Discounted hotel package</div>
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.6);">Pay cover at each club</div>
+      <div style="padding:1rem 1.5rem;background:rgba(200,151,78,0.04);border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.9);">Included access at participating venues</div>
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.6);">Wait in regular lines</div>
+      <div style="padding:1rem 1.5rem;background:rgba(200,151,78,0.04);border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.9);">Skip-the-line entry where available</div>
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.6);">Figure out where to go</div>
+      <div style="padding:1rem 1.5rem;background:rgba(200,151,78,0.04);border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.9);">Curated Windsor nightlife route</div>
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.6);">Pay for breakfast separately</div>
+      <div style="padding:1rem 1.5rem;background:rgba(200,151,78,0.04);border-bottom:1px solid rgba(200,151,78,0.08);color:rgba(255,255,255,0.9);">Breakfast included</div>
+      <div style="padding:1rem 1.5rem;color:rgba(255,255,255,0.6);">Guess what ID you need</div>
+      <div style="padding:1rem 1.5rem;background:rgba(200,151,78,0.04);color:rgba(255,255,255,0.9);">Border document checklist provided</div>
+    </div>
+    <p style="text-align:center;margin-top:2rem;color:#C8974E;font-weight:600;font-size:1.05rem;">NorthBound is not just a hotel booking. It is your Windsor nightlife weekend — already built for you.</p>
   </div>
 </section>
 
@@ -1053,10 +1061,22 @@ img { display: block; max-width: 100%; }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow">Sample Itinerary</div>
-      <h2 class="section-title">A typical NorthBound weekend</h2>
-      <p class="section-desc">Here's what a Standard package weekend looks like.</p>
+      <h2 class="section-title">What your weekend looks like</h2>
+      <p class="section-subtitle">Here is what a typical NorthBound weekend looks like.</p>
     </div>
-    <div class="itinerary" id="itinerary-content"><div class="loading-msg">Loading itinerary...</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;">
+      <div class="step-card" style="padding:2rem;">
+        <h3 style="color:#C8974E;margin-bottom:1rem;">One-Night Package</h3>
+        <p style="margin-bottom:0.75rem;"><strong style="color:rgba(255,255,255,0.9);">Day 1:</strong> Arrive in Windsor, hotel check-in, optional dinner, NorthBound nightlife route, access to participating clubs.</p>
+        <p><strong style="color:rgba(255,255,255,0.9);">Day 2:</strong> Breakfast at hotel, checkout, explore Windsor or head home.</p>
+      </div>
+      <div class="step-card" style="padding:2rem;">
+        <h3 style="color:#C8974E;margin-bottom:1rem;">Two-Night Package</h3>
+        <p style="margin-bottom:0.75rem;"><strong style="color:rgba(255,255,255,0.9);">Day 1:</strong> Arrive in Windsor, hotel check-in, nightlife access.</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:rgba(255,255,255,0.9);">Day 2:</strong> Breakfast, shop/explore/recover, dinner opportunity, second nightlife route.</p>
+        <p><strong style="color:rgba(255,255,255,0.9);">Day 3:</strong> Breakfast and checkout.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1064,47 +1084,43 @@ img { display: block; max-width: 100%; }
 <section class="section reveal" id="travel">
   <div class="container">
     <div class="section-header">
-      <div class="eyebrow">Travel Requirements</div>
-      <h2 class="section-title">What you need to cross</h2>
-      <p class="section-desc">Crossing into Canada is straightforward — here's what to bring.</p>
+      <div class="eyebrow">Before You Cross</div>
+      <h2 class="section-title">What you need to enter Canada</h2>
+      <p class="section-subtitle" style="color:#e74c3c;font-weight:600;">A regular U.S. driver's license is not enough to cross into Canada.</p>
     </div>
-    <div class="info-grid">
-      <div class="info-card">
-        <div class="info-icon">&#128706;</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:2.5rem;">
+      <div class="step-card" style="padding:2rem;">
         <h3>Accepted Documents</h3>
-        <p>You need one of the following to enter Canada:</p>
-        <ul>
-          <li>Valid U.S. Passport</li>
-          <li>U.S. Passport Card</li>
-          <li>Enhanced Driver's License (MI, NY, VT, WA, MN)</li>
-          <li>NEXUS Card</li>
+        <p>You need one of the following:</p>
+        <ul style="margin-top:0.75rem;list-style:none;padding:0;">
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Valid U.S. Passport</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; U.S. Passport Card</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Enhanced Driver's License (where available)</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; NEXUS Card</li>
         </ul>
       </div>
-      <div class="info-card">
-        <div class="info-icon">&#127874;</div>
-        <h3>Age Requirements</h3>
-        <p>Ontario's legal drinking age is 19. You must be at least 19 to access nightlife venues on our tours. All travelers must be 18+ to book.</p>
+      <div class="step-card" style="padding:2rem;">
+        <h3>Age Requirement</h3>
+        <p>Ontario's legal drinking age is 19. You must be at least 19 to access nightlife venues. All travelers must be 18+ to book.</p>
       </div>
-      <div class="info-card">
-        <div class="info-icon">&#128721;</div>
-        <h3>Border Tips</h3>
-        <p>Smooth crossings every time:</p>
-        <ul>
-          <li>No criminal record issues (DUI, etc.)</li>
-          <li>No cannabis — illegal to cross with</li>
-          <li>Declare all purchases on return</li>
-          <li>Be polite and honest with officers</li>
+      <div class="step-card" style="padding:2rem;">
+        <h3>Border Rules</h3>
+        <ul style="margin-top:0.75rem;list-style:none;padding:0;">
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10007; No cannabis across the border — federal offense</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#9888; Criminal record issues, including DUI, may affect entry</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Be honest with border officers</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Declare all purchases on return</li>
         </ul>
       </div>
-      <div class="info-card">
-        <div class="info-icon">&#128737;</div>
-        <h3>Safety &amp; Support</h3>
-        <p>Your safety is our top priority. Every trip includes:</p>
-        <ul>
-          <li>Hotel check-in instructions provided</li>
-          <li>Weekend support contact</li>
-          <li>Venue access rules and nightlife route</li>
-          <li>Border document checklist provided</li>
+      <div class="step-card" style="padding:2rem;">
+        <h3>Safe &amp; Organized</h3>
+        <p>NorthBound gives travelers a clear plan before they arrive:</p>
+        <ul style="margin-top:0.75rem;list-style:none;padding:0;">
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Hotel check-in instructions</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Emergency support contact</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Venue access rules</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Border document reminders</li>
+          <li style="padding:0.4rem 0;color:rgba(255,255,255,0.8);">&#10003; Conduct expectations</li>
         </ul>
       </div>
     </div>
@@ -1135,7 +1151,7 @@ img { display: block; max-width: 100%; }
 <!-- ── CTA ── -->
 <section class="cta-band reveal">
   <div class="container">
-    <h2>Ready to go <span class="gradient-text">NorthBound</span>?</h2>
+    <h2>Ready for your <span class="gradient-text">NorthBound</span> weekend?</h2>
     <p>Your Windsor nightlife weekend is waiting. Hotel, breakfast, clubs, no cover — all in one package.</p>
     <button class="btn-gold" data-action="openBooking">Book Your Weekend &rarr;</button>
   </div>
