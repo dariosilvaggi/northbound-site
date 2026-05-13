@@ -1098,6 +1098,46 @@ img { display: block; max-width: 100%; }
 }
 </style>
 
+
+<!-- MOBILE V3 FIXES: hero layout, logo centering, halo -->
+<style>
+@media (max-width: 768px) {
+  /* Force hero to stack vertically — hero-inner + stats-bar were side-by-side */
+  #hero, .hero {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .hero-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Center the logo */
+  .hero-visual {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+  .hero-logo-wrap {
+    margin: 0 auto !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure halo/glow doesn't clip */
+  .hero-inner, .hero-content, .hero-visual, .hero-logo-wrap {
+    overflow: visible !important;
+  }
+
+  /* Stats bar full width below hero */
+  .hero-stats-bar {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
