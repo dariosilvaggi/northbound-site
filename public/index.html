@@ -879,6 +879,128 @@ img { display: block; max-width: 100%; }
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
+
+<!-- MOBILE RESPONSIVE FIXES -->
+<style>
+/* ===== MOBILE: 768px and below ===== */
+@media (max-width: 768px) {
+  /* --- Global --- */
+  .container { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+  .section { padding: 3rem 0 !important; }
+  .section-title { font-size: 1.6rem !important; line-height: 1.2 !important; }
+  .section-subtitle { font-size: 0.95rem !important; }
+
+  /* --- Hero --- */
+  .hero { min-height: auto !important; padding-bottom: 2rem !important; }
+  .hero-inner { grid-template-columns: 1fr !important; text-align: center !important; }
+  .hero-content { max-width: 100% !important; }
+  .hero-content h1 { font-size: 2.2rem !important; line-height: 1.15 !important; }
+  .hero-sub { margin-left: auto !important; margin-right: auto !important; font-size: 0.95rem !important; }
+  .hero-ctas { justify-content: center !important; flex-direction: column !important; align-items: center !important; gap: 0.75rem !important; }
+  .hero-ctas .btn-gold,
+  .hero-ctas .btn-outline { width: 100% !important; max-width: 280px !important; text-align: center !important; }
+  .hero-visual { order: -1 !important; }
+  .hero-logo-wrap { width: 180px !important; height: 180px !important; margin: 0 auto !important; }
+  .hero-logo-wrap img { width: 150px !important; }
+
+  /* --- Stats Row --- */
+  .stats-row { flex-direction: column !important; gap: 0.5rem !important; padding: 1.25rem !important; }
+  .stat-item { padding: 0.75rem 0 !important; }
+  .stat-item + .stat-item::before {
+    left: 20% !important; right: 20% !important; top: 0 !important; bottom: auto !important;
+    width: auto !important; height: 1px !important;
+  }
+  .stat-num { font-size: 1.5rem !important; }
+
+  /* --- Steps Grid (How It Works) --- */
+  .steps-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
+
+  /* --- Destinations (inline grid) --- */
+  #destinations div[style*="grid-template-columns"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  /* --- Nightlife Comparison (inline 1fr 1fr grid) --- */
+  #nightlife div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+  #nightlife div[style*="grid-template-columns"] > div {
+    border-bottom: 1px solid rgba(200,151,78,0.15);
+  }
+
+  /* --- Itinerary Cards (inline 1fr 1fr grid) --- */
+  #itinerary div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  /* --- Travel / Before You Cross (inline auto-fit grid) --- */
+  #travel div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* --- Packages Grid --- */
+  .pkg-grid { grid-template-columns: 1fr !important; }
+  .pkg-card { max-width: 100% !important; }
+
+  /* --- Weekends Grid --- */
+  .weekends-grid { grid-template-columns: 1fr !important; }
+
+  /* --- FAQ --- */
+  .faq-item { padding: 1rem !important; }
+
+  /* --- CTA Section --- */
+  #cta h2, .section-title { font-size: 1.6rem !important; }
+
+  /* --- Footer --- */
+  .footer-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+  .footer-brand-text { font-size: 0.9rem !important; }
+  .footer-bottom { flex-direction: column !important; gap: 0.75rem !important; text-align: center !important; }
+
+  /* --- Booking Form --- */
+  .form-row { grid-template-columns: 1fr !important; }
+}
+
+/* ===== SMALL MOBILE: 480px and below ===== */
+@media (max-width: 480px) {
+  .container { padding-left: 1rem !important; padding-right: 1rem !important; }
+  .section-title { font-size: 1.35rem !important; }
+  .hero-content h1 { font-size: 1.8rem !important; }
+  .hero-logo-wrap { width: 140px !important; height: 140px !important; }
+  .hero-logo-wrap img { width: 120px !important; }
+  .stat-num { font-size: 1.3rem !important; }
+  .stats-row { padding: 1rem !important; }
+
+  /* Destinations: single column on very small screens */
+  #destinations div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer phone/email block */
+  footer a[href^="tel:"] { font-size: 1rem !important; }
+  footer a[href^="mailto:"] { font-size: 0.85rem !important; }
+}
+
+/* ===== NAV HAMBURGER FIX ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none !important; }
+  .mobile-toggle { display: block !important; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
+  .nav-links.mobile-open {
+    display: flex !important; flex-direction: column !important;
+    position: absolute !important; top: 100% !important; left: 0 !important; right: 0 !important;
+    background: rgba(10,8,18,0.97) !important;
+    backdrop-filter: blur(24px) !important;
+    padding: 1.5rem !important; gap: 1rem !important;
+    border-bottom: 1px solid rgba(200,151,78,0.2) !important;
+    z-index: 999 !important;
+  }
+  nav { position: relative !important; }
+  #nav-sponsor { display: none !important; }
+}
+</style>
+
 </head>
 <body>
 
