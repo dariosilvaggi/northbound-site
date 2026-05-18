@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const Stripe = require('stripe');
 const { Pool } = require('pg');
+const nodemailer = require('nodemailer');
 
 const stripe = process.env.STRIPE_SECRET_KEY ? Stripe(process.env.STRIPE_SECRET_KEY) : null;
 const pool = process.env.DATABASE_URL
@@ -81,6 +82,13 @@ async function initDB() {
     console.log('Seeded default packages into PostgreSQL');
   }
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS rep_applications (
+      id TEXT PRIMARY KEY,
+      data JSONB NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
   console.log('PostgreSQL connected and tables ready');
 }
 
@@ -626,6 +634,66 @@ app.post('/api/checkout', async (req, res) => {
 // ── Admin: Bookings ───────────────────────────────────────────────
 app.get('/admin/api/bookings', requireAdmin, async (req, res) => {
   res.json(await loadBookings());
+});
+
+
+// ── Rep Application ──────────────────────────────────────────────
+app.post('/api/rep-application', async (req, res) => {
+  const { name, email, phone, school, instagram, tiktok } = req.body;
+  if (!name || !email) return res.status(400).json({ error: 'Name and email are required.' });
+
+  const application = {
+    id: newId(), name, email,
+    phone: phone || '', school: school || '',
+    instagram: instagram || '', tiktok: tiktok || '',
+    status: 'new', submittedAt: new Date().toISOString()
+  };
+
+  if (pool) {
+    try {
+      await pool.query('INSERT INTO rep_applications (id, data) VALUES ($1, $2)',
+        [application.id, JSON.stringify(application)]);
+    } catch (dbErr) { console.error('DB save error:', dbErr.message); }
+  }
+
+  try {
+    const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER;
+    const smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASS;
+    if (smtpUser && smtpPass) {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        secure: false,
+        auth: { user: smtpUser, pass: smtpPass }
+      });
+      await transporter.sendMail({
+        from: '"NorthBound Weekends" <' + smtpUser + '>',
+        to: 'northboundweekends@gmail.com',
+        subject: 'New Rep Application: ' + name,
+        html: '<h2>New Rep Application</h2>' +
+          '<p><strong>Name:</strong> ' + name + '</p>' +
+          '<p><strong>Email:</strong> ' + email + '</p>' +
+          '<p><strong>Phone:</strong> ' + (phone || 'N/A') + '</p>' +
+          '<p><strong>School:</strong> ' + (school || 'N/A') + '</p>' +
+          '<p><strong>Instagram:</strong> ' + (instagram || 'N/A') + '</p>' +
+          '<p><strong>TikTok:</strong> ' + (tiktok || 'N/A') + '</p>' +
+          '<hr><p style="color:#888">Submitted ' + new Date().toISOString() + '</p>'
+      });
+      console.log('Rep email sent for:', name);
+    } else {
+      console.log('SMTP not configured — rep saved to DB only');
+    }
+  } catch (emailErr) { console.error('Rep email error:', emailErr.message); }
+
+  res.json({ success: true, message: 'Application submitted!' });
+});
+
+app.get('/admin/api/rep-applications', requireAdmin, async (req, res) => {
+  if (pool) {
+    const { rows } = await pool.query('SELECT data FROM rep_applications ORDER BY created_at DESC');
+    return res.json(rows.map(r => r.data));
+  }
+  res.json([]);
 });
 
 // ── SEO: robots.txt + sitemap ────────────────────────────────────

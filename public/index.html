@@ -1154,6 +1154,7 @@ img { display: block; max-width: 100%; }
       <a href="#travel">What You Need</a>
       <a href="#nightlife">Nightlife</a>
       <a href="#faq">FAQ</a>
+      <a href="#rep">Become a Rep</a>
       <a class="btn-nav" data-action="openBooking">Book Now</a>
     </div>
     <button class="mobile-toggle" data-action="toggleMobileNav">&#9776;</button>
@@ -1403,6 +1404,47 @@ img { display: block; max-width: 100%; }
   </div>
 </section>
 
+
+<section class="section rep-section reveal" id="rep">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">Join the Team</div>
+      <h2 class="section-title">Become a <span class="gradient-text">Rep</span></h2>
+      <p class="section-desc">Represent NorthBound on your campus. Earn free trips, commissions, and exclusive perks.</p>
+    </div>
+    <div class="rep-grid">
+      <div class="rep-info">
+        <h3>Why become a NorthBound Rep?</h3>
+        <p>As a campus rep, you&#8217;re the go-to person for the best cross-border weekends. Promote trips to your friends and network, and earn rewards for every booking.</p>
+        <ul class="rep-perks">
+          <li>Free trips for top performers</li>
+          <li>Commission on every booking you refer</li>
+          <li>Exclusive merch and VIP access</li>
+          <li>Build your brand as a campus leader</li>
+          <li>Flexible &#8212; work on your own schedule</li>
+        </ul>
+      </div>
+      <div class="rep-form-box" id="repForm">
+        <div id="repFormFields">
+          <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" id="repName" type="text" placeholder="Your full name"></div>
+          <div class="form-group"><label class="form-label">Email *</label><input class="form-input" id="repEmail" type="email" placeholder="you@university.edu"></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="repPhone" type="tel" placeholder="(555) 123-4567"></div>
+          <div class="form-group"><label class="form-label">School / University</label><input class="form-input" id="repSchool" type="text" placeholder="University of Michigan"></div>
+          <div class="rep-form-box form-row" style="background:none;border:none;padding:0">
+            <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="repInstagram" type="text" placeholder="@yourhandle"></div>
+            <div class="form-group"><label class="form-label">TikTok</label><input class="form-input" id="repTiktok" type="text" placeholder="@yourhandle"></div>
+          </div>
+          <button class="rep-submit" onclick="submitRepForm()">Apply Now</button>
+        </div>
+        <div class="rep-success" id="repSuccess">
+          <h3>Application Received!</h3>
+          <p>We&#8217;ll review your application and get back to you within 48 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── CTA ── -->
 <section class="cta-band reveal">
   <div class="container">
@@ -1445,6 +1487,7 @@ img { display: block; max-width: 100%; }
         <a href="#nightlife">Nightlife Access</a>
         <a href="#travel">Before You Cross</a>
         <a href="#faq">FAQ</a>
+      <a href="#rep">Become a Rep</a>
         <a href="#">Become a Campus Rep</a>
       </div>
       <div class="footer-col">
@@ -1484,9 +1527,45 @@ img { display: block; max-width: 100%; }
         <div class="booking-step" id="step4"></div>
       </div>
       <div id="bookingStep1">
-        <div class="form-group"><label class="form-label">Select Weekend</label><select class="form-select" id="selectWeekend"><option value="">Loading trips…</option></select></div>
-        <div class="form-group"><label class="form-label">Package</label><select class="form-select" id="selectPackage"><option value="">Loading packages…</option></select></div>
-        <div class="form-group"><label class="form-label">Number of Travelers</label><select class="form-select" id="selectTravelers"><option value="1">1 traveler</option><option value="2" selected>2 travelers</option><option value="3">3 travelers</option><option value="4">4 travelers</option><option value="5+">5+ travelers (group)</option></select></div>
+        <div class="swb" id="selectedWeekendBanner">
+          <div class="swb-date" id="swbDate"></div>
+          <div class="swb-name" id="swbName"></div>
+          <div class="swb-route" id="swbRoute"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Number of Nights</label>
+          <div class="nights-toggle">
+            <button type="button" class="night-btn active" onclick="selectNights(1)">1 Night</button>
+            <button type="button" class="night-btn" onclick="selectNights(2)">2 Nights</button>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Room Type</label>
+          <div class="room-cards">
+            <div class="room-card active" onclick="selectRoom(2)">
+              <div class="room-icon">&#128716;</div>
+              <div class="room-name">Double Room</div>
+              <div class="room-desc">2 Guests</div>
+              <div class="room-price" id="price2g"></div>
+            </div>
+            <div class="room-card" onclick="selectRoom(4)">
+              <div class="room-icon">&#128716;&#128716;</div>
+              <div class="room-name">Quad Room</div>
+              <div class="room-desc">4 Guests</div>
+              <div class="room-price" id="price4g"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Number of Rooms</label>
+          <select class="form-select" id="selectRooms" onchange="updateCart()">
+            <option value="1">1 Room</option>
+            <option value="2">2 Rooms</option>
+            <option value="3">3 Rooms</option>
+          </select>
+        </div>
+        <div class="cart-summary">
+          <div class="cart-line"><span>Guests</span><span id="cartGuests">2</span></div>
+          <div class="cart-line"><span>Nights</span><span id="cartNights">1</span></div>
+          <div class="cart-line total"><span>Subtotal</span><span id="cartSubtotal">$138</span></div>
+        </div>
       </div>
       <div id="bookingStep2" style="display:none;">
         <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="inputFirstName" type="text" placeholder="John"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="inputLastName" type="text" placeholder="Smith"></div></div>
@@ -1532,10 +1611,8 @@ var _bookingTrips=[];var _bookingPkgs=[];
 
 function populateBookingSelects(trips,pkgs){
   _bookingTrips=trips||[];_bookingPkgs=pkgs||[];
-  var ws=document.getElementById('selectWeekend');
-  if(ws&&_bookingTrips.length){ws.innerHTML=_bookingTrips.map(function(t){return'<option value="'+t.name+'" data-price="'+t.price+'">'+t.dateRange+' — '+t.name+' ('+t.city+')</option>';}).join('');}
-  var ps=document.getElementById('selectPackage');
-  if(ps&&_bookingPkgs.length){ps.innerHTML=_bookingPkgs.map(function(p){var lbl=p.featured?' (Most Popular)':'';return'<option value="'+p.name+'" data-price="'+p.price+'"'+(p.featured?' selected':'')+'>'+p.name+' — $'+p.price+'/person'+lbl+'</option>';}).join('');}
+  _calTrips=trips.map(function(t){var d=parseWeekendDates(t.dateRange);t._dates=d;return t;}).filter(function(t){return t._dates;});
+  renderCalendar();
 }
 
 function calcCharges(pp, tr){
@@ -1549,33 +1626,31 @@ function calcCharges(pp, tr){
 }
 
 function buildSummary(){
-  var ws=document.getElementById('selectWeekend');
-  var ps=document.getElementById('selectPackage');
-  var tv=document.getElementById('selectTravelers');
-  var wn=ws?ws.options[ws.selectedIndex].value:'';
-  var pn=ps?ps.options[ps.selectedIndex].value:'';
-  var pp=ps?ps.options[ps.selectedIndex].getAttribute('data-price'):'0';
-  var tr=tv?tv.value:'1';
-  var c=calcCharges(pp,tr);
-  document.getElementById('summaryWeekend').textContent=wn;
-  document.getElementById('summaryPackage').textContent=pn+' Package · '+tr+' traveler(s)';
-  document.getElementById('summaryTotal').textContent='$'+c.total.toFixed(2);
-  var breakdownHtml=
+  if(!_selectedTrip)return;
+  var rooms=parseInt(document.getElementById('selectRooms').value)||1;
+  var tg=_selectedGuestsPerRoom*rooms;
+  var bp=parseFloat(_selectedTrip.price)||69;
+  var pp=bp*tg*_selectedNights;
+  var c=calcCharges(pp,tg);
+  var rl=_selectedGuestsPerRoom===2?'Double Room':'Quad Room';
+  document.getElementById('summaryWeekend').textContent=_selectedTrip.name+' — '+_selectedTrip.dateRange;
+  document.getElementById('summaryPackage').textContent=rooms+' '+rl+' · '+_selectedNights+' night(s) · '+tg+' guest(s)';
+  document.getElementById('summaryDeposit').textContent='$'+c.total.toFixed(2);
+  var bh=
     '<div style="font-size:0.72rem;color:var(--gray-dim);margin-bottom:0.5rem;line-height:1.9">'+
-    'Package price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.base.toFixed(2)+'</span><br>'+
+    'Room total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.base.toFixed(2)+'</span><br>'+
     'MAT (6%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.mat.toFixed(2)+'</span><br>'+
     'HST (13%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.hst.toFixed(2)+'</span>'+
     (c.adm>0?'<br>Admin fee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right">$'+c.adm.toFixed(2)+'</span>':'')+
     '</div>';
-  document.getElementById('summaryBalance').innerHTML=breakdownHtml+'<span style="font-size:0.72rem;color:#c06060">All sales final — no refunds</span>';
+  document.getElementById('summaryBalance').innerHTML=bh+'<span style="font-size:0.72rem;color:#c06060">All sales final — no refunds</span>';
 }
 
-function openBooking(tripName){
+function openBooking(){
   currentStep=1;
   updateBookingUI();
   document.getElementById('bookingModal').classList.add('active');
   document.body.style.overflow='hidden';
-  if(tripName){var ws=document.getElementById('selectWeekend');if(ws){for(var i=0;i<ws.options.length;i++){if(ws.options[i].value===tripName){ws.selectedIndex=i;break;}}}}
 }
 function closeBooking(){document.getElementById('bookingModal').classList.remove('active');document.body.style.overflow='';}
 
@@ -1600,26 +1675,29 @@ function updateBookingUI(){
     if(c)c.style.display=i===currentStep?'block':'none';
   }
   document.getElementById('bookingBack').style.display=currentStep>1?'inline-flex':'none';
-  var ws=document.getElementById('selectPackage');
-  var pp2=ws&&ws.selectedIndex>=0?ws.options[ws.selectedIndex].getAttribute('data-price'):'0';
-  var tv2=document.getElementById('selectTravelers');var tr2=tv2?tv2.value:'1';
-  var c2=calcCharges(pp2,tr2);
-  document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $'+c2.total.toFixed(2)+' →':'Continue';
+  var rooms2=parseInt(document.getElementById('selectRooms').value)||1;
+  var tg2=_selectedGuestsPerRoom*rooms2;
+  var bp2=parseFloat(_selectedTrip?_selectedTrip.price:69);
+  var pp2=bp2*tg2*_selectedNights;
+  var c2=calcCharges(pp2,tg2);
+  document.getElementById('bookingNext').textContent=currentStep===totalSteps?'Pay $'+c2.total.toFixed(2)+' \u2192':'Continue';
 }
 
 async function submitToStripe(){
   var btn=document.getElementById('bookingNext');
   var errEl=document.getElementById('stripeError');
-  btn.textContent='Redirecting to payment…';btn.disabled=true;
+  btn.textContent='Redirecting to payment\u2026';btn.disabled=true;
   errEl.style.display='none';
-  var ws=document.getElementById('selectWeekend');
-  var ps=document.getElementById('selectPackage');
-  var tv=document.getElementById('selectTravelers');
+  var rooms=parseInt(document.getElementById('selectRooms').value)||1;
+  var tg=_selectedGuestsPerRoom*rooms;
+  var bp=parseFloat(_selectedTrip?_selectedTrip.price:69);
+  var pp=bp*tg*_selectedNights;
+  var rl=_selectedGuestsPerRoom===2?'Double Room':'Quad Room';
   var payload={
-    weekend:ws?ws.options[ws.selectedIndex].value:'',
-    packageName:ps?ps.options[ps.selectedIndex].value:'',
-    packagePrice:ps?ps.options[ps.selectedIndex].getAttribute('data-price'):'0',
-    travelers:tv?tv.value:'1',
+    weekend:_selectedTrip?_selectedTrip.name:'',
+    packageName:rooms+' '+rl+' \u00b7 '+_selectedNights+' Night(s)',
+    packagePrice:String(pp),
+    travelers:String(tg),
     firstName:document.getElementById('inputFirstName').value,
     lastName:document.getElementById('inputLastName').value,
     email:document.getElementById('inputEmail').value,
@@ -1639,8 +1717,221 @@ async function submitToStripe(){
 
 document.getElementById('bookingModal').addEventListener('click',function(e){if(e.target===this)closeBooking();});
 </script>
+
+<script>
+/* ── Calendar Booking System ── */
+var _calTrips=[];var _calMonthOffset=0;var _selectedNights=1;var _selectedGuestsPerRoom=2;var _selectedTrip=null;
+
+function parseWeekendDates(dateRange){
+  var m=dateRange.match(/(\w+)\s+(\d+)(?:-(\d+))?/);
+  if(!m)return null;
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var mi=-1;for(var i=0;i<12;i++){if(months[i].toLowerCase().indexOf(m[1].toLowerCase())===0){mi=i;break;}}
+  if(mi===-1)return null;
+  var yr=new Date().getFullYear();if(mi<new Date().getMonth())yr++;
+  return{start:new Date(yr,mi,parseInt(m[2])),end:new Date(yr,mi,parseInt(m[3]||m[2])),month:mi,year:yr};
+}
+
+function findTripsForDate(d){
+  var r=[];for(var i=0;i<_calTrips.length;i++){
+    var t=_calTrips[i];if(!t._dates)continue;
+    if(d.getTime()>=t._dates.start.getTime()&&d.getTime()<=t._dates.end.getTime())r.push(t);
+  }return r;
+}
+
+function renderCalendar(){
+  var c=document.getElementById('calendar-container');if(!c)return;
+  var now=new Date();var yr=now.getFullYear();var mo=now.getMonth()+_calMonthOffset;
+  while(mo>11){mo-=12;yr++;}while(mo<0){mo+=12;yr--;}
+  var mn=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var fd=new Date(yr,mo,1).getDay();var dim=new Date(yr,mo+1,0).getDate();
+  var h='<div class="cal-header"><button type="button" class="cal-nav" onclick="changeMonth(-1)">&#8592;</button>';
+  h+='<div class="cal-month">'+mn[mo]+' '+yr+'</div>';
+  h+='<button type="button" class="cal-nav" onclick="changeMonth(1)">&#8594;</button></div>';
+  h+='<div class="cal-grid">';
+  var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  for(var i=0;i<7;i++)h+='<div class="cal-day-name">'+dn[i]+'</div>';
+  for(var i=0;i<fd;i++)h+='<div class="cal-cell empty"></div>';
+  var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  for(var d=1;d<=dim;d++){
+    var dt=new Date(yr,mo,d);var trips=findTripsForDate(dt);
+    var cls='cal-cell';var oc='';
+    if(trips.length){cls+=' cal-weekend';oc=' onclick="selectCalendarWeekend(\''+trips[0].id+'\')" title="'+trips[0].name+'"';}
+    if(yr===now.getFullYear()&&mo===now.getMonth()&&d===now.getDate())cls+=' cal-today';
+    if(dt<today)cls+=' cal-past';
+    h+='<div class="'+cls+'"'+oc+'><span class="cal-date">'+d+'</span>';
+    if(trips.length)h+='<span class="cal-trip-dot"></span>';
+    h+='</div>';
+  }
+  h+='</div>';
+  h+='<div class="cal-legend"><div class="cal-legend-item"><div class="cal-legend-dot" style="background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.3)"></div> Available Weekend</div>';
+  h+='<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(255,255,255,0.15)"></div> Today</div></div>';
+  c.innerHTML=h;
+  renderUpcomingList();
+}
+
+function renderUpcomingList(){
+  var el=document.getElementById('cal-upcoming');if(!el)return;
+  var now=new Date();
+  var future=_calTrips.filter(function(t){return t._dates&&t._dates.end>=now;}).sort(function(a,b){return a._dates.start-b._dates.start;});
+  if(!future.length){el.innerHTML='';return;}
+  var sm=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.innerHTML='<h3 style="font-size:1.1rem;margin:1.5rem 0 1rem;color:var(--gray)">Upcoming Trips</h3>'+
+    future.map(function(t){
+      var d=t._dates.start;
+      return '<div class="cal-upcoming-card" onclick="selectCalendarWeekend(\''+t.id+'\')">'+
+        '<div class="cal-upcoming-left">'+
+        '<div class="cal-upcoming-date"><span class="cal-m">'+sm[d.getMonth()]+'</span><span class="cal-d">'+d.getDate()+'</span></div>'+
+        '<div class="cal-upcoming-info"><h4>'+t.name+'</h4><p>'+t.city+' &#8594; Windsor &middot; '+t.nights+' night'+(parseInt(t.nights)>1?'s':'')+' &middot; '+(t.spotsLeft||'?')+' spots left</p></div>'+
+        '</div>'+
+        '<div class="cal-upcoming-price"><div class="pr-amt">$'+t.price+'</div><div class="pr-per">/person</div></div>'+
+        '</div>';
+    }).join('');
+}
+
+function changeMonth(dir){_calMonthOffset+=dir;renderCalendar();}
+
+function selectCalendarWeekend(tripId){
+  var trip=_calTrips.find(function(t){return t.id===tripId;});
+  if(!trip)return;
+  _selectedTrip=trip;
+  _selectedNights=parseInt(trip.nights)||1;
+  _selectedGuestsPerRoom=2;
+  document.getElementById('swbDate').textContent=trip.dateRange;
+  document.getElementById('swbName').textContent=trip.name;
+  document.getElementById('swbRoute').textContent=trip.city+' → Windsor';
+  document.querySelectorAll('.night-btn').forEach(function(b,i){b.classList.toggle('active',(i===0&&_selectedNights===1)||(i===1&&_selectedNights===2));});
+  document.querySelectorAll('.room-card').forEach(function(c,i){c.classList.toggle('active',i===0);});
+  document.getElementById('selectRooms').value='1';
+  updateCart();
+  openBooking();
+}
+
+function selectNights(n){
+  _selectedNights=n;
+  document.querySelectorAll('.night-btn').forEach(function(b,i){b.classList.toggle('active',(i===0&&n===1)||(i===1&&n===2));});
+  updateCart();
+}
+
+function selectRoom(g){
+  _selectedGuestsPerRoom=g;
+  document.querySelectorAll('.room-card').forEach(function(c,i){c.classList.toggle('active',(g===2&&i===0)||(g===4&&i===1));});
+  updateCart();
+}
+
+function updateCart(){
+  if(!_selectedTrip)return;
+  var rooms=parseInt(document.getElementById('selectRooms').value)||1;
+  var tg=_selectedGuestsPerRoom*rooms;
+  var bp=parseFloat(_selectedTrip.price)||69;
+  var sub=bp*tg*_selectedNights;
+  document.getElementById('cartGuests').textContent=tg;
+  document.getElementById('cartNights').textContent=_selectedNights;
+  document.getElementById('cartSubtotal').textContent='$'+sub.toFixed(0);
+  var p2=document.getElementById('price2g');var p4=document.getElementById('price4g');
+  if(p2)p2.textContent='$'+(bp*2*_selectedNights).toFixed(0)+'/room';
+  if(p4)p4.textContent='$'+(bp*4*_selectedNights).toFixed(0)+'/room';
+}
+
+function bookFromPackage(){scrollToSection('weekends');}
+
+/* ── Rep Form ── */
+async function submitRepForm(){
+  var n=document.getElementById('repName').value.trim();
+  var e=document.getElementById('repEmail').value.trim();
+  if(!n||!e){alert('Please enter your name and email.');return;}
+  var payload={name:n,email:e,phone:document.getElementById('repPhone').value.trim(),
+    school:document.getElementById('repSchool').value.trim(),
+    instagram:document.getElementById('repInstagram').value.trim(),
+    tiktok:document.getElementById('repTiktok').value.trim()};
+  try{
+    var r=await fetch('/api/rep-application',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    var d=await r.json();
+    if(d.success){document.getElementById('repFormFields').style.display='none';document.getElementById('repSuccess').style.display='block';}
+    else{alert(d.error||'Something went wrong.');}
+  }catch(err){alert('Connection error. Please try again.');}
+}
+</script>
+
 <script src="/sponsor-banner.js"></script>
-<style>.loading-msg{color:#555;font-size:.9rem;padding:2rem;text-align:center;}</style>
+<style>.loading-msg{color:#555;font-size:.9rem;padding:2rem;text-align:center;}
+/* ── CALENDAR ── */
+.cal-container{max-width:700px;margin:0 auto}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.cal-month{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.5rem;font-weight:800}
+.cal-nav{background:none;border:1px solid rgba(200,135,76,0.3);color:var(--gold);width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+.cal-nav:hover{background:var(--gold);color:var(--bg)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day-name{text-align:center;font-size:0.72rem;color:var(--gray-dim);padding:0.5rem 0;font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+.cal-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;position:relative;font-size:0.9rem;color:var(--gray)}
+.cal-cell.empty{background:none}
+.cal-cell.cal-past{opacity:0.3}
+.cal-cell.cal-today{color:var(--white);font-weight:700}
+.cal-cell.cal-today::after{content:'';position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:var(--white)}
+.cal-cell.cal-weekend{background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.3);cursor:pointer;color:var(--gold);font-weight:700;transition:all 0.3s}
+.cal-cell.cal-weekend:hover{background:linear-gradient(135deg,var(--gold),var(--purple));color:var(--bg);transform:scale(1.08)}
+.cal-trip-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);position:absolute;bottom:6px}
+.cal-legend{display:flex;gap:1.5rem;justify-content:center;margin-top:1.5rem;font-size:0.82rem;color:var(--gray);flex-wrap:wrap}
+.cal-legend-item{display:flex;align-items:center;gap:0.5rem}
+.cal-legend-dot{width:14px;height:14px;border-radius:4px}
+.cal-upcoming{margin-top:2rem}
+.cal-upcoming-card{background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.2);border-radius:var(--radius-sm);padding:1.25rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;cursor:pointer;transition:all 0.3s}
+.cal-upcoming-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.cal-upcoming-left{display:flex;align-items:center;gap:1rem}
+.cal-upcoming-date{background:var(--gold);color:var(--bg);width:50px;height:50px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;line-height:1}
+.cal-upcoming-date .cal-m{font-size:0.65rem;text-transform:uppercase}
+.cal-upcoming-date .cal-d{font-size:1.2rem}
+.cal-upcoming-info h4{margin:0 0 0.25rem;font-size:1rem}
+.cal-upcoming-info p{margin:0;font-size:0.82rem;color:var(--gray)}
+.cal-upcoming-price{text-align:right}
+.cal-upcoming-price .pr-amt{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.2rem;color:var(--gold)}
+.cal-upcoming-price .pr-per{font-size:0.72rem;color:var(--gray)}
+/* ── Room Configurator ── */
+.nights-toggle{display:flex;gap:0.5rem}
+.night-btn{flex:1;padding:0.75rem;background:rgba(30,30,30,0.8);border:1px solid rgba(200,135,76,0.15);border-radius:8px;color:var(--gray);font-weight:600;cursor:pointer;transition:all 0.3s;font-size:0.9rem}
+.night-btn.active{background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border-color:var(--gold);color:var(--gold)}
+.room-cards{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.room-card{background:rgba(30,30,30,0.8);border:1px solid rgba(200,135,76,0.15);border-radius:var(--radius-sm);padding:1rem;text-align:center;cursor:pointer;transition:all 0.3s}
+.room-card.active{border-color:var(--gold);background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim))}
+.room-card:hover{border-color:rgba(200,135,76,0.5)}
+.room-icon{font-size:1.5rem;margin-bottom:0.25rem}
+.room-name{font-weight:700;font-size:0.9rem;margin-bottom:0.15rem}
+.room-desc{font-size:0.78rem;color:var(--gray)}
+.room-price{font-size:0.82rem;color:var(--gold);margin-top:0.25rem;font-weight:600}
+.cart-summary{background:rgba(20,20,20,0.6);border:1px solid rgba(200,135,76,0.1);border-radius:8px;padding:1rem;margin-top:1rem}
+.cart-line{display:flex;justify-content:space-between;padding:0.35rem 0;font-size:0.85rem;color:var(--gray)}
+.cart-line.total{border-top:1px solid rgba(200,135,76,0.15);margin-top:0.5rem;padding-top:0.75rem;color:var(--gold);font-weight:700;font-size:1rem}
+.swb{background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.2);border-radius:var(--radius-sm);padding:1rem;margin-bottom:1.25rem;text-align:center}
+.swb-date{font-size:0.78rem;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
+.swb-name{font-size:1.1rem;font-weight:700;margin:0.25rem 0}
+.swb-route{font-size:0.82rem;color:var(--gray)}
+/* ── Rep Form ── */
+.rep-section{background:linear-gradient(180deg,rgba(24,24,24,0.9),rgba(10,10,10,0.98))}
+.rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.rep-info h3{font-size:1.4rem;margin-bottom:1rem;font-weight:700}
+.rep-info p{color:var(--gray);line-height:1.7;margin-bottom:1.5rem}
+.rep-perks{list-style:none;padding:0;margin:0}
+.rep-perks li{padding:0.5rem 0;color:var(--gray);display:flex;align-items:center;gap:0.75rem;font-size:0.92rem}
+.rep-perks li::before{content:'\2713';color:var(--gold);font-weight:700}
+.rep-form-box{background:rgba(30,30,30,0.7);border:1px solid rgba(200,135,76,0.15);border-radius:var(--radius);padding:2rem}
+.rep-form-box .form-group{margin-bottom:1rem}
+.rep-form-box .form-label{display:block;font-size:0.82rem;color:var(--gray);margin-bottom:0.4rem;font-weight:600}
+.rep-form-box .form-input{width:100%;padding:0.65rem 0.9rem;background:rgba(15,15,15,0.8);border:1px solid rgba(200,135,76,0.15);border-radius:8px;color:var(--white);font-size:0.9rem;outline:none;transition:border-color 0.3s;box-sizing:border-box}
+.rep-form-box .form-input:focus{border-color:var(--gold)}
+.rep-form-box .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.rep-submit{width:100%;padding:0.85rem;background:linear-gradient(135deg,var(--gold),var(--purple));color:var(--bg);font-weight:700;border:none;border-radius:8px;cursor:pointer;font-size:1rem;transition:opacity 0.3s;margin-top:0.5rem}
+.rep-submit:hover{opacity:0.9}
+.rep-success{display:none;text-align:center;padding:2rem}
+.rep-success h3{color:var(--gold);margin-bottom:0.5rem}
+@media(max-width:768px){
+  .rep-grid{grid-template-columns:1fr;gap:2rem}
+  .cal-cell{font-size:0.75rem}
+  .cal-upcoming-card{flex-direction:column;gap:1rem;text-align:center}
+  .cal-upcoming-left{flex-direction:column}
+  .room-cards{grid-template-columns:1fr}
+  .rep-form-box .form-row{grid-template-columns:1fr}
+}
+</style>
 <script>
 (function(){
   'use strict';
@@ -1716,7 +2007,7 @@ document.getElementById('bookingModal').addEventListener('click',function(e){if(
   function load(url,fn){fetch(url).then(function(r){return r.json();}).then(fn).catch(function(){});}
   var _trips=[],_pkgs=[];
   var _tripsLoaded=false,_pkgsLoaded=false;
-  fetch('/api/weekends').then(function(r){return r.json();}).then(function(d){_trips=d;_tripsLoaded=true;renderWeekends(d);if(_pkgsLoaded)populateBookingSelects(_trips,_pkgs);}).catch(function(){_tripsLoaded=true;});
+  fetch('/api/weekends').then(function(r){return r.json();}).then(function(d){_trips=d;_tripsLoaded=true;if(_pkgsLoaded)populateBookingSelects(_trips,_pkgs);}).catch(function(){_tripsLoaded=true;});
   fetch('/api/packages').then(function(r){return r.json();}).then(function(d){_pkgs=d;_pkgsLoaded=true;renderPackages(d);if(_tripsLoaded)populateBookingSelects(_trips,_pkgs);}).catch(function(){_pkgsLoaded=true;});
   load('/api/cities',renderCities);
   load('/api/clubs',renderClubs);
