@@ -997,7 +997,7 @@ img { display: block; max-width: 100%; }
     z-index: 999 !important;
   }
   nav { position: relative !important; }
-  #nav-sponsor { display: none !important; }
+  
 }
 </style>
 
@@ -1155,7 +1155,7 @@ img { display: block; max-width: 100%; }
       <a href="#nightlife">Nightlife</a>
       <a href="#faq">FAQ</a>
       <a href="#rep">Become a Rep</a>
-      <a class="btn-nav" data-action="openBooking">Book Now</a>
+      <a class="btn-nav" href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener">Book Now</a>
     </div>
     <button class="mobile-toggle" data-action="toggleMobileNav">&#9776;</button>
   </div>
@@ -1172,7 +1172,7 @@ img { display: block; max-width: 100%; }
       <h1>Cross the border.<br>Check in. <span class="gradient-text">Skip the line.</span></h1>
       <p class="hero-sub">Windsor nightlife weekend packages for U.S. students and young adults. Hotel, breakfast, club access, no cover, and skip-the-line entry included. You travel to Windsor — we handle the weekend.</p>
       <div class="hero-ctas">
-        <button class="btn-gold" data-action="openBooking">View Packages &rarr;</button>
+        <a class="btn-gold" href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" style="text-decoration:none">Book Your Weekend Here &#8594;</a>
         <a class="btn-ghost" href="#how">How It Works</a>
       </div>
     </div>
@@ -1450,7 +1450,7 @@ img { display: block; max-width: 100%; }
   <div class="container">
     <h2>Ready for your <span class="gradient-text">NorthBound</span> weekend?</h2>
     <p>Your Windsor nightlife weekend is waiting. Hotel, breakfast, clubs, no cover — all in one package.</p>
-    <button class="btn-gold" data-action="openBooking">View Packages &rarr;</button>
+    <button class="btn-gold" onclick="window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank')">View Packages &rarr;</button>
   </div>
 </section>
 
@@ -1512,92 +1512,7 @@ img { display: block; max-width: 100%; }
 </footer>
 
 <!-- ── BOOKING MODAL ── -->
-<div class="modal-overlay" id="bookingModal">
-  <div class="modal">
-    <button class="modal-close" data-action="closeBooking">&times;</button>
-    <div class="modal-header">
-      <h2>Book Your Weekend</h2>
-      <p>Full payment at checkout. All sales final — no refunds.</p>
-    </div>
-    <div class="modal-body">
-      <div class="booking-steps">
-        <div class="booking-step active" id="step1"></div>
-        <div class="booking-step" id="step2"></div>
-        <div class="booking-step" id="step3"></div>
-        <div class="booking-step" id="step4"></div>
-      </div>
-      <div id="bookingStep1">
-        <div class="swb" id="selectedWeekendBanner">
-          <div class="swb-date" id="swbDate"></div>
-          <div class="swb-name" id="swbName"></div>
-          <div class="swb-route" id="swbRoute"></div>
-        </div>
-        <div class="form-group"><label class="form-label">Number of Nights</label>
-          <div class="nights-toggle">
-            <button type="button" class="night-btn active" onclick="selectNights(1)">1 Night</button>
-            <button type="button" class="night-btn" onclick="selectNights(2)">2 Nights</button>
-          </div>
-        </div>
-        <div class="form-group"><label class="form-label">Room Type</label>
-          <div class="room-cards">
-            <div class="room-card active" onclick="selectRoom(2)">
-              <div class="room-icon">&#128716;</div>
-              <div class="room-name">Double Room</div>
-              <div class="room-desc">2 Guests</div>
-              <div class="room-price" id="price2g"></div>
-            </div>
-            <div class="room-card" onclick="selectRoom(4)">
-              <div class="room-icon">&#128716;&#128716;</div>
-              <div class="room-name">Quad Room</div>
-              <div class="room-desc">4 Guests</div>
-              <div class="room-price" id="price4g"></div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group"><label class="form-label">Number of Rooms</label>
-          <select class="form-select" id="selectRooms" onchange="updateCart()">
-            <option value="1">1 Room</option>
-            <option value="2">2 Rooms</option>
-            <option value="3">3 Rooms</option>
-          </select>
-        </div>
-        <div class="cart-summary">
-          <div class="cart-line"><span>Guests</span><span id="cartGuests">2</span></div>
-          <div class="cart-line"><span>Nights</span><span id="cartNights">1</span></div>
-          <div class="cart-line total"><span>Subtotal</span><span id="cartSubtotal">$138</span></div>
-        </div>
-      </div>
-      <div id="bookingStep2" style="display:none;">
-        <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="inputFirstName" type="text" placeholder="John"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="inputLastName" type="text" placeholder="Smith"></div></div>
-        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="inputEmail" type="email" placeholder="john@university.edu"></div>
-        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="inputPhone" type="tel" placeholder="(555) 123-4567"></div>
-        <div class="form-row"><div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" id="inputDob" type="date"></div><div class="form-group"><label class="form-label">Home City</label><input class="form-input" id="inputCity" type="text" placeholder="Detroit, MI"></div></div>
-      </div>
-      <div id="bookingStep3" style="display:none;">
-        <div class="form-group"><label class="form-label">Border Document Type</label><select class="form-select" id="selectDoc"><option>U.S. Passport</option><option>Passport Card</option><option>Enhanced Driver's License</option><option>NEXUS Card</option></select></div>
-        <div class="form-group"><label class="form-label">Upload Document Photo</label><input class="form-input" id="inputDocFile" type="file" accept="image/*,.pdf" style="padding:0.55rem;"></div>
-        <div class="form-group" style="margin-top:1.25rem;"><label style="display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;font-size:0.84rem;color:var(--gray);"><input type="checkbox" id="agreeWaiver" style="margin-top:0.25rem;accent-color:var(--gold);">I agree to the <a href="#" style="color:var(--gold);">Liability Waiver</a> and <a href="#" style="color:var(--gold);">Terms of Service</a>. I confirm I will be 19+ on the date of travel.</label></div>
-      </div>
-      <div id="bookingStep4" style="display:none;">
-        <div style="background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.15);border-radius:var(--radius-sm);padding:1.25rem;margin-bottom:1.25rem;">
-          <div style="font-size:0.8rem;color:var(--gray);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Booking Summary</div>
-          <div id="summaryWeekend" style="font-weight:700;margin-bottom:0.25rem;"></div>
-          <div id="summaryPackage" style="font-size:0.85rem;color:var(--gray);margin-bottom:0.75rem;"></div>
-          <div style="border-top:1px solid rgba(200,135,76,0.15);padding-top:0.75rem;display:flex;justify-content:space-between;align-items:center;">
-            <div><div style="font-size:0.8rem;color:var(--gray);">Total due today</div><div style="font-size:0.72rem;color:var(--gray-dim);" id="summaryBalance"></div></div>
-            <div id="summaryTotal" style="font-family:'Plus Jakarta Sans';font-weight:800;color:var(--gold);font-size:1.25rem;"></div>
-          </div>
-        </div>
-        <div style="font-size:0.78rem;color:var(--gray-dim);text-align:center;margin-bottom:0.5rem;">You'll be redirected to Stripe's secure checkout. Full payment required. All sales final — no refunds. We accept all major cards, Apple Pay &amp; Google Pay.</div>
-        <div id="stripeError" style="display:none;background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.3);border-radius:6px;padding:0.75rem;font-size:0.82rem;color:#f87171;margin-top:0.5rem;"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-ghost" id="bookingBack" data-action="prevStep" style="display:none;flex:0 0 auto;padding:0.75rem 1.5rem;">Back</button>
-      <button class="btn-gold" id="bookingNext" data-action="nextStep" style="flex:1;justify-content:center;">Continue</button>
-    </div>
-  </div>
-</div>
+<!-- booking modal removed -->
 
 <script>
 window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);});
@@ -1644,12 +1559,7 @@ function buildSummary(){
   document.getElementById('summaryBalance').innerHTML=bh+'<span style="font-size:0.72rem;color:#c06060">All sales final — no refunds</span>';
 }
 
-function openBooking(){
-  currentStep=1;
-  updateBookingUI();
-  document.getElementById('bookingModal').classList.add('active');
-  document.body.style.overflow='hidden';
-}
+function openBooking(){window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank');}
 function closeBooking(){document.getElementById('bookingModal').classList.remove('active');document.body.style.overflow='';}
 
 function nextStep(){
@@ -1781,7 +1691,7 @@ async function submitRepForm(){
 }
 </script>
 
-<script src="/sponsor-banner.js"></script>
+<!-- sponsors removed -->
 <style>.loading-msg{color:#555;font-size:.9rem;padding:2rem;text-align:center;}
 /* ── CALENDAR ── */
 
@@ -1871,7 +1781,7 @@ async function submitRepForm(){
     el.innerHTML=trips.map(function(t){
       var b=BADGE[t.badge]?'<span class="wk-badge '+BADGE[t.badge].cls+'">'+BADGE[t.badge].text+'</span>':'';
       var imgHtml=t.image?'<div class="wk-img" style="background-image:url(\''+t.image+'\')"></div>':'';
-      return '<div class="wk-card" data-action="openBooking">'+imgHtml+
+      return '<div class="wk-card" onclick="window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank')">'+imgHtml+
         '<div class="wk-top"><div class="wk-date">'+t.dateRange+'</div>'+b+'</div>'+
         '<div class="wk-body"><h3>'+t.name+'</h3><div class="wk-route">'+t.city+' &rarr; Windsor</div>'+
         '<div class="wk-details"><span class="wk-detail">'+t.nights+' nights</span>'+
@@ -1879,7 +1789,7 @@ async function submitRepForm(){
         '<span class="wk-detail">'+t.spotsLeft+' spots left</span></div></div>'+
         '<div class="wk-footer"><div><span class="wk-price-from">from </span>'+
         '<span class="wk-price-amount">$'+t.price+'</span><span class="wk-price-per"> /person</span></div>'+
-        '<button class="btn-sm">Book</button></div></div>';
+        '<a class="btn-sm" href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" style="text-decoration:none">Book Your Weekend</a></div></div>';
     }).join('');
   }
 
@@ -1895,7 +1805,7 @@ async function submitRepForm(){
         '<div class="pkg-name">'+p.name+'</div>'+
         '<div class="pkg-price"><span class="currency">$</span><span class="amount">'+p.price+'</span><span class="per"> /person</span></div>'+
         '<ul class="pkg-features">'+fl+'</ul>'+
-        '<button class="'+bc+'" data-action="openBooking">Select '+p.name+'</button></div>';
+        '<button class="'+bc+'" onclick="window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank')">Select '+p.name+'</button></div>';
     }).join('');
   }
 
