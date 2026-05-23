@@ -1764,11 +1764,11 @@ async function submitRepForm(){
 }
 
 .hero-visual{order:-1;margin-bottom:1.5rem;}
-.hero-content{order:0;text-align:center;align-items:center;}
-.hero-content .hero-tag{order:2;margin-top:1.5rem;}
+.hero-content{order:0;text-align:center;align-items:center;display:flex;flex-direction:column;}
+.hero-content .hero-tag{order:10;margin-top:1.5rem;}
 .hero-content h1{order:0;}
-.hero-content .hero-sub{order:1;}
-.hero-content .hero-ctas{order:1;justify-content:center;}
+.hero-content .hero-sub{order:2;}
+.hero-content .hero-ctas{order:3;justify-content:center;}
 .hero-stats-bar{order:3;margin-top:2rem;width:100%;}
 </style>
 <script>
@@ -1794,21 +1794,7 @@ async function submitRepForm(){
     }).join('');
   }
 
-  function renderPackages(pkgs){
-    var el=document.getElementById('packages-grid'); if(!el) return;
-    if(!pkgs.length){el.innerHTML='<div class="loading-msg">No packages available.</div>';return;}
-    el.innerHTML=pkgs.map(function(p){
-      var fl=(p.features||[]).map(function(f){
-        return '<li'+(f.included?'':' class="off"')+'><span class="chk">'+(f.included?'&#10003;':'&mdash;')+'</span> '+f.text+'</li>';
-      }).join('');
-      var bc=p.featured?'btn-pkg btn-pkg-filled':'btn-pkg btn-pkg-outline';
-      return '<div class="pkg-card'+(p.featured?' featured':'')+'">'+
-        '<div class="pkg-name">'+p.name+'</div>'+
-        '<div class="pkg-price"><span class="currency">$</span><span class="amount">'+p.price+'</span><span class="per"> /person</span></div>'+
-        '<ul class="pkg-features">'+fl+'</ul>'+
-        '<button class="'+bc+'" onclick="openBooking()">Select '+p.name+'</button></div>';
-    }).join('');
-  }
+  function renderPackages(){var el=document.getElementById('packages-grid');if(!el)return;el.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><a href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" class="btn-pkg btn-pkg-filled" style="display:inline-block;text-decoration:none;font-size:1.25rem;padding:1.2rem 3rem;letter-spacing:0.05em;">BOOK YOUR WEEKEND HERE</a></div>';}
 
   function renderCities(cities){
     var el=document.getElementById('cities-grid'); if(!el) return;
