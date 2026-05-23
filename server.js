@@ -721,14 +721,6 @@ app.get('/sitemap.xml', (req, res) => {
 });
 
 // ── Catch-all ────────────────────────────────────────────────────
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// ── Boot ──────────────────────────────────────────────────────────
-initDB()
-  .then(() => {
-    
 // Nightlife Photos API
 app.get('/api/nightlife-photos', async (req, res) => {
   try {
@@ -777,6 +769,14 @@ app.put('/api/admin/nightlife-photos/:id', async (req, res) => {
   } catch(e) { res.status(500).json({ error: 'Update failed' }); }
 });
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// ── Boot ──────────────────────────────────────────────────────────
+initDB()
+  .then(() => {
+    
 app.listen(PORT, '0.0.0.0', () => {
       console.log(`NorthBound running on port ${PORT} | DB: ${pool ? 'PostgreSQL' : 'file system'}`);
     });
