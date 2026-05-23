@@ -273,7 +273,7 @@ img { display: block; max-width: 100%; }
 .hero-inner {
   position: relative; z-index: 1;
   max-width: 1140px; margin: 0 auto; padding: 0 1.5rem;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+  display:flex;flex-direction:column;align-items:center;  gap: 3rem; align-items: center;
 }
 .hero-content { max-width: 540px; }
 .hero-tag {
@@ -878,6 +878,8 @@ img { display: block; max-width: 100%; }
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
+
+#hero{flex-direction:column!important;align-items:center!important;}
 </style>
 
 <!-- MOBILE RESPONSIVE FIXES -->
@@ -1231,16 +1233,7 @@ img { display: block; max-width: 100%; }
 </section>
 
 <!-- ── UPCOMING WEEKENDS ── -->
-<section class="section weekends-bg reveal" id="weekends">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow">Upcoming Weekends</div>
-      <h2 class="section-title">Grab your spot</h2>
-      <p class="section-desc">Limited capacity on every weekend. These sell out.</p>
-    </div>
-    <div class="weekends-grid" id="weekends-grid"><div class="loading-msg">Loading trips...</div></div>
-  </div>
-</section>
+<!-- weekends section removed -->
 
 <hr class="glow-divider">
 
@@ -1252,7 +1245,7 @@ img { display: block; max-width: 100%; }
       <h2 class="section-title">Windsor Nightlife Weekend Packages</h2>
       <p class="section-desc">Every package includes hotel, breakfast, nightlife access, no cover at included clubs, skip-the-line entry, weekend itinerary, and border document checklist.</p>
     </div>
-    <div class="pkg-grid" id="packages-grid"><div class="loading-msg">Loading packages...</div></div>
+    <div class="pkg-grid" id="packages-grid"><div style="text-align:center;padding:3rem 1rem;"><a href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" class="btn-pkg btn-pkg-filled" style="display:inline-block;text-decoration:none;font-size:1.25rem;padding:1.2rem 3rem;letter-spacing:0.05em;">BOOK YOUR WEEKEND HERE</a></div></div>
   </div>
 </section>
 
@@ -1450,7 +1443,7 @@ img { display: block; max-width: 100%; }
   <div class="container">
     <h2>Ready for your <span class="gradient-text">NorthBound</span> weekend?</h2>
     <p>Your Windsor nightlife weekend is waiting. Hotel, breakfast, clubs, no cover — all in one package.</p>
-    <button class="btn-gold" onclick="window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank')">View Packages &rarr;</button>
+    <button class="btn-gold" onclick="openBooking()">View Packages &rarr;</button>
   </div>
 </section>
 
@@ -1623,7 +1616,7 @@ async function submitToStripe(){
   }
 }
 
-document.getElementById('bookingModal').addEventListener('click',function(e){if(e.target===this)closeBooking();});
+var _bm=document.getElementById('bookingModal');_bm&&_bm.addEventListener('click',function(e){if(e.target===this)closeBooking();});
 </script>
 
 <script>
@@ -1769,6 +1762,14 @@ async function submitRepForm(){
   .room-cards{grid-template-columns:1fr}
   .rep-form-box .form-row{grid-template-columns:1fr}
 }
+
+.hero-visual{order:-1;margin-bottom:1.5rem;}
+.hero-content{order:0;text-align:center;align-items:center;}
+.hero-content .hero-tag{order:2;margin-top:1.5rem;}
+.hero-content h1{order:0;}
+.hero-content .hero-sub{order:1;}
+.hero-content .hero-ctas{order:1;justify-content:center;}
+.hero-stats-bar{order:3;margin-top:2rem;width:100%;}
 </style>
 <script>
 (function(){
@@ -1781,7 +1782,7 @@ async function submitRepForm(){
     el.innerHTML=trips.map(function(t){
       var b=BADGE[t.badge]?'<span class="wk-badge '+BADGE[t.badge].cls+'">'+BADGE[t.badge].text+'</span>':'';
       var imgHtml=t.image?'<div class="wk-img" style="background-image:url(\''+t.image+'\')"></div>':'';
-      return '<div class="wk-card" onclick="window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank')">'+imgHtml+
+      return '<div class="wk-card" onclick="openBooking()">'+imgHtml+
         '<div class="wk-top"><div class="wk-date">'+t.dateRange+'</div>'+b+'</div>'+
         '<div class="wk-body"><h3>'+t.name+'</h3><div class="wk-route">'+t.city+' &rarr; Windsor</div>'+
         '<div class="wk-details"><span class="wk-detail">'+t.nights+' nights</span>'+
@@ -1805,7 +1806,7 @@ async function submitRepForm(){
         '<div class="pkg-name">'+p.name+'</div>'+
         '<div class="pkg-price"><span class="currency">$</span><span class="amount">'+p.price+'</span><span class="per"> /person</span></div>'+
         '<ul class="pkg-features">'+fl+'</ul>'+
-        '<button class="'+bc+'" onclick="window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank')">Select '+p.name+'</button></div>';
+        '<button class="'+bc+'" onclick="openBooking()">Select '+p.name+'</button></div>';
     }).join('');
   }
 
