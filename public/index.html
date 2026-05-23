@@ -1397,7 +1397,7 @@ img { display: block; max-width: 100%; }
             <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="repInstagram" type="text" placeholder="@yourhandle"></div>
             <div class="form-group"><label class="form-label">TikTok</label><input class="form-input" id="repTiktok" type="text" placeholder="@yourhandle"></div>
           </div>
-          <button class="rep-submit" onclick="submitRepForm()">Apply Now</button>
+          <button type="button" class="rep-submit" >Apply Now</button>
         </div>
         <div class="rep-success" id="repSuccess">
           <h3>Application Received!</h3>
@@ -1852,6 +1852,74 @@ document.addEventListener('click',function(e){
     case 'scrollTo': scrollToSection(btn.dataset.target); break;
   }
 });
+</script>
+
+<script>
+(function(){
+  // Override submitRepForm with robust version using addEventListener
+  var form = document.getElementById('repForm');
+  if(!form) return;
+  var btn = form.querySelector('button');
+  if(!btn) return;
+
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    var name = document.getElementById('repName').value.trim();
+    var email = document.getElementById('repEmail').value.trim();
+    var phone = document.getElementById('repPhone').value.trim();
+    var school = document.getElementById('repSchool').value.trim();
+    var instagram = document.getElementById('repInstagram').value.trim();
+    var tiktok = document.getElementById('repTiktok').value.trim();
+
+    if(!name || !email) {
+      alert('Please fill in your name and email.');
+      return;
+    }
+
+    var origText = btn.textContent;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    fetch('/api/rep-application', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        school: school,
+        instagram: instagram,
+        tiktok: tiktok
+      })
+    })
+    .then(function(r) {
+      if(!r.ok) throw new Error('Server error ' + r.status);
+      return r.json();
+    })
+    .then(function() {
+      btn.textContent = 'Application Sent!';
+      btn.style.background = '#2ecc71';
+      btn.style.opacity = '1';
+      ['repName','repEmail','repPhone','repSchool','repInstagram','repTiktok'].forEach(function(id) {
+        document.getElementById(id).value = '';
+      });
+      setTimeout(function() {
+        btn.textContent = origText;
+        btn.disabled = false;
+        btn.style.background = '';
+      }, 3000);
+    })
+    .catch(function(err) {
+      alert('Error: ' + err.message);
+      btn.textContent = origText;
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    });
+  });
+})();
 </script>
 </body>
 </html>
