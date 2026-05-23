@@ -89,6 +89,14 @@ async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS nightlife_photos (
+        id SERIAL PRIMARY KEY, filename VARCHAR(255), caption VARCHAR(500),
+        image_data TEXT NOT NULL, content_type VARCHAR(100) DEFAULT 'image/jpeg',
+        sort_order INTEGER DEFAULT 0, created_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
   console.log('PostgreSQL connected and tables ready');
 }
 
@@ -720,7 +728,56 @@ app.get('*', (req, res) => {
 // ── Boot ──────────────────────────────────────────────────────────
 initDB()
   .then(() => {
-    app.listen(PORT, '0.0.0.0', () => {
+    
+// Nightlife Photos API
+app.get('/api/nightlife-photos', async (req, res) => {
+  try {
+    const r = await pool.query('SELECT id, filename, caption, sort_order FROM nightlife_photos ORDER BY sort_order ASC, created_at DESC');
+    res.json({ photos: r.rows });
+  } catch(e) { res.json({ photos: [] }); }
+});
+
+app.get('/api/nightlife-photos/:id/image', async (req, res) => {
+  try {
+    const r = await pool.query('SELECT image_data, content_type FROM nightlife_photos WHERE id = $1', [req.params.id]);
+    if (r.rows.length === 0) return res.status(404).send('Not found');
+    const p = r.rows[0];
+    res.set('Content-Type', p.content_type || 'image/jpeg');
+    res.set('Cache-Control', 'public, max-age=86400');
+    res.send(Buffer.from(p.image_data, 'base64'));
+  } catch(e) { res.status(500).send('Error'); }
+});
+
+app.post('/api/admin/nightlife-photos', upload.single('photo'), async (req, res) => {
+  if (!req.session || !req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.file) return res.status(400).json({ error: 'No file' });
+  try {
+    const b64 = req.file.buffer.toString('base64');
+    const r = await pool.query(
+      'INSERT INTO nightlife_photos (filename, caption, image_data, content_type, sort_order) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+      [req.file.originalname, req.body.caption || '', b64, req.file.mimetype, parseInt(req.body.sort_order) || 0]
+    );
+    res.json({ success: true, id: r.rows[0].id });
+  } catch(e) { res.status(500).json({ error: 'Upload failed' }); }
+});
+
+app.delete('/api/admin/nightlife-photos/:id', async (req, res) => {
+  if (!req.session || !req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  try { await pool.query('DELETE FROM nightlife_photos WHERE id = $1', [req.params.id]); res.json({ success: true }); }
+  catch(e) { res.status(500).json({ error: 'Delete failed' }); }
+});
+
+app.put('/api/admin/nightlife-photos/:id', async (req, res) => {
+  if (!req.session || !req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const { caption, sort_order } = req.body;
+    await pool.query('UPDATE nightlife_photos SET caption = $1, sort_order = $2 WHERE id = $3',
+      [caption || '', parseInt(sort_order) || 0, req.params.id]);
+    res.json({ success: true });
+  } catch(e) { res.status(500).json({ error: 'Update failed' }); }
+});
+
+app.listen(PORT, '0.0.0.0', () => {
       console.log(`NorthBound running on port ${PORT} | DB: ${pool ? 'PostgreSQL' : 'file system'}`);
     });
   })
