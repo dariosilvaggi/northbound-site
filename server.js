@@ -274,6 +274,7 @@ function makeUploader(dir) {
 }
 const upload        = makeUploader(BANNERS_DIR);
 const weekendUpload = makeUploader(WEEKENDS_IMG_DIR);
+const memUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 }, fileFilter: (req, file, cb) => { if (file.mimetype.startsWith("image/")) cb(null, true); else cb(new Error("Images only")); } });
 
 // ── Auth middleware ──────────────────────────────────────────────
 function requireAdmin(req, res, next) {
@@ -740,7 +741,7 @@ app.get('/api/nightlife-photos/:id/image', async (req, res) => {
   } catch(e) { res.status(500).send('Error'); }
 });
 
-app.post('/api/admin/nightlife-photos', upload.single('photo'), async (req, res) => {
+app.post('/api/admin/nightlife-photos', memUpload.single('photo'), async (req, res) => {
   if (!req.session || !req.session.isAdmin) return res.status(401).json({ error: 'Unauthorized' });
   if (!req.file) return res.status(400).json({ error: 'No file' });
   try {
