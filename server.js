@@ -750,7 +750,7 @@ app.post('/api/admin/nightlife-photos', upload.single('photo'), async (req, res)
       [req.file.originalname, req.body.caption || '', b64, req.file.mimetype, parseInt(req.body.sort_order) || 0]
     );
     res.json({ success: true, id: r.rows[0].id });
-  } catch(e) { res.status(500).json({ error: 'Upload failed' }); }
+  } catch(e) { console.error('PHOTO UPLOAD ERR:', e); res.status(500).json({ error: 'Upload failed: ' + e.message }); }
 });
 
 app.delete('/api/admin/nightlife-photos/:id', async (req, res) => {
