@@ -741,7 +741,7 @@ app.get('/api/nightlife-photos/:id/image', async (req, res) => {
 });
 
 app.post('/api/admin/nightlife-photos', upload.single('photo'), async (req, res) => {
-  if (!req.session || !req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.session || !req.session.isAdmin) return res.status(401).json({ error: 'Unauthorized' });
   if (!req.file) return res.status(400).json({ error: 'No file' });
   try {
     const b64 = req.file.buffer.toString('base64');
@@ -754,13 +754,13 @@ app.post('/api/admin/nightlife-photos', upload.single('photo'), async (req, res)
 });
 
 app.delete('/api/admin/nightlife-photos/:id', async (req, res) => {
-  if (!req.session || !req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.session || !req.session.isAdmin) return res.status(401).json({ error: 'Unauthorized' });
   try { await pool.query('DELETE FROM nightlife_photos WHERE id = $1', [req.params.id]); res.json({ success: true }); }
   catch(e) { res.status(500).json({ error: 'Delete failed' }); }
 });
 
 app.put('/api/admin/nightlife-photos/:id', async (req, res) => {
-  if (!req.session || !req.session.admin) return res.status(401).json({ error: 'Unauthorized' });
+  if (!req.session || !req.session.isAdmin) return res.status(401).json({ error: 'Unauthorized' });
   try {
     const { caption, sort_order } = req.body;
     await pool.query('UPDATE nightlife_photos SET caption = $1, sort_order = $2 WHERE id = $3',
