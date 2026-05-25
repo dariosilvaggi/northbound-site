@@ -1153,10 +1153,7 @@ img { display: block; max-width: 100%; }
     <div class="nav-links" id="navLinks">
       
     <!-- Nightlife Photo Carousel -->
-    <div class="nightlife-carousel-wrapper" id="nightlifeCarousel">
-      <div class="nightlife-carousel" id="carouselTrack"></div>
-      <div class="carousel-dots" id="carouselDots"></div>
-    </div>
+
 <a href="#how">How It Works</a>
       <a href="#packages">Packages</a>
       <a href="#travel">What You Need</a>
@@ -1182,6 +1179,10 @@ img { display: block; max-width: 100%; }
       <div class="hero-ctas">
         <a class="btn-gold" href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" style="text-decoration:none">Book Your Weekend Here &#8594;</a>
         <a class="btn-ghost" href="#how">How It Works</a>
+      </div>
+      <div class="nightlife-carousel-wrapper" id="nightlifeCarousel" style="order:5;">
+        <div class="nightlife-carousel" id="carouselTrack"></div>
+        <div class="carousel-dots" id="carouselDots"></div>
       </div>
     </div>
     <div class="hero-visual">
@@ -1775,7 +1776,7 @@ async function submitRepForm(){
 }
 
 /* Nightlife Carousel */
-.nightlife-carousel-wrapper{width:100%;max-width:700px;margin:2rem auto;position:relative;overflow:hidden;border-radius:12px;}
+.nightlife-carousel-wrapper{width:100%;max-width:100%;margin:1.5rem 0;position:relative;overflow:hidden;border-radius:12px;order:5;}
 .nightlife-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;gap:0;}
 .nightlife-carousel::-webkit-scrollbar{display:none;}
 .nightlife-carousel .carousel-slide{flex:0 0 100%;scroll-snap-align:start;position:relative;aspect-ratio:16/9;overflow:hidden;}
@@ -1783,7 +1784,7 @@ async function submitRepForm(){
 .carousel-dots{display:flex;justify-content:center;gap:8px;padding:12px 0 4px;}
 .carousel-dots .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:background 0.3s,transform 0.3s;}
 .carousel-dots .dot.active{background:#d4a853;transform:scale(1.3);}
-@media(max-width:768px){.nightlife-carousel-wrapper{max-width:100%;margin:1.5rem auto;border-radius:8px;}.nightlife-carousel .carousel-slide{aspect-ratio:4/3;}}
+@media(max-width:768px){.nightlife-carousel-wrapper{max-width:100%;margin:1rem 0;border-radius:8px;}.nightlife-carousel .carousel-slide{aspect-ratio:4/3;}}
 </style>
 <script>
 (function(){
