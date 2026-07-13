@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+"""Part 1: Remove Mystic Garden, add two event cards, download images, add server routes."""
+import os, urllib.request
+
+PUBLIC = os.path.expanduser('~/temp-deploy/public')
+INDEX = os.path.join(PUBLIC, 'index.html')
+SERVER = os.path.expanduser('~/temp-deploy/server.js')
+
+print("[0] Downloading event images...")
+urllib.request.urlretrieve(
+    'https://cdn.uploads.webconnex.com/191761/52p_aug8_bennybenassi__event%20%281%29.jpg',
+    os.path.join(PUBLIC, 'benny-benassi-banner.jpg'))
+print("    done: benny-benassi-banner.jpg")
+urllib.request.urlretrieve(
+    'https://sync-fest.com/Reference/syncpreview.png',
+    os.path.join(PUBLIC, 'sync-fest-banner.png'))
+print("    done: sync-fest-banner.png")
+
+with open(INDEX, 'r') as f:
+    s = f.read()
+orig = s
+
+# Remove Mystic Garden HTML
+mg = s.find('<div class="featured-event"')
+if mg != -1:
+    d, i = 0, mg
+    while i < len(s):
+        if s[i:i+4] == '<div': d += 1
+        elif s[i:i+6] == '</div>':
+            d -= 1
+            if d == 0:
+                s = s[:mg] + s[i+6:]
+                break
+        i += 1
+    print("[1] Removed Mystic Garden HTML")
+
+# Remove Mystic Garden CSS
+for marker in ['/* Featured Event */', '/* Featured Event Image */']:
+    p = s.find(marker)
+    if p != -1:
+        e = s.find('\n/', p + 10)
+        if e == -1: e = s.find('</style>', p)
+        s = s[:p] + s[e:]
+        print(f"[2] Removed CSS: {marker}")
+
+# Insert two event cards after hero-ctas
+ct = s.find('<div class="hero-ctas">')
+d, i = 0, ct
+while i < len(s):
+    if s[i:i+4] == '<div': d += 1
+    elif s[i:i+6] == '</div>':
+        d -= 1
+        if d == 0:
+            ce = i + 6
+            break
+    i += 1
+
+cards = '''
+      <div class="featured-events-section" style="order:4;">
+        <div class="featured-events-badge">FEATURED EVENTS</div>
+        <div class="featured-events-grid">
+          <div class="feat-event-card">
+            <div class="feat-event-img"><img src="/benny-benassi-banner.jpg" alt="Benny Benassi Live in Windsor"></div>
+            <div class="feat-event-body">
+              <h3 class="feat-event-name">Benny Benassi Party Weekend</h3>
+              <div class="feat-event-meta"><span class="feat-event-date">Aug 8, 2026</span><span class="feat-sep">&middot;</span><span>Windsor, ON</span><span class="feat-sep">&middot;</span><span class="feat-event-date">19+</span></div>
+              <p class="feat-event-desc">Concert + after-party + hotel. The king of electro-house headlines Windsor.</p>
+              <div class="feat-event-price">From <strong>$399</strong> <span>/ 2 guests</span></div>
+              <a href="/benny-benassi" class="feat-event-btn">View Packages &rarr;</a>
+            </div>
+          </div>
+          <div class="feat-event-card">
+            <div class="feat-event-img"><img src="/sync-fest-banner.png" alt="SYNC Festival 2026"></div>
+            <div class="feat-event-body">
+              <h3 class="feat-event-name">SYNC Festival Weekend</h3>
+              <div class="feat-event-meta"><span class="feat-event-date">Jul 17&ndash;18, 2026</span><span class="feat-sep">&middot;</span><span>Windsor, ON</span><span class="feat-sep">&middot;</span><span class="feat-event-date">19+</span></div>
+              <p class="feat-event-desc">Full 2-day festival + both after-parties + hotel. Two days. One frequency.</p>
+              <div class="feat-event-price">From <strong>$399</strong> <span>/ 2 guests</span></div>
+              <a href="/sync-fest" class="feat-event-btn">View Packages &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>'''
+s = s[:ce] + cards + s[ce:]
+print("[3] Inserted event cards")
+
+# Add CSS
+css = '''
+/* Featured Events Section */
+.featured-events-section{width:100%;margin:1.5rem 0 .5rem;order:4;text-align:center;}
+.featured-events-badge{display:inline-block;background:linear-gradient(135deg,#d4a853,#f0d68a,#d4a853);color:#0a0a14;font-size:.7rem;font-weight:800;letter-spacing:.15em;padding:4px 16px;border-radius:20px;margin-bottom:14px;text-transform:uppercase;}
+.featured-events-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.feat-event-card{background:linear-gradient(145deg,rgba(212,168,83,.08),rgba(212,168,83,.02));border:1px solid rgba(212,168,83,.2);border-radius:14px;overflow:hidden;text-align:left;transition:transform .3s,box-shadow .3s;}
+.feat-event-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(212,168,83,.15);}
+.feat-event-img{width:100%;height:160px;overflow:hidden;}
+.feat-event-img img{width:100%;height:100%;object-fit:cover;}
+.feat-event-body{padding:18px 16px 20px;}
+.feat-event-name{font-family:'Playfair Display',Georgia,serif;font-size:1.15rem;font-weight:700;color:#fff;margin:0 0 8px;line-height:1.25;}
+.feat-event-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.78rem;color:rgba(255,255,255,.6);margin-bottom:10px;}
+.feat-event-date{color:#d4a853;font-weight:600;}
+.feat-sep{color:rgba(255,255,255,.25);}
+.feat-event-desc{font-size:.8rem;color:rgba(255,255,255,.55);margin:0 0 12px;line-height:1.45;}
+.feat-event-price{font-size:.85rem;color:rgba(255,255,255,.7);margin-bottom:14px;}
+.feat-event-price strong{color:#d4a853;font-size:1.1rem;}
+.feat-event-price span{font-size:.75rem;color:rgba(255,255,255,.4);}
+.feat-event-btn{display:inline-block;background:linear-gradient(135deg,#d4a853,#c49843);color:#0a0a14;font-weight:700;font-size:.85rem;padding:10px 28px;border-radius:8px;text-decoration:none;transition:all .3s;box-shadow:0 3px 12px rgba(212,168,83,.25);}
+.feat-event-btn:hover{background:linear-gradient(135deg,#e0b863,#d4a853);transform:translateY(-1px);box-shadow:0 5px 18px rgba(212,168,83,.4);}
+@media(max-width:768px){.featured-events-grid{grid-template-columns:1fr;}.feat-event-name{font-size:1.05rem;}.feat-event-img{height:140px;}}
+'''
+sc = s.rfind('</style>')
+s = s[:sc] + css + s[sc:]
+print("[4] Added CSS")
+
+with open(INDEX, 'w') as f:
+    f.write(s)
+print(f"[OK] index.html: {len(orig)} -> {len(s)}")
+
+# Remove old image
+mg_img = os.path.join(PUBLIC, 'mystic-garden-banner.jpg')
+if os.path.exists(mg_img):
+    os.remove(mg_img)
+    print("[5] Removed mystic-garden-banner.jpg")
+
+# Add server routes
+with open(SERVER, 'r') as f:
+    srv = f.read()
+ca = srv.find("app.get('*'")
+routes = '''
+// Special Event Booking Pages
+app.get('/benny-benassi', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'benny-benassi.html'));
+});
+app.get('/sync-fest', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sync-fest.html'));
+});
+
+// Special Event Booking API
+const eventPricing = { 'benny-benassi': {2:399,3:499,4:619}, 'sync-fest': {2:399,3:499,4:619} };
+app.post('/api/book/:event', express.urlencoded({extended:true}), async (req, res) => {
+  try {
+    const {event} = req.params;
+    const {package:pkg, firstName, lastName, email, phone} = req.body;
+    const guests = parseInt(pkg);
+    const pricing = eventPricing[event];
+    if (!pricing || !pricing[guests]) return res.status(400).send('Invalid package');
+    const amount = pricing[guests];
+    const attendees = [];
+    for (let i=1; i<=guests; i++) attendees.push({first:req.body['guest'+i+'First']||'',last:req.body['guest'+i+'Last']||''});
+    const bookingsFile = path.join(__dirname, 'bookings.json');
+    let bookings = [];
+    try { bookings = JSON.parse(fs.readFileSync(bookingsFile,'utf8')); } catch(e){}
+    const booking = {id:Date.now().toString(36)+Math.random().toString(36).substr(2,4),event,guests,amount,lead:{firstName,lastName,email,phone},attendees,status:'pending',createdAt:new Date().toISOString()};
+    bookings.push(booking);
+    fs.writeFileSync(bookingsFile, JSON.stringify(bookings,null,2));
+    const name = event==='benny-benassi'?'Benny Benassi Party Weekend':'SYNC Festival Weekend';
+    res.send('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Booking Received</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#0a0a14;color:#fff;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px;}.card{max-width:500px;background:rgba(212,168,83,.06);border:1px solid rgba(212,168,83,.2);border-radius:16px;padding:40px 30px;}h1{color:#d4a853;font-size:1.6rem;margin-bottom:12px;}p{color:rgba(255,255,255,.7);font-size:.9rem;line-height:1.6;margin-bottom:16px;}.amount{font-size:1.3rem;color:#d4a853;font-weight:700;margin:8px 0;}.ref{font-size:.8rem;color:rgba(255,255,255,.4);}a{color:#d4a853;text-decoration:none;}</style></head><body><div class="card"><h1>Booking Received!</h1><p class="amount">$'+amount+' - '+guests+'-person package</p><p>Thank you, '+firstName+'! Your '+name+' booking has been received.</p><p>We will contact you at <strong>'+email+'</strong> with payment instructions shortly.</p><p class="ref">Ref: '+booking.id+'</p><br><a href="/">Back to NorthBound Weekends</a></div></body></html>');
+    console.log('[BOOKING]', event, guests, 'guests', '$'+amount, email);
+  } catch(e) { console.error('[BOOKING ERROR]', e.message); res.status(500).send('Booking error.'); }
+});
+
+'''
+srv = srv[:ca] + routes + srv[ca:]
+with open(SERVER, 'w') as f:
+    f.write(srv)
+print("[6] Added server routes")
+print("\nPART 1 DONE - run Part 2 next for booking pages")
