@@ -770,6 +770,39 @@ app.put('/api/admin/nightlife-photos/:id', async (req, res) => {
   } catch(e) { res.status(500).json({ error: 'Update failed' }); }
 });
 
+
+// Special Event Booking Pages
+app.get('/benny-benassi', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'benny-benassi.html'));
+});
+app.get('/sync-fest', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sync-fest.html'));
+});
+
+// Special Event Booking API
+const eventPricing = { 'benny-benassi': {2:399,3:499,4:619}, 'sync-fest': {2:399,3:499,4:619} };
+app.post('/api/book/:event', express.urlencoded({extended:true}), async (req, res) => {
+  try {
+    const {event} = req.params;
+    const {package:pkg, firstName, lastName, email, phone} = req.body;
+    const guests = parseInt(pkg);
+    const pricing = eventPricing[event];
+    if (!pricing || !pricing[guests]) return res.status(400).send('Invalid package');
+    const amount = pricing[guests];
+    const attendees = [];
+    for (let i=1; i<=guests; i++) attendees.push({first:req.body['guest'+i+'First']||'',last:req.body['guest'+i+'Last']||''});
+    const bookingsFile = path.join(__dirname, 'bookings.json');
+    let bookings = [];
+    try { bookings = JSON.parse(fs.readFileSync(bookingsFile,'utf8')); } catch(e){}
+    const booking = {id:Date.now().toString(36)+Math.random().toString(36).substr(2,4),event,guests,amount,lead:{firstName,lastName,email,phone},attendees,status:'pending',createdAt:new Date().toISOString()};
+    bookings.push(booking);
+    fs.writeFileSync(bookingsFile, JSON.stringify(bookings,null,2));
+    const name = event==='benny-benassi'?'Benny Benassi Party Weekend':'SYNC Festival Weekend';
+    res.send('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Booking Received</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#0a0a14;color:#fff;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px;}.card{max-width:500px;background:rgba(212,168,83,.06);border:1px solid rgba(212,168,83,.2);border-radius:16px;padding:40px 30px;}h1{color:#d4a853;font-size:1.6rem;margin-bottom:12px;}p{color:rgba(255,255,255,.7);font-size:.9rem;line-height:1.6;margin-bottom:16px;}.amount{font-size:1.3rem;color:#d4a853;font-weight:700;margin:8px 0;}.ref{font-size:.8rem;color:rgba(255,255,255,.4);}a{color:#d4a853;text-decoration:none;}</style></head><body><div class="card"><h1>Booking Received!</h1><p class="amount">$'+amount+' - '+guests+'-person package</p><p>Thank you, '+firstName+'! Your '+name+' booking has been received.</p><p>We will contact you at <strong>'+email+'</strong> with payment instructions shortly.</p><p class="ref">Ref: '+booking.id+'</p><br><a href="/">Back to NorthBound Weekends</a></div></body></html>');
+    console.log('[BOOKING]', event, guests, 'guests', '$'+amount, email);
+  } catch(e) { console.error('[BOOKING ERROR]', e.message); res.status(500).send('Booking error.'); }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
