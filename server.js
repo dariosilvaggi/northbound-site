@@ -186,6 +186,51 @@ async function saveBooking(booking) {
 function newId() { return crypto.randomBytes(6).toString('hex'); }
 
 // ── Stripe webhook (raw body — must be BEFORE express.json()) ────
+
+// Email configuration
+const emailTransporter = process.env.SMTP_USER ? nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT) || 587,
+  secure: false,
+  auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+}) : null;
+
+async function sendBookingConfirmation(booking) {
+  if (!emailTransporter) { console.log('SMTP not configured - skipping confirmation email'); return; }
+  var attendeeList = (booking.attendees || []).map(function(a) { return '<li>' + (a.first || '') + ' ' + (a.last || '') + '</li>'; }).join('');
+  var totalFormatted = booking.amountTotal ? '$' + (booking.amountTotal / 100).toFixed(2) : ('$' + (booking.price || '0'));
+  var emailHtml = '<div style="max-width:600px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#0a0a14;color:#ffffff;padding:40px 30px;border-radius:12px;">'
+    + '<div style="text-align:center;margin-bottom:30px;">'
+    + '<h1 style="color:#d4a853;font-size:28px;margin:0;">Booking Confirmed</h1>'
+    + '<p style="color:#ccc;margin-top:8px;">NorthBound Weekends</p></div>'
+    + '<div style="background:#1a1a2e;padding:24px;border-radius:8px;margin-bottom:20px;">'
+    + '<h2 style="color:#d4a853;font-size:20px;margin:0 0 16px;">' + (booking.eventName || 'Event') + '</h2>'
+    + '<p style="color:#ccc;margin:4px 0;"><strong style="color:#fff;">Guests:</strong> ' + (booking.guests || '') + '</p>'
+    + '<p style="color:#ccc;margin:4px 0;"><strong style="color:#fff;">Total Paid:</strong> ' + totalFormatted + '</p>'
+    + '<p style="color:#ccc;margin:4px 0;"><strong style="color:#fff;">Booked By:</strong> ' + (booking.firstName || '') + ' ' + (booking.lastName || '') + '</p></div>'
+    + '<div style="background:#1a1a2e;padding:24px;border-radius:8px;margin-bottom:20px;">'
+    + '<h3 style="color:#d4a853;font-size:16px;margin:0 0 12px;">Attendees</h3>'
+    + '<ul style="color:#ccc;padding-left:20px;margin:0;">' + attendeeList + '</ul></div>'
+    + '<div style="background:#2a1a1a;padding:16px;border-radius:8px;border-left:4px solid #d4a853;margin-bottom:20px;">'
+    + '<p style="color:#ccc;margin:0;font-size:14px;"><strong style="color:#d4a853;">Reminders:</strong></p>'
+    + '<ul style="color:#ccc;padding-left:20px;margin:8px 0 0;font-size:14px;">'
+    + '<li>Valid government-issued ID required at check-in</li>'
+    + '<li>All attendees must be 19+</li>'
+    + '<li>No refunds - all sales final</li></ul></div>'
+    + '<p style="color:#888;font-size:13px;text-align:center;">Questions? Contact info@northboundweekends.com</p></div>';
+  try {
+    await emailTransporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: booking.email,
+      subject: 'Booking Confirmed - ' + (booking.eventName || 'NorthBound Weekends'),
+      html: emailHtml
+    });
+    console.log('Confirmation email sent to', booking.email);
+  } catch (err) {
+    console.error('Email send failed:', err.message);
+  }
+}
+
 app.post('/api/webhook/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
