@@ -67,14 +67,27 @@ h2{font-family:'Playfair Display',serif;font-size:1.4rem;margin:30px 0 16px;colo
 <button type="submit" class="submit-btn">Proceed to Payment &rarr;</button>
 <p class="notice">Availability is limited. Bookings confirmed on payment only. Valid government ID required at check-in. Details emailed before the event.</p>
 </form></div></div><script>
-function selectPkg(el){
-  document.querySelectorAll('.pkg').forEach(p=>p.classList.remove('selected'));
-  el.classList.add('selected');
-  var g=parseInt(el.dataset.guests),p=parseInt(el.dataset.price);
-  document.getElementById('pkgInput').value=g;
-  document.getElementById('totalPrice').textContent='$'+p;
-  var c=document.getElementById('attendeeFields'),h='';
-  for(var i=1;i<=g;i++) h+='<div class="attendee-row"><div class="form-row"><label>Guest '+i+' First Name *</label><input name="guest'+i+'First" required></div><div class="form-row"><label>Guest '+i+' Last Name *</label><input name="guest'+i+'Last" required></div></div>';
-  c.innerHTML=h;
-}
+document.addEventListener('DOMContentLoaded', function() {
+  var pkgs = document.querySelectorAll('.pkg');
+  var pkgInput = document.getElementById('pkgInput');
+  var totalPrice = document.getElementById('totalPrice');
+  var attendeeFields = document.getElementById('attendeeFields');
+  pkgs.forEach(function(pkg) {
+    pkg.addEventListener('click', function() {
+      pkgs.forEach(function(p) { p.classList.remove('selected'); });
+      this.classList.add('selected');
+      var guests = parseInt(this.dataset.guests);
+      var price = parseInt(this.dataset.price);
+      pkgInput.value = guests;
+      totalPrice.textContent = '$' + price;
+      attendeeFields.innerHTML = '';
+      for (var i = 1; i <= guests; i++) {
+        var row = document.createElement('div');
+        row.className = 'form-row';
+        row.innerHTML = '<div class="form-group"><label>Guest ' + i + ' First Name *</label><input type="text" name="guest' + i + 'First" required></div><div class="form-group"><label>Guest ' + i + ' Last Name *</label><input type="text" name="guest' + i + 'Last" required></div>';
+        attendeeFields.appendChild(row);
+      }
+    });
+  });
+});
 </script></body></html>
