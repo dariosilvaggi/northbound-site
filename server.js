@@ -676,7 +676,7 @@ app.post('/api/checkout', async (req, res) => {
       mode: 'payment',
       customer_email: email,
       metadata: { weekend, packageName, packagePrice: String(packagePrice || ''), travelers: String(numTravelers), firstName, lastName, phone, city, baseCents: String(baseCents), matCents: String(matCents), hstCents: String(hstCents), adminCents: String(adminCents) },
-      success_url: `${siteUrl}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${siteUrl}/booking-success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${siteUrl}/booking-cancel`,
     });
     res.json({ url: s.url });
@@ -871,7 +871,7 @@ app.post('/api/book/:event', express.urlencoded({extended:true}), async (req, re
         attendees: JSON.stringify(attendees),
         baseCents: String(baseCents), matCents: String(matCents), hstCents: String(hstCents), adminCents: String(adminCents)
       },
-      success_url: siteUrl + '/booking-success?session_id={CHECKOUT_SESSION_ID}',
+      success_url: siteUrl + '/booking-success.html?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: siteUrl + '/' + eventSlug,
     });
     res.redirect(303, session.url);
