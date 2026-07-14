@@ -782,25 +782,57 @@ app.get('/sync-fest', (req, res) => {
 // Special Event Booking API
 const eventPricing = { 'benny-benassi': {2:399,3:499,4:619}, 'sync-fest': {2:399,3:499,4:619} };
 app.post('/api/book/:event', express.urlencoded({extended:true}), async (req, res) => {
+  if (!stripe) return res.status(503).send('Stripe not configured.');
+  const eventSlug = req.params.event;
+  const guests = parseInt(req.body.package) || 2;
+  const { firstName, lastName, email, phone } = req.body;
+  if (!email || !firstName) return res.status(400).send('Missing required fields.');
+  const eventPricing = {
+    'benny-benassi': { 2: 399, 3: 499, 4: 619, name: 'Benny Benassi Party Weekend' },
+    'sync-fest':     { 2: 399, 3: 499, 4: 619, name: 'SYNC Festival Weekend' }
+  };
+  const ev = eventPricing[eventSlug];
+  if (!ev) return res.status(404).send('Event not found.');
+  const price = ev[guests];
+  if (!price) return res.status(400).send('Invalid package selection.');
+  const baseCents = price * 100;
+  const matCents = Math.round(baseCents * 0.06);
+  const hstCents = Math.round((baseCents + matCents) * 0.13);
+  const adminFeeMap = { 2: 200, 3: 300, 4: 400 };
+  const adminCents = adminFeeMap[guests] || 0;
+  const siteUrl = process.env.SITE_URL || 'https://northboundweekends.com';
+  const attendees = [];
+  for (let i = 1; i <= guests; i++) {
+    attendees.push({ first: req.body['guest' + i + 'First'] || '', last: req.body['guest' + i + 'Last'] || '' });
+  }
+  const lineItems = [
+    { price_data: { currency: 'usd', product_data: { name: ev.name, description: guests + '-guest package - No refunds' }, unit_amount: baseCents }, quantity: 1 },
+    { price_data: { currency: 'usd', product_data: { name: 'Municipal Accommodation Tax (MAT 6%)' }, unit_amount: matCents }, quantity: 1 },
+    { price_data: { currency: 'usd', product_data: { name: 'HST (13%)' }, unit_amount: hstCents }, quantity: 1 },
+  ];
+  if (adminCents) {
+    lineItems.push({ price_data: { currency: 'usd', product_data: { name: 'Admin Fee (group of ' + guests + ')' }, unit_amount: adminCents }, quantity: 1 });
+  }
   try {
-    const {event} = req.params;
-    const {package:pkg, firstName, lastName, email, phone} = req.body;
-    const guests = parseInt(pkg);
-    const pricing = eventPricing[event];
-    if (!pricing || !pricing[guests]) return res.status(400).send('Invalid package');
-    const amount = pricing[guests];
-    const attendees = [];
-    for (let i=1; i<=guests; i++) attendees.push({first:req.body['guest'+i+'First']||'',last:req.body['guest'+i+'Last']||''});
-    const bookingsFile = path.join(__dirname, 'bookings.json');
-    let bookings = [];
-    try { bookings = JSON.parse(fs.readFileSync(bookingsFile,'utf8')); } catch(e){}
-    const booking = {id:Date.now().toString(36)+Math.random().toString(36).substr(2,4),event,guests,amount,lead:{firstName,lastName,email,phone},attendees,status:'pending',createdAt:new Date().toISOString()};
-    bookings.push(booking);
-    fs.writeFileSync(bookingsFile, JSON.stringify(bookings,null,2));
-    const name = event==='benny-benassi'?'Benny Benassi Party Weekend':'SYNC Festival Weekend';
-    res.send('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Booking Received</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#0a0a14;color:#fff;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px;}.card{max-width:500px;background:rgba(212,168,83,.06);border:1px solid rgba(212,168,83,.2);border-radius:16px;padding:40px 30px;}h1{color:#d4a853;font-size:1.6rem;margin-bottom:12px;}p{color:rgba(255,255,255,.7);font-size:.9rem;line-height:1.6;margin-bottom:16px;}.amount{font-size:1.3rem;color:#d4a853;font-weight:700;margin:8px 0;}.ref{font-size:.8rem;color:rgba(255,255,255,.4);}a{color:#d4a853;text-decoration:none;}</style></head><body><div class="card"><h1>Booking Received!</h1><p class="amount">$'+amount+' - '+guests+'-person package</p><p>Thank you, '+firstName+'! Your '+name+' booking has been received.</p><p>We will contact you at <strong>'+email+'</strong> with payment instructions shortly.</p><p class="ref">Ref: '+booking.id+'</p><br><a href="/">Back to NorthBound Weekends</a></div></body></html>');
-    console.log('[BOOKING]', event, guests, 'guests', '$'+amount, email);
-  } catch(e) { console.error('[BOOKING ERROR]', e.message); res.status(500).send('Booking error.'); }
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      mode: 'payment',
+      customer_email: email,
+      metadata: {
+        event: eventSlug, eventName: ev.name, guests: String(guests), price: String(price),
+        firstName: firstName || '', lastName: lastName || '', phone: phone || '', email: email || '',
+        attendees: JSON.stringify(attendees),
+        baseCents: String(baseCents), matCents: String(matCents), hstCents: String(hstCents), adminCents: String(adminCents)
+      },
+      success_url: siteUrl + '/booking-success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: siteUrl + '/' + eventSlug,
+    });
+    res.redirect(303, session.url);
+  } catch (err) {
+    console.error('Event checkout error:', err.message);
+    res.status(500).send('Payment error. Please try again.');
+  }
 });
 
 app.get('*', (req, res) => {
