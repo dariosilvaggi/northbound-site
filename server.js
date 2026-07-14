@@ -229,6 +229,7 @@ app.use(helmet({
       connectSrc:           ["'self'", 'api.stripe.com'],
       frameSrc:             ['js.stripe.com', 'hooks.stripe.com'],
       upgradeInsecureRequests: [],
+        formAction: ["'self'", "https://checkout.stripe.com"],
     },
   },
   hsts:           { maxAge: 31536000, includeSubDomains: true, preload: true },
