@@ -1525,6 +1525,7 @@ img { display: block; max-width: 100%; }
       </div>
       <div id="bookingStep1">
         <div class="form-group"><label class="form-label">Choose Your Weekend</label><select class="form-select" id="selectWeekend"></select></div>
+        <div class="form-group" id="openDateGroup" style="display:none"><label class="form-label">Weekend Date</label><input class="form-input" id="inputWeekendDate" type="date"></div>
         <div class="swb" id="selectedWeekendBanner">
           <div class="swb-date" id="swbDate"></div>
           <div class="swb-name" id="swbName"></div>
@@ -1668,10 +1669,13 @@ function fillWeekendSelect(){
   var sel=document.getElementById('selectWeekend');if(!sel)return;
   var trips=_bookingTrips||[];
   if(!trips.length){
-    sel.innerHTML='<option>No weekends available right now</option>';sel.disabled=true;_selectedTrip=null;
-    document.getElementById('swbDate').textContent='';document.getElementById('swbName').textContent='Check back soon';document.getElementById('swbRoute').textContent='';
+    sel.parentNode.style.display='none';document.getElementById('openDateGroup').style.display='block';
+    var di=document.getElementById('inputWeekendDate');di.min=new Date(Date.now()+86400000).toISOString().slice(0,10);
+    if(!_selectedTrip||_selectedTrip.id!=='open-date'){applyTrip({id:'open-date',name:'NorthBound Weekend',dateRange:'',city:'Your city',nights:1,price:69});di.value='';}
+    document.getElementById('swbRoute').textContent='Windsor, Ontario';
     return;
   }
+  sel.parentNode.style.display='';document.getElementById('openDateGroup').style.display='none';
   sel.disabled=false;
   sel.innerHTML=trips.map(function(t){return '<option value="'+t.id+'">'+t.dateRange+' — '+t.name+' ('+t.city+')</option>';}).join('');
   if(!_selectedTrip||!trips.some(function(t){return t.id===_selectedTrip.id;}))applyTrip(trips[0]);
@@ -1680,7 +1684,6 @@ function fillWeekendSelect(){
 function openBooking(){
   currentStep=1;
   var show=function(){
-    if(!_bookingTrips||!_bookingTrips.length){window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank');return;} /* strideFallback */
     fillWeekendSelect();updateBookingUI();
     document.getElementById('bookingModal').classList.add('active');document.body.style.overflow='hidden';
     nbTrack('viewItem');
@@ -1692,12 +1695,16 @@ document.addEventListener('change',function(e){
   if(e.target&&e.target.id==='selectWeekend'){
     var t=(_bookingTrips||[]).filter(function(x){return x.id===e.target.value;})[0];
     if(t){applyTrip(t);updateBookingUI();}
+  }else if(e.target&&e.target.id==='inputWeekendDate'&&_selectedTrip&&_selectedTrip.id==='open-date'){
+    var v=e.target.value;_selectedTrip.dateRange=v?new Date(v+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}):'';
+    document.getElementById('swbDate').textContent=_selectedTrip.dateRange;
   }else if(e.target&&e.target.id==='selectRooms'){updateCart();updateBookingUI();}
 });
 function closeBooking(){document.getElementById('bookingModal').classList.remove('active');document.body.style.overflow='';}
 
 function nextStep(){
   if(currentStep===1&&!_selectedTrip)return;
+  if(currentStep===1&&_selectedTrip.id==='open-date'&&!document.getElementById('inputWeekendDate').value){alert('Please choose your weekend date.');return;}
   if(currentStep===2){
     var em=document.getElementById('inputEmail');var fn=document.getElementById('inputFirstName');
     if(!fn||!fn.value.trim()||!em||!em.value.trim()){alert('Please fill in your name and email.');return;}
@@ -1739,7 +1746,7 @@ async function submitToStripe(){
   var rl=_selectedGuestsPerRoom===2?'Double Room':'Quad Room';
   var payload={
     tripId:_selectedTrip?_selectedTrip.id:'',
-    weekend:_selectedTrip?_selectedTrip.name:'',
+    weekend:_selectedTrip?(_selectedTrip.id==='open-date'?_selectedTrip.name+' \u2014 '+_selectedTrip.dateRange:_selectedTrip.name):'',
     packageName:rooms+' '+rl+' \u00b7 '+_selectedNights+' Night(s)',
     packagePrice:String(pp),
     travelers:String(tg),

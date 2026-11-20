@@ -672,6 +672,7 @@ app.post('/api/checkout', async (req, res) => {
   try {
     const s = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      allow_promotion_codes: true,
       line_items: lineItems,
       mode: 'payment',
       customer_email: email,
@@ -862,6 +863,7 @@ app.post('/api/book/:event', express.urlencoded({extended:true}), async (req, re
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      allow_promotion_codes: true,
       line_items: lineItems,
       mode: 'payment',
       customer_email: email,
@@ -888,7 +890,7 @@ app.get('/api/checkout-session', async (req, res) => {
   if (!stripe || !/^cs_(test|live)_[A-Za-z0-9]+$/.test(id)) return res.status(400).json({ error: 'Invalid session' });
   try {
     const s = await stripe.checkout.sessions.retrieve(id);
-    if (s.payment_status !== 'paid') return res.status(402).json({ error: 'Not paid' });
+    if (!['paid', 'no_payment_required'].includes(s.payment_status)) return res.status(402).json({ error: 'Not paid' });
     const m = s.metadata || {};
     const isEvent = !!m.event;
     const guests = parseInt(isEvent ? m.guests : m.travelers, 10) || 1;
