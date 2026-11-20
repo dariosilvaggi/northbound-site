@@ -1140,6 +1140,7 @@ img { display: block; max-width: 100%; }
 }
 </style>
 
+<script src="/tracking.js"></script>
 </head>
 <body>
 
@@ -1160,7 +1161,7 @@ img { display: block; max-width: 100%; }
       <a href="#nightlife">Nightlife</a>
       <a href="#faq">FAQ</a>
       <a href="#rep">Become a Rep</a>
-      <a class="btn-nav" href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" style="color:#000;">Book Now</a>
+      <a class="btn-nav" href="#" data-action="openBooking" style="color:#000;">Book Now</a>
     </div>
     <button class="mobile-toggle" data-action="toggleMobileNav">&#9776;</button>
   </div>
@@ -1177,7 +1178,7 @@ img { display: block; max-width: 100%; }
       <h1>Cross the border.<br>Check in. <span class="gradient-text">Skip the line.</span></h1>
       <p class="hero-sub">Windsor nightlife weekend packages for U.S. students and young adults. Hotel, breakfast, club access, no cover, and skip-the-line entry included. You travel to Windsor — we handle the weekend.</p>
       <div class="hero-ctas">
-        <a class="btn-gold" href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" style="text-decoration:none">Book Your Weekend Here &#8594;</a>
+        <a class="btn-gold" href="#" data-action="openBooking" style="text-decoration:none">Book Your Weekend Here &#8594;</a>
         <a class="btn-ghost" href="#how">How It Works</a>
       </div>      <div class="featured-events-section" style="order:4;">
         <div class="featured-events-badge">FEATURED EVENTS</div>
@@ -1278,7 +1279,7 @@ img { display: block; max-width: 100%; }
       <h2 class="section-title">Windsor Nightlife Weekend Packages</h2>
       <p class="section-desc">Every package includes hotel, breakfast, nightlife access, no cover at included clubs, skip-the-line entry, weekend itinerary, and border document checklist.</p>
     </div>
-    <div class="pkg-grid" id="packages-grid"><div style="text-align:center;padding:3rem 1rem;"><a href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" class="btn-pkg btn-pkg-filled" style="display:inline-block;text-decoration:none;font-size:1.25rem;padding:1.2rem 3rem;letter-spacing:0.05em;">BOOK YOUR WEEKEND HERE</a></div></div>
+    <div class="pkg-grid" id="packages-grid"><div style="text-align:center;padding:3rem 1rem;"><a href="#" data-action="openBooking" class="btn-pkg btn-pkg-filled" style="display:inline-block;text-decoration:none;font-size:1.25rem;padding:1.2rem 3rem;letter-spacing:0.05em;">BOOK YOUR WEEKEND HERE</a></div></div>
   </div>
 </section>
 
@@ -1446,7 +1447,7 @@ img { display: block; max-width: 100%; }
   <div class="container">
     <h2>Ready for your <span class="gradient-text">NorthBound</span> weekend?</h2>
     <p>Your Windsor nightlife weekend is waiting. Hotel, breakfast, clubs, no cover — all in one package.</p>
-    <a href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" class="btn-gold" style="color:#000;display:inline-block;text-decoration:none;cursor:pointer;">View Packages &rarr;</a>
+    <a href="#" data-action="openBooking" class="btn-gold" style="color:#000;display:inline-block;text-decoration:none;cursor:pointer;">View Packages &rarr;</a>
   </div>
 </section>
 
@@ -1471,8 +1472,8 @@ img { display: block; max-width: 100%; }
       </div>
       <div class="footer-col">
         <h4>Weekends</h4>
-        <a href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener">One-Night Packages</a>
-        <a href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener">Two-Night Packages</a>
+        <a href="#" data-action="openBooking">One-Night Packages</a>
+        <a href="#" data-action="openBooking">Two-Night Packages</a>
         
         
         
@@ -1508,7 +1509,93 @@ img { display: block; max-width: 100%; }
 </footer>
 
 <!-- ── BOOKING MODAL ── -->
-<!-- booking modal removed -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" data-action="closeBooking">&times;</button>
+    <div class="modal-header">
+      <h2>Book Your Weekend</h2>
+      <p>Full payment at checkout. All sales final — no refunds.</p>
+    </div>
+    <div class="modal-body">
+      <div class="booking-steps">
+        <div class="booking-step active" id="step1"></div>
+        <div class="booking-step" id="step2"></div>
+        <div class="booking-step" id="step3"></div>
+        <div class="booking-step" id="step4"></div>
+      </div>
+      <div id="bookingStep1">
+        <div class="form-group"><label class="form-label">Choose Your Weekend</label><select class="form-select" id="selectWeekend"></select></div>
+        <div class="swb" id="selectedWeekendBanner">
+          <div class="swb-date" id="swbDate"></div>
+          <div class="swb-name" id="swbName"></div>
+          <div class="swb-route" id="swbRoute"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Number of Nights</label>
+          <div class="nights-toggle">
+            <button type="button" class="night-btn active" data-action="selectNights" data-arg="1">1 Night</button>
+            <button type="button" class="night-btn" data-action="selectNights" data-arg="2">2 Nights</button>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Room Type</label>
+          <div class="room-cards">
+            <div class="room-card active" data-action="selectRoom" data-arg="2">
+              <div class="room-icon">&#128716;</div>
+              <div class="room-name">Double Room</div>
+              <div class="room-desc">2 Guests</div>
+              <div class="room-price" id="price2g"></div>
+            </div>
+            <div class="room-card" data-action="selectRoom" data-arg="4">
+              <div class="room-icon">&#128716;&#128716;</div>
+              <div class="room-name">Quad Room</div>
+              <div class="room-desc">4 Guests</div>
+              <div class="room-price" id="price4g"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Number of Rooms</label>
+          <select class="form-select" id="selectRooms">
+            <option value="1">1 Room</option>
+            <option value="2">2 Rooms</option>
+            <option value="3">3 Rooms</option>
+          </select>
+        </div>
+        <div class="cart-summary">
+          <div class="cart-line"><span>Guests</span><span id="cartGuests">2</span></div>
+          <div class="cart-line"><span>Nights</span><span id="cartNights">1</span></div>
+          <div class="cart-line total"><span>Subtotal</span><span id="cartSubtotal">$138</span></div>
+        </div>
+      </div>
+      <div id="bookingStep2" style="display:none;">
+        <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="inputFirstName" type="text" placeholder="John"></div><div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="inputLastName" type="text" placeholder="Smith"></div></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="inputEmail" type="email" placeholder="john@university.edu"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="inputPhone" type="tel" placeholder="(555) 123-4567"></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" id="inputDob" type="date"></div><div class="form-group"><label class="form-label">Home City</label><input class="form-input" id="inputCity" type="text" placeholder="Detroit, MI"></div></div>
+      </div>
+      <div id="bookingStep3" style="display:none;">
+        <div class="form-group"><label class="form-label">Border Document Type</label><select class="form-select" id="selectDoc"><option>U.S. Passport</option><option>Passport Card</option><option>Enhanced Driver's License</option><option>NEXUS Card</option></select></div>
+        <div class="form-group"><label class="form-label">Upload Document Photo</label><input class="form-input" id="inputDocFile" type="file" accept="image/*,.pdf" style="padding:0.55rem;"></div>
+        <div class="form-group" style="margin-top:1.25rem;"><label style="display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;font-size:0.84rem;color:var(--gray);"><input type="checkbox" id="agreeWaiver" style="margin-top:0.25rem;accent-color:var(--gold);">I agree to the <a href="#" style="color:var(--gold);">Liability Waiver</a> and <a href="#" style="color:var(--gold);">Terms of Service</a>. I confirm I will be 19+ on the date of travel.</label></div>
+      </div>
+      <div id="bookingStep4" style="display:none;">
+        <div style="background:linear-gradient(135deg,var(--gold-dim),var(--purple-dim));border:1px solid rgba(200,135,76,0.15);border-radius:var(--radius-sm);padding:1.25rem;margin-bottom:1.25rem;">
+          <div style="font-size:0.8rem;color:var(--gray);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Booking Summary</div>
+          <div id="summaryWeekend" style="font-weight:700;margin-bottom:0.25rem;"></div>
+          <div id="summaryPackage" style="font-size:0.85rem;color:var(--gray);margin-bottom:0.75rem;"></div>
+          <div style="border-top:1px solid rgba(200,135,76,0.15);padding-top:0.75rem;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-size:0.8rem;color:var(--gray);">Total due today</div><div style="font-size:0.72rem;color:var(--gray-dim);" id="summaryBalance"></div></div>
+            <div id="summaryDeposit" style="font-family:'Plus Jakarta Sans';font-weight:800;color:var(--gold);font-size:1.25rem;"></div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--gray-dim);text-align:center;margin-bottom:0.5rem;">You'll be redirected to Stripe's secure checkout. Full payment required. All sales final — no refunds. We accept all major cards, Apple Pay &amp; Google Pay.</div>
+        <div id="stripeError" style="display:none;background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.3);border-radius:6px;padding:0.75rem;font-size:0.82rem;color:#f87171;margin-top:0.5rem;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" id="bookingBack" data-action="prevStep" style="display:none;flex:0 0 auto;padding:0.75rem 1.5rem;">Back</button>
+      <button class="btn-gold" id="bookingNext" data-action="nextStep" style="flex:1;justify-content:center;">Continue</button>
+    </div>
+  </div>
+</div>
 
 <script>
 window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);});
@@ -1555,10 +1642,61 @@ function buildSummary(){
   document.getElementById('summaryBalance').innerHTML=bh+'<span style="font-size:0.72rem;color:#c06060">All sales final — no refunds</span>';
 }
 
-function openBooking(){window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank');}
+var _selectedTrip=null,_selectedNights=1,_selectedGuestsPerRoom=2;
+function nbSel(){
+  if(!_selectedTrip)return null;
+  var rooms=parseInt(document.getElementById('selectRooms').value)||1;
+  var tg=_selectedGuestsPerRoom*rooms;
+  var pp=(parseFloat(_selectedTrip.price)||69)*tg*_selectedNights;
+  var rl=_selectedGuestsPerRoom===2?'Double Room':'Quad Room';
+  return {id:_selectedTrip.id,weekend:_selectedTrip.name,packageName:rooms+' '+rl+' · '+_selectedNights+' Night(s)',price:pp,value:calcCharges(pp,tg).total,travelers:tg};
+}
+function nbTrack(fn){try{var s=nbSel();if(s&&window.NBTrack)window.NBTrack[fn](s);}catch(e){}}
+function applyTrip(trip){
+  _selectedTrip=trip;
+  _selectedNights=parseInt(trip.nights)||1;
+  _selectedGuestsPerRoom=2;
+  document.getElementById('swbDate').textContent=trip.dateRange;
+  document.getElementById('swbName').textContent=trip.name;
+  document.getElementById('swbRoute').textContent=trip.city+' → Windsor';
+  document.querySelectorAll('.night-btn').forEach(function(b,i){b.classList.toggle('active',(i===0&&_selectedNights===1)||(i===1&&_selectedNights===2));});
+  document.querySelectorAll('.room-card').forEach(function(c,i){c.classList.toggle('active',i===0);});
+  document.getElementById('selectRooms').value='1';
+  updateCart();
+}
+function fillWeekendSelect(){
+  var sel=document.getElementById('selectWeekend');if(!sel)return;
+  var trips=_bookingTrips||[];
+  if(!trips.length){
+    sel.innerHTML='<option>No weekends available right now</option>';sel.disabled=true;_selectedTrip=null;
+    document.getElementById('swbDate').textContent='';document.getElementById('swbName').textContent='Check back soon';document.getElementById('swbRoute').textContent='';
+    return;
+  }
+  sel.disabled=false;
+  sel.innerHTML=trips.map(function(t){return '<option value="'+t.id+'">'+t.dateRange+' — '+t.name+' ('+t.city+')</option>';}).join('');
+  if(!_selectedTrip||!trips.some(function(t){return t.id===_selectedTrip.id;}))applyTrip(trips[0]);
+  sel.value=_selectedTrip.id;
+}
+function openBooking(){
+  currentStep=1;
+  var show=function(){
+    fillWeekendSelect();updateBookingUI();
+    document.getElementById('bookingModal').classList.add('active');document.body.style.overflow='hidden';
+    nbTrack('viewItem');
+  };
+  if(_bookingTrips&&_bookingTrips.length)show();
+  else fetch('/api/weekends').then(function(r){return r.json();}).then(function(t){_bookingTrips=t||[];}).catch(function(){}).then(show);
+}
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.id==='selectWeekend'){
+    var t=(_bookingTrips||[]).filter(function(x){return x.id===e.target.value;})[0];
+    if(t){applyTrip(t);updateBookingUI();}
+  }else if(e.target&&e.target.id==='selectRooms'){updateCart();updateBookingUI();}
+});
 function closeBooking(){document.getElementById('bookingModal').classList.remove('active');document.body.style.overflow='';}
 
 function nextStep(){
+  if(currentStep===1&&!_selectedTrip)return;
   if(currentStep===2){
     var em=document.getElementById('inputEmail');var fn=document.getElementById('inputFirstName');
     if(!fn||!fn.value.trim()||!em||!em.value.trim()){alert('Please fill in your name and email.');return;}
@@ -1568,7 +1706,7 @@ function nextStep(){
     if(!cb||!cb.checked){alert('Please agree to the waiver and terms.');return;}
     buildSummary();
   }
-  if(currentStep<totalSteps){currentStep++;updateBookingUI();}
+  if(currentStep<totalSteps){if(currentStep===1)nbTrack('addToCart');else if(currentStep===2)nbTrack('beginCheckout');currentStep++;updateBookingUI();}
   else{submitToStripe();}
 }
 function prevStep(){if(currentStep>1){currentStep--;updateBookingUI();}}
@@ -1591,6 +1729,7 @@ async function submitToStripe(){
   var btn=document.getElementById('bookingNext');
   var errEl=document.getElementById('stripeError');
   btn.textContent='Redirecting to payment\u2026';btn.disabled=true;
+  nbTrack('addPaymentInfo');
   errEl.style.display='none';
   var rooms=parseInt(document.getElementById('selectRooms').value)||1;
   var tg=_selectedGuestsPerRoom*rooms;
@@ -1598,6 +1737,7 @@ async function submitToStripe(){
   var pp=bp*tg*_selectedNights;
   var rl=_selectedGuestsPerRoom===2?'Double Room':'Quad Room';
   var payload={
+    tripId:_selectedTrip?_selectedTrip.id:'',
     weekend:_selectedTrip?_selectedTrip.name:'',
     packageName:rooms+' '+rl+' \u00b7 '+_selectedNights+' Night(s)',
     packagePrice:String(pp),
@@ -1853,11 +1993,11 @@ async function submitRepForm(){
         '<span class="wk-detail">'+t.spotsLeft+' spots left</span></div></div>'+
         '<div class="wk-footer"><div><span class="wk-price-from">from </span>'+
         '<span class="wk-price-amount">$'+t.price+'</span><span class="wk-price-per"> /person</span></div>'+
-        '<a class="btn-sm" href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" style="text-decoration:none">Book Your Weekend</a></div></div>';
+        '<a class="btn-sm" href="#" data-action="openBooking" style="text-decoration:none">Book Your Weekend</a></div></div>';
     }).join('');
   }
 
-  function renderPackages(){var el=document.getElementById('packages-grid');if(!el)return;el.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><a href="https://www.strideevents.com/events/northbound-weekends/2026/tickets" target="_blank" rel="noopener" class="btn-pkg btn-pkg-filled" style="display:inline-block;text-decoration:none;font-size:1.25rem;padding:1.2rem 3rem;letter-spacing:0.05em;">BOOK YOUR WEEKEND HERE</a></div>';}
+  function renderPackages(){var el=document.getElementById('packages-grid');if(!el)return;el.innerHTML='<div style="text-align:center;padding:3rem 1rem;"><a href="#" data-action="openBooking" class="btn-pkg btn-pkg-filled" style="display:inline-block;text-decoration:none;font-size:1.25rem;padding:1.2rem 3rem;letter-spacing:0.05em;">BOOK YOUR WEEKEND HERE</a></div>';}
 
   function renderCities(cities){
     var el=document.getElementById('cities-grid'); if(!el) return;
@@ -1909,7 +2049,9 @@ document.addEventListener('click',function(e){
   if(!btn)return;
   var action=btn.dataset.action;
   switch(action){
-    case 'openBooking': openBooking(); break;
+    case 'openBooking': if(btn.tagName==='A')e.preventDefault(); openBooking(); break;
+    case 'selectNights': selectNights(parseInt(btn.dataset.arg)); break;
+    case 'selectRoom': selectRoom(parseInt(btn.dataset.arg)); break;
     case 'closeBooking': closeBooking(); break;
     case 'prevStep': prevStep(); break;
     case 'nextStep': nextStep(); break;

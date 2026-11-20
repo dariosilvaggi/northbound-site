@@ -267,11 +267,11 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc:           ["'self'"],
-      scriptSrc:            ["'self'", "'unsafe-inline'", 'js.stripe.com', 'cdnjs.cloudflare.com'],
+      scriptSrc:            ["'self'", "'unsafe-inline'", 'js.stripe.com', 'cdnjs.cloudflare.com', 'www.googletagmanager.com', 'connect.facebook.net'],
       styleSrc:             ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
       fontSrc:              ["'self'", 'fonts.gstatic.com'],
       imgSrc:               ["'self'", 'data:', 'https:'],
-      connectSrc:           ["'self'", 'api.stripe.com'],
+      connectSrc:           ["'self'", 'api.stripe.com', 'www.googletagmanager.com', '*.google-analytics.com', '*.analytics.google.com', '*.g.doubleclick.net', 'www.facebook.com', 'connect.facebook.net'],
       frameSrc:             ['js.stripe.com', 'hooks.stripe.com'],
       upgradeInsecureRequests: [],
         formAction: ["'self'", "https://checkout.stripe.com"],
@@ -648,7 +648,7 @@ app.post('/admin/itinerary/item/delete/:dayId/:itemId', requireAdmin, async (req
 // ── Stripe Checkout ───────────────────────────────────────────────
 app.post('/api/checkout', async (req, res) => {
   if (!stripe) return res.status(503).json({ error: 'Stripe not configured — add STRIPE_SECRET_KEY to Railway env vars.' });
-  const { weekend, packageName, packagePrice, travelers, firstName, lastName, email, phone, city } = req.body;
+  const { tripId, weekend, packageName, packagePrice, travelers, firstName, lastName, email, phone, city } = req.body;
   if (!email || !weekend || !packageName) return res.status(400).json({ error: 'Missing required fields.' });
 
   const baseCents  = Math.round(parseFloat(packagePrice || 0) * 100);
@@ -675,7 +675,7 @@ app.post('/api/checkout', async (req, res) => {
       line_items: lineItems,
       mode: 'payment',
       customer_email: email,
-      metadata: { weekend, packageName, packagePrice: String(packagePrice || ''), travelers: String(numTravelers), firstName, lastName, phone, city, baseCents: String(baseCents), matCents: String(matCents), hstCents: String(hstCents), adminCents: String(adminCents) },
+      metadata: { tripId: String(tripId || ''), weekend, packageName, packagePrice: String(packagePrice || ''), travelers: String(numTravelers), firstName, lastName, phone, city, baseCents: String(baseCents), matCents: String(matCents), hstCents: String(hstCents), adminCents: String(adminCents) },
       success_url: `${siteUrl}/booking-success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${siteUrl}/booking-cancel`,
     });
@@ -878,6 +878,34 @@ app.post('/api/book/:event', express.urlencoded({extended:true}), async (req, re
   } catch (err) {
     console.error('Event checkout error:', err.message);
     res.status(500).send('Payment error. Please try again.');
+  }
+});
+
+// ── Tracking: paid-session lookup for the GA4/Meta purchase event ─
+// Works for both Stripe flows (/api/checkout and /api/book/:event). Returns no PII.
+app.get('/api/checkout-session', async (req, res) => {
+  const id = String(req.query.session_id || '');
+  if (!stripe || !/^cs_(test|live)_[A-Za-z0-9]+$/.test(id)) return res.status(400).json({ error: 'Invalid session' });
+  try {
+    const s = await stripe.checkout.sessions.retrieve(id);
+    if (s.payment_status !== 'paid') return res.status(402).json({ error: 'Not paid' });
+    const m = s.metadata || {};
+    const isEvent = !!m.event;
+    const guests = parseInt(isEvent ? m.guests : m.travelers, 10) || 1;
+    res.json({
+      transaction_id: s.id,
+      value:        (s.amount_total || 0) / 100,
+      currency:     (s.currency || 'usd').toUpperCase(),
+      tax:          ((+m.matCents || 0) + (+m.hstCents || 0)) / 100,
+      id:           isEvent ? `${m.event}-${guests}-guests` : (m.tripId || undefined),
+      weekend:      (isEvent ? m.eventName : m.weekend) || '',
+      packageName:  isEvent ? `${guests}-guest package` : (m.packageName || ''),
+      packagePrice: (+m.baseCents || 0) / 100,
+      travelers:    guests,
+      livemode:     !!s.livemode
+    });
+  } catch (err) {
+    res.status(404).json({ error: 'Session not found' });
   }
 });
 

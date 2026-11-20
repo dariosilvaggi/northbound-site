@@ -18,6 +18,7 @@ p{font-size:1.1rem;line-height:1.6;color:#ccc;margin-bottom:1rem}
 .btn:hover{opacity:.85}
 .note{font-size:.9rem;color:#888;margin-top:2rem}
 </style>
+<script src="/tracking.js"></script>
 </head>
 <body>
 <div class="container">
@@ -29,5 +30,15 @@ p{font-size:1.1rem;line-height:1.6;color:#ccc;margin-bottom:1rem}
 <a href="/" class="btn">Back to NorthBound Weekends</a>
 <p class="note">All sales are final — no refunds. Questions? Contact info@northboundweekends.com</p>
 </div>
+<script>
+(function(){
+  var id=new URLSearchParams(location.search).get('session_id');
+  if(!id||!window.NBTrack)return;
+  fetch('/api/checkout-session?session_id='+encodeURIComponent(id))
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){if(d&&d.transaction_id)window.NBTrack.purchase(d);})
+    .catch(function(){});
+})();
+</script>
 </body>
 </html>
