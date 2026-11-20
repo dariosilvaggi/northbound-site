@@ -1680,6 +1680,7 @@ function fillWeekendSelect(){
 function openBooking(){
   currentStep=1;
   var show=function(){
+    if(!_bookingTrips||!_bookingTrips.length){window.open('https://www.strideevents.com/events/northbound-weekends/2026/tickets','_blank');return;} /* strideFallback */
     fillWeekendSelect();updateBookingUI();
     document.getElementById('bookingModal').classList.add('active');document.body.style.overflow='hidden';
     nbTrack('viewItem');
